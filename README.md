@@ -16,11 +16,11 @@ Folder structure of git repository:
 
 InvoiceManager-3.0/
 
-  |--documentation/       - both user and technical documentation     
+    |--documentation/       - both user and technical documentation     
   
-  |--outlook/             - VBA addin for MS OutLook
+    |--outlook/             - VBA addin for MS OutLook
   
-  |--excel/               - Excel sheet with macros for reporting
+    |--excel/               - Excel sheet with macros for reporting
   
-  |--InvoivceManager/     - Maven project source code
+    |--InvoivceManager/     - Maven project source code
   
