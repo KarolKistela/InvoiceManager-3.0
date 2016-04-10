@@ -14,7 +14,7 @@ Application will be made of 3 components:
 
 Folder structure of git repository:
 
-InvoiceManager-3.0/
+    InvoiceManager-3.0/
 
     |--documentation/       - both user and technical documentation     
   
