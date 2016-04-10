@@ -40,7 +40,7 @@ public class InvoiceManagerCFG {
             resultSet = statement.executeQuery("SELECT * FROM columnsAndWidth;");
             while(resultSet.next())
             {
-                this.putInColumnsAndWidth(resultSet.getString(1), resultSet.getInt(2));
+                this.putInColumnsAndWidth(resultSet.getString(1), resultSet.getDouble(2));
             }
 
             resultSet = statement.executeQuery("SELECT count() FROM columnsAndWidth WHERE columnWidth > 0;");
@@ -70,7 +70,7 @@ public class InvoiceManagerCFG {
 
     }
 
-    public void putInColumnsAndWidth(String K, int V) {
+    public void putInColumnsAndWidth(String K, Double V) {
         this.columnsAndWidth.put(K,V);
     }
 
@@ -98,11 +98,11 @@ public class InvoiceManagerCFG {
         this.rowsPerPage = rowsPerPage;
     }
 
-    public HashMap getColumnsAndWidth() {
+    public Map<String, Double> getColumnsAndWidthMap() {
         return columnsAndWidth;
     }
 
-    public void setColumnsAndWidth(HashMap columnsAndWidth) {
+    public void setColumnsAndWidth(Map<String, Double> columnsAndWidth) {
         this.columnsAndWidth = columnsAndWidth;
     }
 
@@ -114,7 +114,7 @@ public class InvoiceManagerCFG {
         this.nrOfColumnsToDisplay = nrOfColumnsToDisplay;
     }
 
-    public Object getWidth(String columnID){
+    public Double getColumnWidth(String columnID){
         return this.columnsAndWidth.get(columnID);
     }
 }
