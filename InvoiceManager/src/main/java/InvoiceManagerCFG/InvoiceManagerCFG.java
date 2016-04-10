@@ -2,6 +2,7 @@ package InvoiceManagerCFG;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ public class InvoiceManagerCFG {
     /** how many records will be displayed per page. It applies for DB main view and All Filters views. */
     private int rowsPerPage;
     /** Key - name of the column, Value - width of columnn in %. IMPORTANT: sum of widths cannot exceed 90%. Columns with value of 0% will not be displayed */
-    private Map<String,Double> columnsAndWidth = new HashMap<String,Double>();
+    private LinkedHashMap<String, Double> columnsAndWidth = new LinkedHashMap<String, Double>();
     /** Calculated, based on columnsAndWidth. */
     private int nrOfColumnsToDisplay;
 
@@ -98,11 +99,11 @@ public class InvoiceManagerCFG {
         this.rowsPerPage = rowsPerPage;
     }
 
-    public Map<String, Double> getColumnsAndWidthMap() {
+    public LinkedHashMap<String, Double> getColumnsAndWidthMap() {
         return columnsAndWidth;
     }
 
-    public void setColumnsAndWidth(Map<String, Double> columnsAndWidth) {
+    public void setColumnsAndWidth(LinkedHashMap<String, Double> columnsAndWidth) {
         this.columnsAndWidth = columnsAndWidth;
     }
 
