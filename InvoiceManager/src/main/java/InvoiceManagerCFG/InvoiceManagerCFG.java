@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Karol Kistela on 07-Apr-16.
@@ -71,10 +72,6 @@ public class InvoiceManagerCFG {
 
     }
 
-    public void putInColumnsAndWidth(String K, Double V) {
-        this.columnsAndWidth.put(K,V);
-    }
-
     public String getImExternalFolderPath() {
         return imExternalFolderPath;
     }
@@ -107,6 +104,12 @@ public class InvoiceManagerCFG {
         this.columnsAndWidth = columnsAndWidth;
     }
 
+    public void putInColumnsAndWidth(String K, Double V) {
+        this.columnsAndWidth.put(K,V);
+    }
+
+    public Set getSetOfColumns() { return this.columnsAndWidth.keySet();}
+
     public int getNrOfColumnsToDisplay() {
         return nrOfColumnsToDisplay;
     }
@@ -115,7 +118,7 @@ public class InvoiceManagerCFG {
         this.nrOfColumnsToDisplay = nrOfColumnsToDisplay;
     }
 
-    public Double getColumnWidth(String columnID){
+    public Double getColumnWidth(Object columnID){
         return this.columnsAndWidth.get(columnID);
     }
 }

@@ -3025,11 +3025,11 @@ thead {
 }
 
 td, th {
-  padding: 15px 5px;
+  padding: 7px 3px;
   display: table-cell;
   text-align: left;
   vertical-align: middle;
-  border-radius: 2px;
+  border-radius: 0px;
 }
 
 @media only screen and (max-width: 992px) {
@@ -4242,8 +4242,10 @@ nav .input-field label.active {
 }
 
 .navbar-fixed {
-  position: relative;
+  position: fixed;
   height: 56px;
+  width:100%;
+  top: 0;
   z-index: 998;
 }
 
@@ -4257,7 +4259,8 @@ nav .input-field label.active {
     line-height: 64px;
   }
   .navbar-fixed {
-    height: 64px;
+    height: 35px;
+    margin-top: 10px;
   }
 }
 
@@ -4870,10 +4873,10 @@ small {
   border: none;
   border-radius: 2px;
   display: inline-block;
-  height: 36px;
-  line-height: 36px;
+  height: 30px;
+  line-height: 30px;
   outline: 0;
-  padding: 0 2rem;
+  padding: 0 0.2rem;
   text-transform: uppercase;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
@@ -4920,16 +4923,17 @@ small {
 
 .btn, .btn-large {
   text-decoration: none;
-  color: #fff;
-  background-color: #26a69a;
+  color: #000;
+  background-color: #fff;
   text-align: center;
-  letter-spacing: .5px;
   transition: .2s ease-out;
   cursor: pointer;
+  border: 1px solid #fff;
 }
 
 .btn:hover, .btn-large:hover {
-  background-color: #2bbbad;
+  background-color: #fff;
+  border: 1px solid #bbb;
 }
 
 .btn-floating {
@@ -5033,8 +5037,8 @@ button.btn-floating {
 
 .btn-flat {
   box-shadow: none;
-  background-color: transparent;
-  color: #343434;
+  background-color: #fff;
+  color: #000;
   cursor: pointer;
 }
 
@@ -5331,9 +5335,9 @@ a.waves-effect .waves-ripple {
   cursor: pointer;
   min-height: 3rem;
   line-height: 3rem;
-  padding: 0 1rem;
+  padding: 0;
   background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 
 .collapsible-header i {
@@ -5494,7 +5498,7 @@ select:focus {
 
 button:focus {
   outline: none;
-  background-color: #2ab7a9;
+  color: #000;
 }
 
 label {
@@ -5551,6 +5555,7 @@ textarea.materialize-textarea {
   box-sizing: content-box;
   transition: all 0.3s;
 }
+
 
 input:not([type]):disabled, input:not([type])[readonly="readonly"],
 input[type=text]:disabled,
@@ -5805,6 +5810,7 @@ textarea.materialize-textarea + label:after {
   position: relative;
   margin-top: 1rem;
 }
+
 
 .input-field label {
   color: #9e9e9e;
