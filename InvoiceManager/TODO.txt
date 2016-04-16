@@ -1,5 +1,0 @@
-TODO: Table HTML code generation with data from columnWidth
-TODO: *.css combining into 1 file - low priority
-TODO: Footer
-TODO: Blocks with variables for freemarker
-TODO: Freemarker class with Static methods for generating views

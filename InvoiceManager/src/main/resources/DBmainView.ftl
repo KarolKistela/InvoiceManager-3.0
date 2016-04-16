@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Invoice Manager 3.0</title>
-    <link type="text/css" rel="stylesheet" href="/Materialize/css/materialize.css" media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="/w3css/w3.css" media="screen,projection"/>
-    <link rel="stylesheet" href="/Materialize/font-awesome-4.5.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/Materialize/css/materialize.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/css/w3css/w3.css" media="screen,projection"/>
+    <link rel="stylesheet" href="/css/Materialize/font-awesome-4.5.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script type="text/javascript" src="/jQuery/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="/Materialize/js/materialize.min.js"></script>
+    <script type="text/javascript" src="/css/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/css/Materialize/js/materialize.min.js"></script>
 
-<!-- FreeMarker generated part of code: template @ /HTML Parts/style.ftl, Model.HTMLtemplateEngine.getStyle -->
+<!-- FreeMarker generated part of code: template @ /HTML Parts/style.ftl, Model.TemplateEngineStyle -->
 ${style}
 <!-- /FreeMarker generated part of code -->
 

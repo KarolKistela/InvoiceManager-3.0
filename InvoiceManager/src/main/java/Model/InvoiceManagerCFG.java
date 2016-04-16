@@ -1,9 +1,7 @@
 package Model;
 
 import java.sql.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,60 +22,11 @@ public class InvoiceManagerCFG {
     private int totalNrOfPages;
 
     public InvoiceManagerCFG() throws ClassNotFoundException {
-        // load the sqlite-JDBC driver using the current class loader
-        Class.forName("org.sqlite.JDBC");
-
-        Connection connection = null;
-        try
-        {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:" + "src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            ResultSet resultSet;
-
-            resultSet = statement.executeQuery("SELECT * FROM CFG ORDER BY ID DESC LIMIT 1;");
-            this.setImExternalFolderPath(resultSet.getString("imExternalFolderPath"));
-            this.setImDBPath(resultSet.getString("imDBPath"));
-            this.setRowsPerPage(resultSet.getInt("rowsPerPage"));
-            this.setBackgroundColor(resultSet.getString("backgroundColor"));
-            this.setTableWidth(resultSet.getDouble("tableWidth"));
-
-            // load (K,V) into columnsAndWidth
-            resultSet = statement.executeQuery("SELECT * FROM columnsAndWidth;");
-            while(resultSet.next())
-            {
-                this.putInColumnsAndWidth(resultSet.getString(1), resultSet.getDouble(2));
-            }
-
-            resultSet = statement.executeQuery("SELECT count() FROM columnsAndWidth WHERE columnWidth > 0;");
-            this.setNrOfColumnsToDisplay(resultSet.getInt(1));
-
-            this.setTotalNrOfPages(0); //default value, change this value when executing query returnigs many records
-        }
-        catch(SQLException e)
-        {
-            // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println(e.getMessage());
-        }
-        finally
-        {
-            try
-            {
-                if(connection != null)
-                    connection.close();
-            }
-            catch(SQLException e)
-            {
-                // connection close failed.
-                System.err.println(e);
-            }
-        }
+        this.loadData();
     }
 
-    /* when user change settings, IM update DB InvoiceManager.cfg after that we need to once again set vars in this class. */
-    public void reloadInvoiceManagerCFG() throws ClassNotFoundException {
+    /* Connetct to db cfg file at src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg and load data from this file. Basically serialization for this class */
+    public void loadData() throws ClassNotFoundException {
         // load the sqlite-JDBC driver using the current class loader
         Class.forName("org.sqlite.JDBC");
 

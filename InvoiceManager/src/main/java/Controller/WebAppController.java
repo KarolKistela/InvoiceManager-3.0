@@ -2,6 +2,7 @@ package Controller;
 
 /**
  * Created by mzjdx6 on 24-Mar-16.
+ * TODO: rewrite it to use with spark 2.3 - low priority
  */
 
 import Model.*;
@@ -20,7 +21,7 @@ import java.io.Writer;
 import static spark.Spark.*;
 
 public class WebAppController {
-    private final HTMLtemplateEngine HTML;
+    private final TemplateEngine HTML;
     private final InvoiceManagerCFG ImCFG;
     private final Configuration FreeMarkerCFG;
     private final InvoiceManagerDB_DAO DAO;
@@ -35,21 +36,21 @@ public class WebAppController {
     }
 
     public WebAppController() throws IOException, ClassNotFoundException {
-        HTML = new HTMLtemplateEngine();
+        HTML = new TemplateEngine();
         ImCFG = new InvoiceManagerCFG();
         FreeMarkerCFG = createFreemarkerConfiguration();
         DAO = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
 
         setPort(8082);
         externalStaticFileLocation(ImCFG.getImExternalFolderPath());
-        staticFileLocation("/"); // translate to /resources
+        staticFileLocation("/"); // => /resources
         initializeRoutes();
     }
 
     abstract class FreemarkerBasedRoute extends Route {
         final Template template;
         /**
-         * TODO: code description
+         * TODO: code description wtf is happening here
          */
         protected FreemarkerBasedRoute(final String path, final String templateName) throws IOException {
             super(path);
@@ -70,7 +71,6 @@ public class WebAppController {
 
         protected abstract void doHandle(final Request request, final Response response, final Writer writer)
                 throws IOException, TemplateException;
-
     }
 
     private void initializeRoutes() throws IOException{
@@ -87,6 +87,11 @@ public class WebAppController {
                                             150));                                              // total nr of pages, depends on query and ImCFG.nrOfColumnsToDisplay
 
                 template.process(root, writer);
+
+//                TODO: move template processing out of webappController class to templateEngine
+//                template.process(simpleHashPut("style",HTML.getStyle()), writer);
+//                writer.write("hello world");
+
             }
         });
 
@@ -110,6 +115,12 @@ public class WebAppController {
     private Configuration createFreemarkerConfiguration() {
         Configuration retVal = new Configuration();
         retVal.setClassForTemplateLoading(WebAppController.class, "/");
+        return retVal;
+    }
+
+    private SimpleHash simpleHashPut(String K, Object V){
+        SimpleHash retVal = new SimpleHash();
+        retVal.put(K,V);
         return retVal;
     }
 }
