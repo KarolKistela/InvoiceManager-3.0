@@ -25,6 +25,9 @@ Folder structure of git repository:
     |--InvoivceManager/     - Maven project source code
 
 RoadMap:
+
 1 may 2016 - working web app and Outlook addIns, beta version
+
 1 june 2016 - production version ready
+
 1 july 2016 - documentation
