@@ -10,14 +10,14 @@
     <script type="text/javascript" src="/css/jQuery/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="/css/Materialize/js/materialize.min.js"></script>
 
-<!-- FreeMarker generated part of code: template @ /HTML Parts/style.ftl, Model.TemplateEngineStyle -->
+<!-- FreeMarker generated part of code: template @ /FTL templates/style.ftl, Model.TemplateEngineStyle -->
 ${style}
 <!-- /FreeMarker generated part of code -->
 
 </head>
 <body>
 
-<!-- FreeMarker generated part of code: template @ /HTML Parts/header2rowed.ftl, getHeader2rowedrowed -->
+<!-- FreeMarker generated part of code: template @ /FTL templates/header2rowed.ftl, getHeader2rowedrowed -->
 <header>
 ${header2rowed}
 </header>

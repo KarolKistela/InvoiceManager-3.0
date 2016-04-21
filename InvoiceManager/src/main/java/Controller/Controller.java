@@ -6,9 +6,7 @@ package Controller;
  */
 
 import Model.*;
-import freemarker.template.Configuration;
-import freemarker.template.SimpleHash;
-import freemarker.template.Template;
+import View.HTMLviewGenerator;
 import freemarker.template.TemplateException;
 import spark.Request;
 import spark.Response;
@@ -17,18 +15,17 @@ import spark.Route;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.sql.SQLException;
 
 import static spark.Spark.*;
 
 public class Controller {
-    private final TemplateEngine Render;
+    private final HTMLviewGenerator Renderer;
     private final InvoiceManagerCFG ImCFG;
-    public PrintWriter errorMSG;
+    public PrintWriter errorMSG; // not sure if it will stay or not
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        //TODO: (args.length == 0) ? connect to DB from ImCFG : connect to test DB for show case
+        //TODO: (args.length == 0) ? connect to getDBview from ImCFG : connect to test getDBview for show case
         if (args.length == 0) {
             new Controller();
         }
@@ -38,7 +35,7 @@ public class Controller {
     }
 
     public Controller() throws IOException, ClassNotFoundException {
-        Render = new TemplateEngine();
+        Renderer = new HTMLviewGenerator();
         ImCFG = new InvoiceManagerCFG();
 
         setPort(8082);
@@ -72,8 +69,8 @@ public class Controller {
     private void initializeRoutes() throws IOException{
         get(new FreemarkerBasedRoute("/DB/:pageNr") {
             @Override
-            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                writer.write(Render.DB(request,response));
+            protected void doHandle(Request request, Response response, StringWriter html) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                html.write(Renderer.getDBview(request,response));
             }
         });
         get(new FreemarkerBasedRoute("/error/:errorMSG") {
@@ -90,10 +87,8 @@ public class Controller {
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException {
                 int pageNr = Integer.parseInt(request.params("idNr"));
 
-                if (pageNr == 55124) {
-                    Runtime runTime = Runtime.getRuntime();
-                    Process process = runTime.exec("notepad");
-                }
+                Runtime runTime = Runtime.getRuntime();
+                Process process = runTime.exec("notepad");
 
                 writer.write("Open NotePad");
             }

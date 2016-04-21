@@ -66,7 +66,7 @@ headerWidth
         <div class="col s6 valign">Date</div>
     </div>
 
-    <div class="col" style="padding: 0px; width: ${tableWidth}%">
+    <div class="col" style="padding: 0px; width: ${tableWidth}%; border-right: 5px solid white">
         <table style="font-weight: bold; border-left: 2px solid #fff; border-right: 2px solid #fff">
             <tbody>
             <tr style="line-height: 1.2em" onclick="myFunction('Demo1')">

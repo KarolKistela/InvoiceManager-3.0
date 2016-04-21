@@ -20,7 +20,7 @@
         body {
             font-family: "Roboto", sans-serif;
             font-size: 15px;
-            background-color: #90caf9;
+            background-color: #ccc;
         }
 
         .IM-menu {
@@ -184,14 +184,14 @@
     </div>
 </div>
 
-<!--Table content for 2 rowed header!!! -->
+<!--InvoicesList content for 2 rowed header!!! -->
 <div class="IM-container">
     <div class="w3-accordion white w3-card-8">
         <!-- User Color @ border-left: ? -->
-        <div class="row valign-wrapper"  style="margin-bottom: 3px; border-bottom: 1px solid #ddd; border-left: 5px solid red">
+        <div class="row valign-wrapper"  style="margin-bottom: 3px; border-left: 5px solid red">
             <!-- Row color defined by user blue lighten-3 -->
             <div class="col valign-wrapper center" style="padding: 0px; width: 12.5% ">
-                <div class="col s4 valign center" style="padding: 0px"><a href="/ID/nr"><button class="btn-flat tooltipped IM-tooltip" data-position="top" data-delay="50" data-tooltip="Edit">55145</button></a></div>
+                <div class="col s4 valign center"><a href="/ID/nr"><button class="btn-flat tooltipped IM-tooltip" data-position="top" data-delay="50" data-tooltip="Edit">55145</button></a></div>
                 <!-- Trigger/Open new window with INV.tiff  REPLACE ":NR" with ID-->
                 <!-- fa fa-barcode - for INV from scanning center, fa fa-print - for INV from scaner -->
                 <div class="col s2 valign center" style="padding: 0px"><a href="/FV/Scan/:nr" onClick="TiffViewNR=window.open('/FV/Scan/:nr','TiffViewNR','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=1024,height=640'); setTimeout(function () { TiffViewNR.close();}, 500); return false;">
@@ -205,7 +205,7 @@
 
             <div class="col" style="padding: 0px; width: 87.5%">
             <!-- User color for rows -->
-                <table style="border: 2px solid red">
+                <table>
                     <tbody>
                         <tr style="line-height: 1.2em">
                             <td class="IM-Supplier">Acme Inc.</td>
@@ -228,7 +228,7 @@
         <div id="Demo1" class="w3-accordion-content w3-container">
             <p>Lorem ipsum...</p>
         </div>
-    </div>    
+    </div>
 </div>
 
 <!--Footer-->

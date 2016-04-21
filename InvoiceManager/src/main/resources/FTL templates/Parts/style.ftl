@@ -6,7 +6,6 @@ IMcolumnClasses - each column has own css class IM-columnName, with width: colum
         body {
             font-family: "Roboto", sans-serif;
             font-size: 15px;
-            background-color: ${backGroundColor};
         }
         .IM-menu {
             margin: 0 0 0 15px;
@@ -24,7 +23,7 @@ IMcolumnClasses - each column has own css class IM-columnName, with width: colum
             width:100%;
             z-index:1;
             top:0;
-            border-bottom: 2px solid #999;
+            border-bottom: 2px solid #555;
         }
         .IM-sidenav{
             display:none;
@@ -55,6 +54,7 @@ IMcolumnClasses - each column has own css class IM-columnName, with width: colum
             clear:both;
             padding-top: 80px;
             width: 100%;
+            background-color: ${backGroundColor};
         }
         .IM-tooltip {
             padding-left: 0px;

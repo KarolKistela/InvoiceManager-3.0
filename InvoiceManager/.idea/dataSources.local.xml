@@ -3,9 +3,11 @@
   <component name="dataSourceStorageLocal">
     <data-source name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="fc203b58-0249-4ca0-9912-0b3d90b0f97b">
       <secret-storage>memory</secret-storage>
+      <auth-required>false</auth-required>
     </data-source>
-    <data-source name="Sqlite (Xerial) - InvoiceManager.db" uuid="30e6b0fe-9239-4466-be1b-c4c3e45c5e7d">
-      <secret-storage>memory</secret-storage>
+    <data-source name="Sqlite (Xerial) - InvoiceManager.db" uuid="fbddaae1-8a35-4d79-b318-bdef9f788a1d">
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
     </data-source>
   </component>
 </project>

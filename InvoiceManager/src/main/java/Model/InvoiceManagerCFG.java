@@ -11,7 +11,7 @@ import java.util.Set;
 public class InvoiceManagerCFG {
     private String imExternalFolderPath;
     private String imDBPath;
-    /** how many records will be displayed per page. It applies for DB main view and All Filters views. */
+    /** how many records will be displayed per page. It applies for getDBview main view and All Filters views. */
     private int rowsPerPage;
     /** Key - name of the column, Value - width of columnn in %. IMPORTANT: sum of widths cannot exceed 90%. Columns with value of 0% will not be displayed */
     private LinkedHashMap<String, Double> columnsAndWidth = new LinkedHashMap<String, Double>();
