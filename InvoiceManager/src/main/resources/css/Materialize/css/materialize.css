@@ -3256,12 +3256,12 @@ nav ul a span.badge {
 
 .progress {
     position: relative;
-    height: 4px;
+    height: 3px;
     display: block;
     width: 100%;
     background-color: #acece6;
     border-radius: 2px;
-    margin: 0.5rem 0 1rem 0;
+    margin: 0;
     overflow: hidden;
 }
 
@@ -8238,7 +8238,7 @@ header .row div{
     /*height: 33px*/
 }
 header strong a {
-    color: #000;
+    /*color: #000;*/
 }
 header nav ul {
     float: left;
@@ -8250,12 +8250,17 @@ nav {
 }
 nav ul li a {
     font-size: 1.5em;
+    border-bottom: 2px solid #fff;
 }
 nav a:hover {
     color: #000000;
+    border-bottom: 2px solid #29b6f6;
 }
 .IM-menu-active{
     color: #000;
+}
+.IM-menu-active a:hover {
+    border-bottom: none;
 }
 strong {
     padding-top: 2px;
@@ -8263,8 +8268,15 @@ strong {
 ul {
     margin: 0 0 0 0;
 }
-header form input[type=text] {
+header form input[type=search] {
     height: 2em;
+    padding-top: 4px;
+    width: 95%;
+}
+
+header form input[type=search]:focus:not([readonly]){
+    border-bottom: 1px solid #29b6f6;
+    box-shadow: 0 1px 0 0 #29b6f6;
 }
 .searchHelp {
     text-align: right;
@@ -8308,7 +8320,11 @@ header form input[type=text] {
     padding:4px 16px 4px 16px
 }
 header nav:nth-child(1) ul:nth-child(1) li a:hover{
-    background-color:#ccc
+    background-color:#ccc;
+    border-bottom: none;
+}
+header nav:nth-child(1) ul:nth-child(1) li a {
+    border-bottom: none;
 }
 .IM-sidenav a{
     display:block
@@ -8339,13 +8355,13 @@ header nav:nth-child(1) ul:nth-child(1) li a:hover{
 }
 
 main {
-    margin-top: 76px;
+    margin-top: 64px;
     padding: 0 1%;
 }
 main table {
     font-weight: normal;
     border-top: 1px solid black;
-    margin-top: 4px;
+    margin-top: 5px;
 }
 .IM-details i {
     font-size: 1.5em;
@@ -8374,7 +8390,14 @@ main table {
 #topPagination {
     float: none;
     text-align: center;
-    font-size: 1em;
+}
+#topPagination li:nth-child(2) a {
+    font-size: 1.25em;
+    color: #000;
+    font-weight: bold;
+}
+#topPagination li:nth-child(2) a:hover {
+    border-bottom: 2px solid white;
 }
 header td {
     padding:3px 3px;
@@ -8390,4 +8413,19 @@ header aside table {
 }
 .processStage {
     margin-bottom: 0px;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
 }

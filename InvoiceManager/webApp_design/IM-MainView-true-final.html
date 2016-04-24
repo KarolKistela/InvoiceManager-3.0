@@ -71,7 +71,8 @@
 <body>
 <!-- =========================================== TopBar ============================================================ -->
 <header class="row">
-    <nav class="col s2">
+    <nav class="col s3">
+<!-- =========================================== SideNav -->
         <ul class="IM-sidenav">
             <li><a href="javascript:void(0)" onclick="w3_close()">Close &times;</a></li>
             <li><a href="/NewFilter">New filter</a></li>
@@ -81,32 +82,34 @@
             <li><a href="/FilterView/4">Filter 4</a></li>
             <li><a href="/FilterView/5">Filter 5</a></li>
         </ul>
-
+<!-- ========================================== MainManu -->
         <ul>
             <li><a href="/DBMainView/1"><i class="fa fa-home IM-menu-active"></i></a></li>
             <li><a href="/Settings"><i class="fa fa-cog"></i></a></li>
-            <li><a href="#"><i class="fa fa-filter" onclick="w3_open()"></i></a></li>
+            <li onclick="w3_open()"><a href="#"><i class="fa fa-filter"></i></a></li>
             <li><a href="/sqlquery"><i class="fa fa-database"></i></a></li>
             <li><a href="/reports"><i class="fa fa-bar-chart"></i></a></li>
         </ul>
     </nav>
-
-    <strong class="waves-effect col s2"><a href="#">DB Main View</a></strong>
-
-    <nav class="pagination col s4">
+<!-- ======================================== View Title style="padding-top: 5px" -->
+    <div class="col s2 center">
+        <a href="#"><strong class="waves-effect">DB Main View</strong></a>
+    </div>
+<!-- ======================================== Pagination -->
+    <nav class="col s2">
         <ul id="topPagination">
             <li class="waves-effect"><a href="/previous"><i class="fa fa-angle-double-left"></i></a></li>
-            <li class="waves-effect" style="padding-top: 5px"><a href="#">15</a></li>
+            <li class="waves-effect"><a>15</a></li>
             <li class="waves-effect"><a href="/next"><i class="fa fa-angle-double-right"></i></a></li>
         </ul>
     </nav>
-
-    <nav class="col s2">
-<!-- Modal Trigger   -->
+<!-- ======================================= Search Info -->
+    <nav class="col s3">
+        <!-- Modal Trigger   -->
         <ul style="float: right">
             <li><a onclick="popUpModal('searchHelp');"><i class="fa fa-info"></i></a></li>
         </ul>
-<!-- Modal Structure -->
+        <!-- Modal Structure -->
         <div id="searchHelp" class="modal">
             <div class="modal-content">
                 <h4>Search Help</h4>
@@ -120,10 +123,10 @@
             </div>
         </div>
     </nav>
-
+<!-- ==================================== Search input  -->
     <form class="col s2 no-padding">
         <label for="search_query"></label>
-        <input placeholder="search" id="search_query" type="text">
+        <input placeholder="search" id="search_query" type="search">
     </form>
 <!-- ===================================== 2nd row for Tab Header ================================================== -->
     <aside class="row">
@@ -148,39 +151,37 @@
 </header>
 <!-- ============================ InvoicesList content for 2 rowed header ========================================== -->
 <main class="row"> <!-- User Color -->
-    <table style="  border-left: 4px solid red;
-                    border-right: 4px solid red;
-                    background-color: #fff;">       <!-- Row color -->
-        <tbody>
-            <tr>
-                <td class="IM-ID">ID</td>
-                <td class="IM-Inv">Inv</td>
-                <td class="IM-Date">Date</td>
-                <td class="IM-Supplier">Supplier</td>
-                <td class="IM-InvoiceNR">InvoiceNR</td>
-                <td class="IM-PO">PO</td>
-                <td class="IM-NetPrice">NetPrice</td>
-                <td class="IM-Authorization" >Authorization</td>
-                <td class="IM-Email">Email</td>
-                <td class="IM-GR">GR</td>
-                <td class="IM-details"><i class="fa fa-chevron-down" onclick="myFunction('acor')"></i></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="row processStage" style="border-left: 4px solid red;
-                                         border-right: 4px solid red">
-        <div class="col s3" style="border-top: 3px solid #212121"></div>
-        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
-        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
-        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
-    </div>
-
-    <section id="acor" class="w3-accordion-content" style="border-left: 4px solid red;
-                                                       border-right: 4px solid red"> <!-- Always white -->
-        <p>Here goes details about this ID</p>
-        <!-- TODO: design details for row - high priority -->
-    </section>
+    <article class="hoverable">
+        <table style="  border-left: 4px solid red;
+                        border-right: 4px solid red;
+                        background-color: #fff;">       <!-- Row color -->
+            <tbody>
+                <tr>
+                    <td class="IM-ID">ID</td>
+                    <td class="IM-Inv">Inv</td>
+                    <td class="IM-Date">Date</td>
+                    <td class="IM-Supplier">Supplier</td>
+                    <td class="IM-InvoiceNR">InvoiceNR</td>
+                    <td class="IM-PO">PO</td>
+                    <td class="IM-NetPrice">NetPrice</td>
+                    <td class="IM-Authorization" >Authorization</td>
+                    <td class="IM-Email">Email</td>
+                    <td class="IM-GR">GR</td>
+                    <td class="IM-details"><i class="fa fa-chevron-down" onclick="myFunction('acor')"></i></td>
+                </tr>
+            </tbody>
+        </table>
+<!-- ========================================== Process stage Indicator -->
+        <div class="progress blue lighten-4">
+            <div class="determinate light-blue darken-4" style="width: 33%"></div>
+        </div>
+<!-- ================================================ Details for inv ID -->
+        <section id="acor" class="w3-accordion-content" style="border-left: 4px solid red;
+                                                           border-right: 4px solid red"> <!-- Always white -->
+            <p>Here goes details about this ID</p>
+            <!-- TODO: design details for row - high priority -->
+        </section>
+    </article>
 <!-- ========================================= Test for colored row ================================================ -->
     <table style="  border-left: 4px solid red;
                     border-right: 4px solid red;
@@ -201,22 +202,55 @@
             </tr>
         </tbody>
     </table>
-
-    <div class="row processStage" style="border-left: 4px solid red;
-                                         border-right: 4px solid red">
-        <div class="col s3" style="border-top: 3px solid #212121"></div>
-        <div class="col s3" style="border-top: 3px solid #212121"></div>
-        <div class="col s3" style="border-top: 3px solid #212121"></div>
-        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
+<!-- ========================================== Process stage Indicator -->
+    <!--<div class="row processStage" style="border-left: 4px solid red;-->
+                                         <!--border-right: 4px solid red">-->
+        <!--<div class="col s3" style="border-top: 3px solid #333"></div>-->
+        <!--<div class="col s3" style="border-top: 3px solid #333"></div>-->
+        <!--<div class="col s3" style="border-top: 3px solid #333"></div>-->
+        <!--<div class="col s3" style="border-top: 3px solid #bdbdbd"></div>-->
+    <!--</div>-->
+    <div class="progress">
+        <div class="determinate" style="width: 70%"></div>
     </div>
 
     <section id="acor2" class="w3-accordion-content" style="border-left: 4px solid red;
                                                         border-right: 4px solid red"> <!-- Always white -->
-            <p>Here goes details about this ID</p>
+            <ul>
+                <li>First list item</li>
+                <li>Second list item</li>
+                <li>third list item</li>
+                <li>last one list item</li>
+            </ul>
     </section>
 </main>
 
-<!--Footer-->
+<!-- ================================================== Footer ===================================================== -->
+<footer class="page-footer blue">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Footer Content</h5>
+                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2014 Copyright Text
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        </div>
+    </div>
+</footer>
 <!--TODO: footer-->
 
 <script>
