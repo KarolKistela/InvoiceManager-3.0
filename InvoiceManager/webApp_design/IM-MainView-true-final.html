@@ -1,0 +1,298 @@
+<!-- template for DataBase view with many records per page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoices Manager 3.0</title>
+    <link type="text/css" rel="stylesheet" href="../src/main/resources/css/Materialize/css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" href="../src/main/resources/css/Materialize/font-awesome-4.5.0/css/font-awesome.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="../src/main/resources/css/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="../src/main/resources/css/Materialize/js/materialize.js"></script>
+    <!-- TODO: make background and font color possible to change from DB settings -->
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            font-size: 15px;
+            background-color: #f3f3f3; /* Background color of body */
+        }
+        header, header nav ul li a {
+            background-color: #fff; /*background color of header */
+            color: #aaa;
+        }
+        header nav:nth-child(1) ul:nth-child(1) li a {
+            background-color: #777;
+            color: #fff;
+        }
+        aside, header form input {
+            color: #000;
+        }
+        .IM-ID {
+            width: 5%;
+            text-align: center;
+        }
+        .IM-Inv{
+            width: 5%;
+            text-align: center;
+        }
+        .IM-Date{
+            width: 5%;
+            text-align: center;
+        }
+        .IM-Supplier {
+            width: 15%
+        }
+        .IM-InvoiceNR{
+            width: 10%
+        }
+        .IM-PO{
+            width: 10%
+        }
+        .IM-NetPrice{
+            width: 10%
+        }
+        .IM-Authorization{
+            width: 15%
+        }
+        .IM-Email{
+            width: 5%
+        }
+        .IM-GR{
+            width: 18%
+        }
+        .IM-details{
+            width: 2%
+        }
+        /**{*/
+            /*border: 1px dashed black;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<!-- =========================================== TopBar ============================================================ -->
+<header class="row">
+    <nav class="col s2">
+        <ul class="IM-sidenav">
+            <li><a href="javascript:void(0)" onclick="w3_close()">Close &times;</a></li>
+            <li><a href="/NewFilter">New filter</a></li>
+            <li><a href="/FilterView/1">Filter 1</a></li>
+            <li><a href="/FilterView/2">Filter 2</a></li>
+            <li><a href="/FilterView/3">Filter 3</a></li>
+            <li><a href="/FilterView/4">Filter 4</a></li>
+            <li><a href="/FilterView/5">Filter 5</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="/DBMainView/1"><i class="fa fa-home IM-menu-active"></i></a></li>
+            <li><a href="/Settings"><i class="fa fa-cog"></i></a></li>
+            <li><a href="#"><i class="fa fa-filter" onclick="w3_open()"></i></a></li>
+            <li><a href="/sqlquery"><i class="fa fa-database"></i></a></li>
+            <li><a href="/reports"><i class="fa fa-bar-chart"></i></a></li>
+        </ul>
+    </nav>
+
+    <strong class="waves-effect col s2"><a href="#">DB Main View</a></strong>
+
+    <nav class="pagination col s4">
+        <ul id="topPagination">
+            <li class="waves-effect"><a href="/previous"><i class="fa fa-angle-double-left"></i></a></li>
+            <li class="waves-effect" style="padding-top: 5px"><a href="#">15</a></li>
+            <li class="waves-effect"><a href="/next"><i class="fa fa-angle-double-right"></i></a></li>
+        </ul>
+    </nav>
+
+    <nav class="col s2">
+<!-- Modal Trigger   -->
+        <ul style="float: right">
+            <li><a onclick="popUpModal('searchHelp');"><i class="fa fa-info"></i></a></li>
+        </ul>
+<!-- Modal Structure -->
+        <div id="searchHelp" class="modal">
+            <div class="modal-content">
+                <h4>Search Help</h4>
+                <p>A bunch of text</p>
+                <iframe src="test.html"></iframe>
+            </div>
+            <div class="modal-fixed-footer white">
+                <a onclick="closeModal('searchHelp');" class="modal-close">
+                    <h5>Close</h5>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <form class="col s2 no-padding">
+        <label for="search_query"></label>
+        <input placeholder="search" id="search_query" type="text">
+    </form>
+<!-- ===================================== 2nd row for Tab Header ================================================== -->
+    <aside class="row">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="IM-ID">ID</td>
+                    <td class="IM-Inv">Inv</td>
+                    <td class="IM-Date">Date</td>
+                    <td class="IM-Supplier">Supplier</td>
+                    <td class="IM-InvoiceNR">InvoiceNR</td>
+                    <td class="IM-PO">PO</td>
+                    <td class="IM-NetPrice">NetPrice</td>
+                    <td class="IM-Authorization" >Authorization</td>
+                    <td class="IM-Email">Email</td> <!-- Email Icon for Authorization Email -->
+                    <td class="IM-GR">GR</td>
+                    <td class="IM-details"></td>
+                </tr>
+            </tbody>
+        </table>
+    </aside>
+</header>
+<!-- ============================ InvoicesList content for 2 rowed header ========================================== -->
+<main class="row"> <!-- User Color -->
+    <table style="  border-left: 4px solid red;
+                    border-right: 4px solid red;
+                    background-color: #fff;">       <!-- Row color -->
+        <tbody>
+            <tr>
+                <td class="IM-ID">ID</td>
+                <td class="IM-Inv">Inv</td>
+                <td class="IM-Date">Date</td>
+                <td class="IM-Supplier">Supplier</td>
+                <td class="IM-InvoiceNR">InvoiceNR</td>
+                <td class="IM-PO">PO</td>
+                <td class="IM-NetPrice">NetPrice</td>
+                <td class="IM-Authorization" >Authorization</td>
+                <td class="IM-Email">Email</td>
+                <td class="IM-GR">GR</td>
+                <td class="IM-details"><i class="fa fa-chevron-down" onclick="myFunction('acor')"></i></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row processStage" style="border-left: 4px solid red;
+                                         border-right: 4px solid red">
+        <div class="col s3" style="border-top: 3px solid #212121"></div>
+        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
+        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
+        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
+    </div>
+
+    <section id="acor" class="w3-accordion-content" style="border-left: 4px solid red;
+                                                       border-right: 4px solid red"> <!-- Always white -->
+        <p>Here goes details about this ID</p>
+        <!-- TODO: design details for row - high priority -->
+    </section>
+<!-- ========================================= Test for colored row ================================================ -->
+    <table style="  border-left: 4px solid red;
+                    border-right: 4px solid red;
+                    background-color: #ffccbc ;">       <!-- Row color -->
+        <tbody>
+            <tr>
+                <td class="IM-ID">ID</td>
+                <td class="IM-Inv">Inv</td>
+                <td class="IM-Date">Date</td>
+                <td class="IM-Supplier">Supplier</td>
+                <td class="IM-InvoiceNR">InvoiceNR</td>
+                <td class="IM-PO">PO</td>
+                <td class="IM-NetPrice">NetPrice</td>
+                <td class="IM-Authorization" >Authorization</td>
+                <td class="IM-Email">Email</td>
+                <td class="IM-GR">GR</td>
+                <td class="IM-details"><i class="fa fa-chevron-down" onclick="myFunction('acor2')"></i></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row processStage" style="border-left: 4px solid red;
+                                         border-right: 4px solid red">
+        <div class="col s3" style="border-top: 3px solid #212121"></div>
+        <div class="col s3" style="border-top: 3px solid #212121"></div>
+        <div class="col s3" style="border-top: 3px solid #212121"></div>
+        <div class="col s3" style="border-top: 3px solid #bdbdbd"></div>
+    </div>
+
+    <section id="acor2" class="w3-accordion-content" style="border-left: 4px solid red;
+                                                        border-right: 4px solid red"> <!-- Always white -->
+            <p>Here goes details about this ID</p>
+    </section>
+</main>
+
+<!--Footer-->
+<!--TODO: footer-->
+
+<script>
+    function w3_open() {
+        document.getElementsByClassName("IM-sidenav")[0].style.display = "block";
+        document.getElementsByClassName("IM-overlay")[0].style.display = "block";
+    }
+    function w3_close() {
+        document.getElementsByClassName("IM-sidenav")[0].style.display = "none";
+        document.getElementsByClassName("IM-overlay")[0].style.display = "none";
+    }
+
+    function myAccFunc() {
+        var x = document.getElementById("demoAcc");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
+
+    function myDropFunc() {
+        var x = document.getElementById("demoDrop");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
+    $(document).ready(function(){
+        $('.collapsible').collapsible({
+            accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+        });
+    });
+
+    function myFunction(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
+
+    function popUpModal(id) {
+        var modalId = document.getElementById(id);
+        modalId.style.display='block';
+        setTimeout(function () { document.getElementById(id).style.display='none';}, 1500);
+        return false;
+    }
+
+    function openModal(id) {
+        var modalId = document.getElementById(id)
+        modalId.style.display='block';
+    }
+
+    function closeModal(id) {
+        var modalId = document.getElementById(id)
+        modalId.style.display='none';
+
+    }
+
+    $(document).ready(function(){
+        $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
+    });
+
+    $(document).ready(function(){
+        $('.tooltipped').tooltip({delay: 50});
+    });
+</script>
+
+</body>
+</html>
