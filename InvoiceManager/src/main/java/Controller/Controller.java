@@ -6,11 +6,13 @@ package Controller;
  */
 
 import Model.*;
-import View.HTMLviewGenerator;
+import Depreciated.HTMLviewGenerator;
+import View.Renderer;
 import freemarker.template.TemplateException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import View.HtmlFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,6 +24,7 @@ import static spark.Spark.*;
 public class Controller {
     private final HTMLviewGenerator Renderer;
     private final InvoiceManagerCFG ImCFG;
+    private final HtmlFactory htmlFactory;
     public PrintWriter errorMSG; // not sure if it will stay or not
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -37,6 +40,7 @@ public class Controller {
     public Controller() throws IOException, ClassNotFoundException {
         Renderer = new HTMLviewGenerator();
         ImCFG = new InvoiceManagerCFG();
+        htmlFactory = new HtmlFactory();
 
         setPort(8082);
         externalStaticFileLocation(ImCFG.getImExternalFolderPath());
@@ -70,7 +74,10 @@ public class Controller {
         get(new FreemarkerBasedRoute("/DB/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter html) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                html.write(Renderer.getDBview(request,response));
+                int pageNr = Integer.parseInt(request.params("pageNr"));
+
+                Renderer DBview = htmlFactory.getDataBaseView(pageNr);
+                html.write(DBview.render());
             }
         });
         get(new FreemarkerBasedRoute("/error/:errorMSG") {
@@ -97,9 +104,9 @@ public class Controller {
 
     // TODO: rout   /ID/:id
     // TODO: rout   /ID/:id/scan
-    // TODO: rout   /ID/:id/email
-    // TODO: rout
-    // TODO: rout
+    // TODO: rout   /ID/:id/AuthEmail
+    // TODO: rout   /Filter/Supplier/:supplier
+    // TODO: rout   /Filter/AuthContact/:authContact  hmm... or more generic: /Filter/:filterKey/:filterValue
     // TODO: rout
     // TODO: rout
     // TODO: rout

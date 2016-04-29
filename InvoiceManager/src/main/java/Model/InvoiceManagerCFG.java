@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.*;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,6 +22,7 @@ public class InvoiceManagerCFG {
     private String backgroundColor;
     private double tableWidth;
     private int totalNrOfPages;
+    private List<String[]> filters;
 
     public InvoiceManagerCFG() throws ClassNotFoundException {
         this.loadData();
@@ -57,6 +60,19 @@ public class InvoiceManagerCFG {
             this.setNrOfColumnsToDisplay(resultSet.getInt(1));
 
             this.setTotalNrOfPages(0);
+
+            resultSet = statement.executeQuery("SELECT * FROM Filters");
+            List<String[]> l = new LinkedList<>();
+            while (resultSet.next()){
+                String[] filter;
+                filter = new String[resultSet.getMetaData().getColumnCount()];
+
+                for (int i=1; i <= resultSet.getMetaData().getColumnCount(); i++){
+                    filter[i-1]=resultSet.getString(i);
+                }
+                l.add(filter);
+            }
+            this.setFilters(l);
         }
         catch(SQLException e)
         {
@@ -151,6 +167,14 @@ public class InvoiceManagerCFG {
 
     public void setTableWidth(double tableWidth) {
         this.tableWidth = tableWidth;
+    }
+
+    public List<String[]> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<String[]> list) {
+        this.filters = list;
     }
 }
 

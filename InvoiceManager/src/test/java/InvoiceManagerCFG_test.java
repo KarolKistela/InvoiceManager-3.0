@@ -12,14 +12,20 @@ public class InvoiceManagerCFG_test {
             e.printStackTrace();
         }
 
-        System.out.println("nr of columns to display: " + ImCFG.getNrOfColumnsToDisplay());
-        System.out.println("External Folder Path: " + ImCFG.getImExternalFolderPath());
-        System.out.println("DataBase Path: " + ImCFG.getImDBPath());
-        System.out.println("Rows to display: " + ImCFG.getRowsPerPage());
-        System.out.println("BackGround color: " + ImCFG.getBackgroundColor());
-
-        for (Object K:ImCFG.getSetOfColumns()) {
-            System.out.println("Width of column " + K +": " + ImCFG.getColumnWidth(K));
+//        System.out.println("nr of columns to display: " + ImCFG.getNrOfColumnsToDisplay());
+//        System.out.println("External Folder Path: " + ImCFG.getImExternalFolderPath());
+//        System.out.println("DBview Path: " + ImCFG.getImDBPath());
+//        System.out.println("Rows to display: " + ImCFG.getRowsPerPage());
+//        System.out.println("BackGround color: " + ImCFG.getBackgroundColor());
+//
+//        for (Object K:ImCFG.getSetOfColumns()) {
+//            System.out.println("Width of column " + K +": " + ImCFG.getColumnWidth(K));
+//        }
+        for (String[] s: ImCFG.getFilters()
+             ) {
+            System.out.println("ID: " + s[0]);
+            System.out.println("FilterName: " + s[1]);
+            System.out.println("sqlQuery" + s[2]);
         }
     }
 }

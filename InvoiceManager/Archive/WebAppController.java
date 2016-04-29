@@ -75,7 +75,7 @@
 //    }
 //
 //    private void initializeRoutes() throws IOException{
-//        get(new FreemarkerBasedRoute("/getDBview/:pageNr", "DBmainView.ftl") {
+//        get(new FreemarkerBasedRoute("/getDBview/:pageNr", "DataBaseView.ftl") {
 //            @Override
 //            protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
 //                SimpleHash root = new SimpleHash();
@@ -96,7 +96,7 @@
 //            }
 //        });
 //
-//        get(new FreemarkerBasedRoute("/", "DBmainView.ftl") {
+//        get(new FreemarkerBasedRoute("/", "DataBaseView.ftl") {
 //                @Override
 //                protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
 //                    response.redirect("/getDBview/1");

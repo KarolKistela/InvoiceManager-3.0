@@ -8429,3 +8429,11 @@ main {
     margin-left: 0px;
     margin-right: 0px;
 }
+.IM-detailsTabel {
+    border-top: none;
+}
+.IM-detailsTabel tr td:nth-child(1) {
+    font-weight: bold;
+    text-align: right;
+    width: 15%;
+}

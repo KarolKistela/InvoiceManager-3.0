@@ -1,8 +1,8 @@
 import Model.Invoice;
 import Model.InvoiceManagerDB_DAO;
-import Model.InvoicesList;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,31 +19,42 @@ public class InvoiceManagerDB_DAO_test {
     }
 
     public InvoiceManagerDB_DAO_test(String s) {
-        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(s);
-        InvoicesList invL =  new InvoicesList();
+        InvoiceManagerDB_DAO db = null;
         try {
-            System.out.println("Nr of records in DB: " + db.sqlCount("SELECT count(*) FROM Invoices;"));
+            db = new InvoiceManagerDB_DAO();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        List<Invoice> invL =  new LinkedList<Invoice>();
+//        try {
+//            System.out.println("Nr of records in DB: " + db.sqlCOUNT("SELECT count(*) FROM Invoices;"));
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            invL = db.sqlSELECT("SELECT * FROM Invoices ORDER BY ID DESC LIMIT 0, 1");
+//            invL.toString();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         try {
-            invL = db.sqlQuery("SELECT * FROM Invoices ORDER BY ID DESC LIMIT 0, 1");
-            invL.toString();
+            List<String[]> list;
+            list = db.sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false);
+
+            for (String[] sarray: list) {
+                System.out.println(sarray[2]);
+            }
+
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        try {
-            invL = new InvoicesList(db.InvoicesTab("SELECT * FROM Invoices ORDER BY ID DESC LIMIT 1, 1"));
-            invL.toString();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -1,4 +1,4 @@
-<!-- template for DataBase view with many records per page -->
+<!-- template for DBview view with many records per page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,16 +28,13 @@
             color: #000;
         }
         .IM-ID {
-            width: 5%;
-            text-align: center;
+            width: 5%;text-align: center;
         }
         .IM-Inv{
-            width: 5%;
-            text-align: center;
+            width: 5%;text-align: center;
         }
         .IM-Date{
-            width: 5%;
-            text-align: center;
+            width: 5%;text-align: center;
         }
         .IM-Supplier {
             width: 15%
@@ -61,7 +58,8 @@
             width: 18%
         }
         .IM-details{
-            width: 2%
+            width: 2%;
+            text-align: center
         }
         /**{*/
             /*border: 1px dashed black;*/
@@ -158,7 +156,7 @@
             <tbody>
                 <tr>
                     <td class="IM-ID">ID</td>
-                    <td class="IM-Inv">Inv</td>
+                    <td class="IM-Inv"><a onClick=popOutWindow('inv')>Inv</a></td>
                     <td class="IM-Date">Date</td>
                     <td class="IM-Supplier">Supplier</td>
                     <td class="IM-InvoiceNR">InvoiceNR</td>
@@ -326,6 +324,11 @@
     $(document).ready(function(){
         $('.tooltipped').tooltip({delay: 50});
     });
+    function popOutWindow(ID) {
+        okno = window.open(ID,'okno','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=1024,height=640');
+        setTimeout(function () { okno.close();}, 500); return false;
+    }
+
 </script>
 
 </body>

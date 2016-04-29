@@ -1,4 +1,4 @@
-package View;
+package Depreciated;
 
 import Model.InvoiceManagerCFG;
 import Model.InvoiceManagerDB_DAO;
@@ -6,12 +6,9 @@ import freemarker.template.Configuration;
 import freemarker.template.SimpleHash;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import spark.Request;
-import spark.Response;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.sql.SQLException;
 
 /**
  * Created by Karol Kistela on 14-Apr-16.
@@ -36,29 +33,29 @@ public class HTMLviewGenerator {
         // TODO: catch InvoiceManagerDB_DAO constructor and in case off connection problem load default values (write method in InvoiceManagerDB_DAO class)
     }
 
-    public String getDBview(Request request, Response response) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-        int pageNr = Integer.parseInt(request.params("pageNR"));
-        ImCFG.setTotalNrOfPages((InvoiceManagerDB_DAO.sqlCount("SELECT count(*) FROM Invoices")/ImCFG.getRowsPerPage() + 1));
-        SimpleHash replaceMap = new SimpleHash();
-        StringWriter retVal = new StringWriter();
-        Template template = cfg.getTemplate("DB.ftl");
-
-        replaceMap.put("style", this.getStyle());
-        replaceMap.put("header2rowed", this.getHeader2rowed(
-                "DB main view",                                     // view name to display in top bar
-                1,                                                  // which icon from top bar to activate
-                pageNr,                                             // what pageNr are we at, required for pagination
-                ImCFG.getTotalNrOfPages()));                        // total nr of pages, depends on query and ImCFG.nrOfColumnsToDisplay
-        replaceMap.put("table", InvoiceManagerDB_DAO.getTable(
-                "SELECT * FROM Invoices ORDER BY ID DESC ",         // SQL query, it will add LIMIT skip,nrOfrows
-                pageNr,                                             // what pageNr are we at, required for LIMIT - skip = (pageNr - 1)*rowsPerPage
-                ImCFG.getRowsPerPage(),
-                ImCFG.getTableWidth()));
-
-        template.process(replaceMap, retVal);
-
-        return retVal.toString();
-    }
+//    public String getDBview(Request request, Response response) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//        int pageNr = Integer.parseInt(request.params("pageNR"));
+//        ImCFG.setTotalNrOfPages((InvoiceManagerDB_DAO.sqlCOUNT("SELECT count(*) FROM Invoices")/ImCFG.getRowsPerPage() + 1));
+//        SimpleHash replaceMap = new SimpleHash();
+//        StringWriter retVal = new StringWriter();
+//        Template template = cfg.getTemplate("DB.ftl");
+//
+//        replaceMap.put("style", this.getStyle());
+//        replaceMap.put("header2rowed", this.getHeader2rowed(
+//                "DB main view",                                     // view name to display in top bar
+//                1,                                                  // which icon from top bar to activate
+//                pageNr,                                             // what pageNr are we at, required for pagination
+//                ImCFG.getTotalNrOfPages()));                        // total nr of pages, depends on query and ImCFG.nrOfColumnsToDisplay
+//        replaceMap.put("table", InvoiceManagerDB_DAO.getTable(
+//                "SELECT * FROM Invoices ORDER BY ID DESC ",         // SQL query, it will add LIMIT skip,nrOfrows
+//                pageNr,                                             // what pageNr are we at, required for LIMIT - skip = (pageNr - 1)*rowsPerPage
+//                ImCFG.getRowsPerPage(),
+//                ImCFG.getTableWidth()));
+//
+//        template.process(replaceMap, retVal);
+//
+//        return retVal.toString();
+//    }
 
 //
 
