@@ -19,6 +19,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 
+import static Model.Helpers.getRout;
+import static Model.Helpers.runShellCommand;
 import static spark.Spark.*;
 
 public class Controller {
@@ -73,11 +75,18 @@ public class Controller {
     private void initializeRoutes() throws IOException{
         get(new FreemarkerBasedRoute("/DB/:pageNr") {
             @Override
-            protected void doHandle(Request request, Response response, StringWriter html) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                int pageNr = Integer.parseInt(request.params("pageNr"));
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                Renderer DBview = htmlFactory.getDataBaseView(request, "/DB/");
+                webPage.write(DBview.render());
+            }
+        });
+        get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                String rout = getRout(request);
 
-                Renderer DBview = htmlFactory.getDataBaseView(pageNr);
-                html.write(DBview.render());
+                Renderer selectWhereView = htmlFactory.getSelectWhereView(request, rout);
+                webPage.write(selectWhereView.render());
             }
         });
         get(new FreemarkerBasedRoute("/error/:errorMSG") {
@@ -87,27 +96,52 @@ public class Controller {
             }
         });
 
-        /* Test
+        /* this rout will open tif file for ID
          */
         get(new FreemarkerBasedRoute("/ID/:idNr/scan") {
             @Override
-            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException {
-                int pageNr = Integer.parseInt(request.params("idNr"));
+            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
+                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"InvScanPath");
+                try {
+                    runShellCommand(filePath);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                Runtime runTime = Runtime.getRuntime();
-                Process process = runTime.exec("notepad");
+                writer.write("Open invoice scan file");
+            }
+        });
 
-                writer.write("Open NotePad");
+        get(new FreemarkerBasedRoute("/ID/:idNr/authEmail") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
+                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"AuthEmail");
+                try {
+                    runShellCommand(filePath);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                writer.write("Open Authorization msg");
+            }
+        });
+
+        get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                String rout = "/ID/"+request.params("idNr")+"/invNr/";
+
+                Renderer invNr = htmlFactory.getInvNrView(request, rout);
+                webPage.write(invNr.render());
             }
         });
     }
-
     // TODO: rout   /ID/:id
     // TODO: rout   /ID/:id/scan
     // TODO: rout   /ID/:id/AuthEmail
     // TODO: rout   /Filter/Supplier/:supplier
     // TODO: rout   /Filter/AuthContact/:authContact  hmm... or more generic: /Filter/:filterKey/:filterValue
-    // TODO: rout
+    // TODO: rout   /ID/:${ID}/invNr
     // TODO: rout
     // TODO: rout
 }

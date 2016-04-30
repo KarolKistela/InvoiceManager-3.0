@@ -11,6 +11,8 @@
       <column name="rowsPerPage" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
       <column name="backgroundColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="tableWidth" sqlType="DOUBLE" precision="0" scale="-1" nullable="false" jdbcType="6" def="ODcuNQ=="/>
+      <column name="OrderByClause" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12" def="J09SREVSIEJZIElEIERFU0Mn"/>
+      <column name="checkForInvNrDuplicates" sqlType="BOOLEAN" precision="0" scale="-1" nullable="false" jdbcType="4" def="VFJVRQ=="/>
       <primary-key columns="id"/>
     </table>
     <table name="Filters" schema="" catalog="" type="TABLE">

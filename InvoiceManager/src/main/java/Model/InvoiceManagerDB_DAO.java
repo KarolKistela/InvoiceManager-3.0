@@ -21,20 +21,30 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
         this.DB_Path = DB_Path;
     }
 
-    public List<String[]> sqlSELECT(String query, int pageNr, boolean withLimitClause) throws ClassNotFoundException, SQLException {
+    public List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause ,boolean withLimitClause) throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         List<String[]> retVal = new LinkedList<>();
-        String limitClause;
+        String orderByClause;
+            if (withOrderByClause) {
+                orderByClause = ImCFG.getOrderByClause();
+            } else {
+                orderByClause = "";
+            }
 
-        /* Make sure that LIMIT is correct sql statment: */
-        if (withLimitClause) {
-            if (pageNr < 0) pageNr = 0;
-            if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
-                pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
-            limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
-        } else {
-            limitClause = ";";
-        }
+        String limitClause;
+            /* Make sure that LIMIT is correct sql statment: */
+            if (withLimitClause) {
+                if (pageNr < 0) pageNr = 0;
+                if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
+                    pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
+                limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+            } else {
+                limitClause = ";";
+            }
+
+        System.err.println("List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause ,boolean withLimitClause):");
+        System.err.println("DB path: " + this.DB_Path);
+        System.err.println("  Query: " + query + orderByClause + limitClause);
 
         Connection connection = null;
         try {
@@ -43,9 +53,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            ResultSet rs = statement.executeQuery(query + limitClause);
-            System.out.println("DB path: " + this.DB_Path);
-            System.out.println("  Query: " + query + limitClause);
+            ResultSet rs = statement.executeQuery(query + orderByClause + limitClause);
+
             while (rs.next()) {
                 String[] row;
                 row = new String[rs.getMetaData().getColumnCount()];
@@ -107,6 +116,9 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
 
     public int sqlCOUNT(String query) throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
+        System.err.println("sqlCOUNT(String query)");
+        System.err.println("DB path: " + this.DB_Path);
+        System.err.println("  Query: " + query);
 
         Connection connection = null;
         try {
@@ -114,6 +126,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -128,6 +141,39 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
                 if (connection != null)
                     connection.close();
             } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+    }
+
+    public String filePath(String ID, String columnName) throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+
+        Connection connection = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            String query = "SELECT " + columnName + " FROM Invoices WHERE ID = " + ID + ";";
+
+            ResultSet rs = statement.executeQuery(query);
+            System.err.println("DB path: " + this.DB_Path);
+            System.err.println("  Query: " + query);
+            System.err.println(" Return: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
+
+            return (ImCFG.getImExternalFolderPath() + rs.getString(1));
+            } catch (SQLException e) {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+                System.err.println(e.getMessage());
+                return null;
+            } finally {
+                try {
+                    if (connection != null)
+                        connection.close();
+                } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
             }

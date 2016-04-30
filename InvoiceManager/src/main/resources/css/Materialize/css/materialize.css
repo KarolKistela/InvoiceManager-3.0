@@ -3026,7 +3026,7 @@ thead {
 }
 
 td, th {
-    padding: 7px 3px;
+    padding: 4px 3px;
     display: table-cell;
     text-align: left;
     vertical-align: middle;
@@ -8414,17 +8414,14 @@ header aside table {
 .processStage {
     margin-bottom: 0px;
 }
-
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
-
 main {
     flex: 1 0 auto;
 }
-
 .row {
     margin-left: 0px;
     margin-right: 0px;
@@ -8436,4 +8433,10 @@ main {
     font-weight: bold;
     text-align: right;
     width: 15%;
+}
+article table tr td a:hover i {
+    font-weight: bold;
+}
+article table tr td a:hover {
+    font-weight: bold;
 }

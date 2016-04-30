@@ -1,37 +1,36 @@
 package View;
 
 import View.Parts.DBTable;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import View.Parts.Header;
 import View.Parts.Style;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import spark.Request;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.SQLException;
 
+import static Model.Helpers.sqlQueryConstructor;
+import static Model.Helpers.sqlQueryConstructorInvNr;
+
 /**
- * Created by Karol Kistela on 27-Apr-16.
- *
- * This class render HTML page for viewing results of SELECT query (1 or more rows). It covers both DB main view and Filter views.
- * Per page will be displayed limited nr of rows (according to settings). However this is carry out by htmlFactory
+ * Created by Karol Kistela on 30-Apr-16.
  */
-public class DBview extends FreeMarkerTemplate implements Renderer {
-    private final String viewTitle = "DB main view";
+public class InvNrView extends FreeMarkerTemplate implements Renderer {
+    private final String viewTitle = "Not unique InvoiceNr";
     private final String ftlFile = "DBview.ftl";
-    private final boolean tabHeader = true;
+    private boolean tabHeader = true;
     private final boolean pagination = true;
-    private final int menuButtonActive = 1;
+    private final int menuButtonActive = 3;
     private String rout;
     private int pageNr;
     private String sqlQuery;
 
-    public DBview(Request request, String rout) {
+    public InvNrView(Request request, String rout) throws SQLException, ClassNotFoundException {
         super();
         this.rout = rout;
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
-        this.sqlQuery = "SELECT * FROM Invoices ";
+        this.sqlQuery = sqlQueryConstructorInvNr(request);
     }
 
     @Override

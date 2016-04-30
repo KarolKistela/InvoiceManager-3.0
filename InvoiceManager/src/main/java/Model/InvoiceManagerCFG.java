@@ -23,6 +23,8 @@ public class InvoiceManagerCFG {
     private double tableWidth;
     private int totalNrOfPages;
     private List<String[]> filters;
+    private String orderByClause;
+    private boolean checkForInvDuplicates;
 
     public InvoiceManagerCFG() throws ClassNotFoundException {
         this.loadData();
@@ -48,6 +50,8 @@ public class InvoiceManagerCFG {
             this.setRowsPerPage(resultSet.getInt("rowsPerPage"));
             this.setBackgroundColor(resultSet.getString("backgroundColor"));
             this.setTableWidth(resultSet.getDouble("tableWidth"));
+            this.setOrderByClause(resultSet.getString("OrderByClause"));
+            this.setCheckForInvDuplicates(resultSet.getBoolean("Duplicates"));
 
             // load (K,V) into columnsAndWidth
             resultSet = statement.executeQuery("SELECT * FROM columnsAndWidth;");
@@ -175,6 +179,22 @@ public class InvoiceManagerCFG {
 
     public void setFilters(List<String[]> list) {
         this.filters = list;
+    }
+
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause) {
+        this.orderByClause = orderByClause;
+    }
+
+    public boolean isCheckForInvDuplicates() {
+        return checkForInvDuplicates;
+    }
+
+    public void setCheckForInvDuplicates(boolean checkForInvDuplicates) {
+        this.checkForInvDuplicates = checkForInvDuplicates;
     }
 }
 

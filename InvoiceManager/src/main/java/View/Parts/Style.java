@@ -40,7 +40,7 @@ public class Style extends FreeMarkerTemplate implements Renderer {
     private String getColumnClasses() throws IOException, ClassNotFoundException, SQLException, TemplateException {
         String columnClasses = "";
         Template template = getTemplate("Parts/DBview/Style_columnClasses.ftl");
-        List<String[]> invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false);
+        List<String[]> invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
 
         for (String[] s:invoicesMetaData) {
             replaceMap.put("className", s[1]);

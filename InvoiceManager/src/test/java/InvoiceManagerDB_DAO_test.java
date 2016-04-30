@@ -43,7 +43,7 @@ public class InvoiceManagerDB_DAO_test {
 //        }
         try {
             List<String[]> list;
-            list = db.sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false);
+            list = db.sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
 
             for (String[] sarray: list) {
                 System.out.println(sarray[2]);
