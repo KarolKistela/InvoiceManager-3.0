@@ -5549,8 +5549,8 @@ textarea.materialize-textarea {
     outline: none;
     height: 3rem;
     width: 100%;
-    font-size: 1rem;
-    margin: 0 0 15px 0;
+    font-size: 1.2rem;
+    margin: 0 0 0px 0;
     padding: 0;
     box-shadow: none;
     box-sizing: content-box;
@@ -6521,7 +6521,7 @@ input[type=range] {
     outline: none;
     width: 100%;
     margin: 15px 0;
-    padding: 0;
+    padding: 15px 0 0 0;
 }
 
 input[type=range]:focus {
@@ -8218,8 +8218,8 @@ header {
     width:100%;
     z-index:1;
     top:0;
-    border-bottom: 1px solid #555;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid #aaa;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.16), 0 5px 10px 0 rgba(0, 0, 0, 0.12);
 }
 header nav {
     background-color: inherit;
@@ -8289,7 +8289,7 @@ header form input[type=search]:focus:not([readonly]){
     z-index:1;
     overflow:auto;
     display:none;
-    margin-top: 76px;
+    margin-top: 64px;
     line-height: 28px;
     -webkit-animation:animateleft 0.4s;
     animation:animateleft 0.4s;
@@ -8355,12 +8355,12 @@ header nav:nth-child(1) ul:nth-child(1) li a {
 }
 
 main {
-    margin-top: 64px;
+    margin-top: 70px;
     padding: 0 1%;
 }
 main table {
     font-weight: normal;
-    border-top: 1px solid black;
+    border-top: 1px solid #aaa;
     margin-top: 5px;
 }
 .IM-details i {
@@ -8439,4 +8439,26 @@ article table tr td a:hover i {
 }
 article table tr td a:hover {
     font-weight: bold;
+}
+.IM-SettingsLabels {
+    text-align: right;
+    color: #ccc;
+}
+.im-settingslabels label {
+    padding-top: 22px;
+}
+form .row {
+    margin-bottom: 0px;
+}
+.Im-save {
+    padding: 0 20px;
+    border: 1px solid #666;
+}
+.Im-save:hover {
+    background-color: #00bcd4;
+    color: #fff;
+}
+#netId {
+    padding: 0;
+    width: 100%;
 }

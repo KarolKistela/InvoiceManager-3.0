@@ -130,6 +130,9 @@ ${DBTable}
     $(document).ready(function(){
         $('.tooltipped').tooltip({delay: 50});
     });
+    $(document).ready(function() {
+        Materialize.updateTextFields();
+    });
 </script>
 
 </body>

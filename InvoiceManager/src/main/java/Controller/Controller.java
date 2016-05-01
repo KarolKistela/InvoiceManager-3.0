@@ -70,32 +70,83 @@ public class Controller {
 
         protected abstract void doHandle(final Request request, final Response response, final StringWriter writer)
                 throws IOException, TemplateException, ClassNotFoundException, SQLException;
+
+        public void searchRespons(Request request, Response response){
+            String s = request.queryParams("search_query");
+            response.redirect("/ID/"+s);
+        };
     }
 
     private void initializeRoutes() throws IOException{
         get(new FreemarkerBasedRoute("/DB/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                Renderer DBview = htmlFactory.getDataBaseView(request, "/DB/");
+                Renderer DBview = htmlFactory.getDataBaseView(request);
                 webPage.write(DBview.render());
             }
         });
+        post(new FreemarkerBasedRoute("/DB/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                this.searchRespons(request, response);
+            }
+        });
+
+
         get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 String rout = getRout(request);
+                System.err.println(request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1));
 
                 Renderer selectWhereView = htmlFactory.getSelectWhereView(request, rout);
                 webPage.write(selectWhereView.render());
             }
         });
+        post(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                this.searchRespons(request, response);
+            }
+        });
+
+        get(new FreemarkerBasedRoute("/Settings") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                Renderer settingView = HtmlFactory.getSettingsView(request);
+                        webPage.write(settingView.render());
+            }
+        });
+        post(new FreemarkerBasedRoute("/Settings") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                System.err.println(request.queryParams("imDBPath"));
+            }
+        });
+
+
+        get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                String rout = "/ID/"+request.params("idNr")+"/invNr/";
+
+                Renderer invNr = htmlFactory.getInvNrView(request, rout);
+                webPage.write(invNr.render());
+            }
+        });
+        post(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                this.searchRespons(request, response);
+            }
+        });
+
         get(new FreemarkerBasedRoute("/error/:errorMSG") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException {
                 writer.write(errorMSG.toString());
             }
         });
-
         /* this rout will open tif file for ID
          */
         get(new FreemarkerBasedRoute("/ID/:idNr/scan") {
@@ -111,7 +162,6 @@ public class Controller {
                 writer.write("Open invoice scan file");
             }
         });
-
         get(new FreemarkerBasedRoute("/ID/:idNr/authEmail") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
@@ -126,15 +176,6 @@ public class Controller {
             }
         });
 
-        get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                String rout = "/ID/"+request.params("idNr")+"/invNr/";
-
-                Renderer invNr = htmlFactory.getInvNrView(request, rout);
-                webPage.write(invNr.render());
-            }
-        });
     }
     // TODO: rout   /ID/:id
     // TODO: rout   /ID/:id/scan

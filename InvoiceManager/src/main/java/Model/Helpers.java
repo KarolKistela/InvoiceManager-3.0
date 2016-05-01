@@ -14,19 +14,18 @@ import java.util.List;
 public class Helpers {
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        System.out.println(" shellCmd: " + cmd);
-        Process shellProcess = runTime.exec("rundll32 SHELL32.DLL,ShellExec_RunDLL " + cmd);
-
-        shellProcess.waitFor();
+        System.err.println(" shellCmd: " + cmd);
+        String[] processCommand = {"cmd", "/c", cmd};
+        Process shellProcess = runTime.exec(processCommand);
     }
 
     public static boolean fileExists(String filePath) {
         File f = new File(filePath);
         if(f.exists() && !f.isDirectory()) {
-            System.out.println(filePath + " EXISTS!");
+//            System.out.println(filePath + " EXISTS!");
             return true;
         } else {
-            System.out.println(filePath + " DOES NOT EXIST!");
+//            System.out.println(filePath + " DOES NOT EXIST!");
             return false;
         }
     }
@@ -69,5 +68,23 @@ public class Helpers {
         System.out.println("getRout: " + "/Filter/Select/"+columnName+"/"+sign+"/"+value+"/");
 
         return "/Filter/Select/"+columnName+"/"+sign+"/"+value+"/";
+    }
+
+    public static String truncuate(String s, int maxLength) {
+        if (s.length() > maxLength) {
+            return  (s.substring(0,maxLength-3)+"...");
+        } else {
+            return s;
+        }
+    }
+
+    public static String doubleFormat(String s) {
+        if (s.indexOf(".") == -1) {
+            return s+".00";
+        } else if (s.indexOf(".") == 2) {
+            return s+"0";
+        } else {
+            return s;
+        }
     }
 }

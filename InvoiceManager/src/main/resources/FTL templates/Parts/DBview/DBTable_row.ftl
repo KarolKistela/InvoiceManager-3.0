@@ -16,7 +16,6 @@
         ${emailLink}
         ${GR}
         ${processStage}
-
         ${BC
         ${contactGenpact}
         ${invDate}

@@ -26,9 +26,9 @@ public class SelectWhereView extends FreeMarkerTemplate implements Renderer{
     private String sqlQuery;
 ;
 
-    public SelectWhereView(Request request, String rout) {
+    public SelectWhereView(Request request) {
         super();
-        this.rout = rout;
+        this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
         this.sqlQuery = sqlQueryConstructor(request);
     }

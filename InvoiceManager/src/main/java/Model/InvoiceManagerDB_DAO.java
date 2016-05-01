@@ -5,6 +5,7 @@ package Model;
  */
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
         this.DB_Path = ImCFG.getImDBPath();
     }
 
-    public InvoiceManagerDB_DAO(String DB_Path) {
+    public InvoiceManagerDB_DAO(String DB_Path) throws ClassNotFoundException {
+        ImCFG = new InvoiceManagerCFG();
         this.DB_Path = DB_Path;
     }
 
@@ -163,7 +165,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
             System.err.println("  Query: " + query);
             System.err.println(" Return: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
 
-            return (ImCFG.getImExternalFolderPath() + rs.getString(1));
+            return ("\"" + ImCFG.getImExternalFolderPath() + rs.getString(1) + "\"");
             } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
@@ -174,6 +176,76 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
                     if (connection != null)
                         connection.close();
                 } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+    }
+
+    public HashMap<String, Integer> findDuplicatedInvNr() throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        HashMap invDuplicatesMap = new HashMap();
+
+        Connection connection = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            String query = "SELECT InvoiceNR, repeatNr FROM (SELECT count(ID) as repeatNr, InvoiceNR FROM Invoices GROUP BY InvoiceNR) as tymTab WHERE repeatNr>1 ORDER BY InvoiceNR DESC";
+
+            ResultSet rs = statement.executeQuery(query);
+            System.err.println("DB path: " + this.DB_Path);
+            System.err.println("  Query: " + query);
+            while (rs.next()) {
+                invDuplicatesMap.put(rs.getString("InvoiceNR"), rs.getInt("repeatNR"));
+            }
+            return invDuplicatesMap;
+        } catch (SQLException e) {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            return null;
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+    }
+
+    public HashMap<String, String> usersColorMap() throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        HashMap usersColorMap = new HashMap();
+
+        Connection connection = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            String query = "SELECT * FROM Users";
+
+            ResultSet rs = statement.executeQuery(query);
+            System.err.println("DB path: " + this.DB_Path);
+            System.err.println("  Query: " + query);
+            while (rs.next()) {
+                usersColorMap.put(rs.getString("NetID"), rs.getString("UserColor"));
+            }
+            return usersColorMap;
+        } catch (SQLException e) {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            return null;
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
             }

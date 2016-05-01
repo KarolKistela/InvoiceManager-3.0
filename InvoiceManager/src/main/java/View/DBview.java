@@ -27,9 +27,9 @@ public class DBview extends FreeMarkerTemplate implements Renderer {
     private int pageNr;
     private String sqlQuery;
 
-    public DBview(Request request, String rout) {
+    public DBview(Request request) {
         super();
-        this.rout = rout;
+        this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
         this.sqlQuery = "SELECT * FROM Invoices ";
     }

@@ -22,6 +22,8 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private String viewTitle;
     private boolean tabHeader;
     private boolean pagination;
+    private InvoiceManagerCFG ImCFG;
+    private List<String[]> invoicesMetaData;
 
     public static void main(String[] args) throws ClassNotFoundException, TemplateException, SQLException, IOException {
         Header h = new Header(1,"/DB/",1,"DB Main View", true, true);
@@ -29,7 +31,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         System.out.println(h.render());
     }
 
-    public Header(int menuButtonActive, String rout, int pageNr, String viewTitle, boolean tabHeader, boolean pagination) {
+    public Header(int menuButtonActive, String rout, int pageNr, String viewTitle, boolean tabHeader, boolean pagination) throws ClassNotFoundException, SQLException {
         super();
         this.menuButtonActive = menuButtonActive;
         this.rout = rout;
@@ -37,6 +39,8 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.viewTitle = viewTitle;
         this.tabHeader = tabHeader;
         this.pagination = pagination;
+        this.ImCFG = new InvoiceManagerCFG();
+        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
     }
 
     @Override
@@ -48,18 +52,21 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         if (pagination) {   // Dont comment part of HTML code for pagination
             replaceMap.put("paginationOff1","");
             replaceMap.put("paginationOff2","");
+            if (this.pageNr == 1) { // hide previous pagination button
+                replaceMap.put("pagePreviousOff1", "<!--");
+                replaceMap.put("pagePreviousOff2", "-->");
+            } else {                // dont hide previous pagination button
+                replaceMap.put("pagePreviousOff1", "");
+                replaceMap.put("pagePreviousOff2", "");
+            }
         } else {            // comment part of HTML code for pagination
             replaceMap.put("paginationOff1","<!--");
-            replaceMap.put("paginationOff2","-->");
-        }
-
-        if (this.pageNr == 1) { // hide previous pagination button
-            replaceMap.put("pagePreviousOff1", "<!--");
-            replaceMap.put("pagePreviousOff2", "-->");
-        } else {                // dont hide previous pagination button
+            replaceMap.put("paginationOff2","--><p></p>");
             replaceMap.put("pagePreviousOff1", "");
             replaceMap.put("pagePreviousOff2", "");
         }
+
+
 
         replaceMap.put("filterList", filterList);
         replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active":"");
@@ -79,7 +86,6 @@ public class Header extends FreeMarkerTemplate implements Renderer {
 
     private String getFilterList() throws IOException, ClassNotFoundException, TemplateException {
         Template template = getTemplate("Parts/DBview/Header_FilterList.ftl");
-        InvoiceManagerCFG ImCFG = new InvoiceManagerCFG();
         String filterList = "";
 
         for (String[] s:ImCFG.getFilters()
@@ -98,7 +104,6 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private String getTableHeader() throws IOException, ClassNotFoundException, SQLException, TemplateException {
         String tableHeader = "";
         Template template = getTemplate("Parts/DBview/Header_tableHeader.ftl");
-        List<String[]> invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
 
         for (String[] s:invoicesMetaData) {
             replaceMap.put("className", s[1]);

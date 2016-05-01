@@ -1,5 +1,6 @@
 package View;
 
+import Model.InvoiceManagerCFG;
 import View.Parts.DBTable;
 import View.Parts.Header;
 import View.Parts.Style;
@@ -10,27 +11,23 @@ import spark.Request;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static Model.Helpers.sqlQueryConstructor;
-import static Model.Helpers.sqlQueryConstructorInvNr;
-
 /**
- * Created by Karol Kistela on 30-Apr-16.
+ * Created by Karol Kistela on 01-May-16.
  */
-public class InvNrView extends FreeMarkerTemplate implements Renderer {
-    private final String viewTitle = "Duplicated Inv Nrs";
-    private final String ftlFile = "DBview.ftl";
-    private boolean tabHeader = true;
-    private final boolean pagination = true;
-    private final int menuButtonActive = 3;
+public class SettingsView extends FreeMarkerTemplate implements Renderer {
+    private final String viewTitle = "Settings";
+    private final String ftlFile = "Settings.ftl";
+    private final boolean tabHeader = false;
+    private final boolean pagination = false;
+    private final int menuButtonActive = 2;
+    private final int pageNr = 1;
+    private InvoiceManagerCFG ImCFG;
     private String rout;
-    private int pageNr;
-    private String sqlQuery;
 
-    public InvNrView(Request request) throws SQLException, ClassNotFoundException {
+    public SettingsView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
-        this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
-        this.sqlQuery = sqlQueryConstructorInvNr(request);
+        this.ImCFG = new InvoiceManagerCFG();
     }
 
     @Override
@@ -44,8 +41,7 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
                                             this.viewTitle,
                                             this.tabHeader,
                                             this.pagination).render());
-        replaceMap.put("DBTable", new DBTable(this.sqlQuery,
-                                              this.pageNr).render());
+
         template.process(replaceMap, retVal);
 
         return retVal.toString();

@@ -7,6 +7,10 @@
         ${menu4}
         ${menu5}
         ${viewTitle}
+        ${paginationOff1} - turns off while pagination
+        ${paginationOff2} - turns off while pagination
+        ${pagePreviousOff1} - turns off pagination buttons - previous
+        ${pagePreviousOff2} - turns off pagination buttons - previous
         ${previous}
         ${pageNr}
         ${next}
@@ -37,9 +41,9 @@ ${filterList}        </ul>
     <!-- ======================================== Pagination -->
     <nav class="col s2">
         <ul id="topPagination">
-            <li class="waves-effect"><a href="/DB/${previous}"><i class="fa fa-angle-double-left"></i></a></li>
+            ${paginationOff1}<li class="waves-effect">${pagePreviousOff1}<a href="${rout}${previous}">${pagePreviousOff2}<i class="fa fa-angle-double-left"></i>${pagePreviousOff1}</a>${pagePreviousOff2}</li>
             <li class="waves-effect"><a>${pageNr}</a></li>
-            <li class="waves-effect"><a href="/DB/${next}"><i class="fa fa-angle-double-right"></i></a></li>
+            <li class="waves-effect"><a href="${rout}${next}"><i class="fa fa-angle-double-right"></i></a></li>${paginationOff2}
         </ul>
     </nav>
     <!-- ======================================= Search Info -->
@@ -50,9 +54,21 @@ ${filterList}        </ul>
         </ul>
         <!-- Modal Structure -->
         <div id="searchHelp" class="modal">
-            <div class="modal-content">
-                <h4>Search Help</h4>
-                <p>under construction</p>
+            <div class="modal-content white">
+                <h4>Advance Search</h4>
+                <form method="post">
+                    <label for="search_query"></label>
+                    <input placeholder="search" id="search_query" name="search_query" type="text" style="width: 40%">
+                    <input id="search_query2" list="browsers" name="search_query2" type="text" style="width: 40%">
+                    <datalist id="browsers">
+                        <option value="Internet Explorer">
+                        <option value="Firefox">
+                        <option value="Chrome">
+                        <option value="Opera">
+                        <option value="Safari">
+                    </datalist>
+                    <input type="submit">
+                </form>
             </div>
             <div class="modal-fixed-footer white">
                 <a onclick="closeModal('searchHelp');" class="modal-close">
@@ -62,9 +78,9 @@ ${filterList}        </ul>
         </div>
     </nav>
     <!-- ==================================== Search input  -->
-    <form class="col s2 no-padding">
+    <form class="col s2 no-padding" method="post">
         <label for="search_query"></label>
-        <input placeholder="search" id="search_query" type="search">
+        <input placeholder="search" id="search_query" name="search_query" type="search">
     </form>
     <!-- ===================================== 2nd row for Tab Header ================================================== -->
     <aside class="row">
