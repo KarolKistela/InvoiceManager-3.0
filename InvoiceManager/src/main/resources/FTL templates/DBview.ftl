@@ -1,3 +1,4 @@
+<#-- =========================== template for DBview view with many records per page =============================== -->
 <#-- VARIABLES for replecaMap:
         ${Style}    Styl.class
             |-- Style.ftl
@@ -10,8 +11,6 @@
             | -- DBTable.ftl
                 | -- DBTable_row.ftl
 -->
-
-<!-- template for DBview view with many records per page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +65,6 @@ ${DBTable}
         document.getElementsByClassName("IM-sidenav")[0].style.display = "none";
         document.getElementsByClassName("IM-overlay")[0].style.display = "none";
     }
-
     function myAccFunc() {
         var x = document.getElementById("demoAcc");
         if (x.className.indexOf("w3-show") == -1) {
@@ -78,7 +76,6 @@ ${DBTable}
                     x.previousElementSibling.className.replace(" w3-green", "");
         }
     }
-
     function myDropFunc() {
         var x = document.getElementById("demoDrop");
         if (x.className.indexOf("w3-show") == -1) {
@@ -95,7 +92,6 @@ ${DBTable}
             accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
         });
     });
-
     function myFunction(id) {
         var x = document.getElementById(id);
         if (x.className.indexOf("w3-show") == -1) {
@@ -104,29 +100,23 @@ ${DBTable}
             x.className = x.className.replace(" w3-show", "");
         }
     }
-
     function popUpModal(id) {
         var modalId = document.getElementById(id);
         modalId.style.display='block';
         setTimeout(function () { document.getElementById(id).style.display='none';}, 1500);
         return false;
     }
-
     function openModal(id) {
         var modalId = document.getElementById(id)
         modalId.style.display='block';
     }
-
     function closeModal(id) {
         var modalId = document.getElementById(id)
         modalId.style.display='none';
-
     }
-
     $(document).ready(function(){
         $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
     });
-
     $(document).ready(function(){
         $('.tooltipped').tooltip({delay: 50});
     });

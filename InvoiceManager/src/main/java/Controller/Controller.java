@@ -6,7 +6,6 @@ package Controller;
  */
 
 import Model.*;
-import Depreciated.HTMLviewGenerator;
 import View.Renderer;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -19,14 +18,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 
-import static Model.Helpers.getRout;
-import static Model.Helpers.runShellCommand;
+import static Model.Helpers.*;
 import static spark.Spark.*;
 
 public class Controller {
-    private final HTMLviewGenerator Renderer;
     private final InvoiceManagerCFG ImCFG;
     private final HtmlFactory htmlFactory;
+    public boolean isConnectedToDB;
     public PrintWriter errorMSG; // not sure if it will stay or not
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -40,9 +38,11 @@ public class Controller {
     }
 
     public Controller() throws IOException, ClassNotFoundException {
-        Renderer = new HTMLviewGenerator();
         ImCFG = new InvoiceManagerCFG();
         htmlFactory = new HtmlFactory();
+        isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
+        System.err.println("Connectioned to DB: " + isConnectedToDB);
+
 
         setPort(8082);
         externalStaticFileLocation(ImCFG.getImExternalFolderPath());
@@ -75,12 +75,25 @@ public class Controller {
             String s = request.queryParams("search_query");
             response.redirect("/ID/"+s);
         };
+        public void redirectToSettings(Response res){
+            if (!isConnectedToDB) {
+                res.redirect("/Settings");
+            }
+        }
     }
 
     private void initializeRoutes() throws IOException{
+        get(new FreemarkerBasedRoute("/") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                redirectToSettings(response);
+                response.redirect("/DB/1");
+            }
+        });
         get(new FreemarkerBasedRoute("/DB/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                redirectToSettings(response);
                 Renderer DBview = htmlFactory.getDataBaseView(request);
                 webPage.write(DBview.render());
             }
@@ -96,6 +109,7 @@ public class Controller {
         get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                redirectToSettings(response);
                 String rout = getRout(request);
                 System.err.println(request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1));
 
@@ -114,13 +128,34 @@ public class Controller {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 Renderer settingView = HtmlFactory.getSettingsView(request);
-                        webPage.write(settingView.render());
+                webPage.write(settingView.render());
             }
         });
         post(new FreemarkerBasedRoute("/Settings") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                System.err.println(request.queryParams("imDBPath"));
+                if (ImCFG.save(request)) {
+                    webPage.write(request.queryParams("imExternalFolderPath"));
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("imDBPath"));
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("rowsPerPage"));
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("orderBy")); // if no changes where made it will return "" !!!
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("order")); // returns ON when descending, null when ascending
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("duplicates")); // returns ON when duplicates = yes, null when duplicates = no
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("userID")); // returns ON when duplicates = yes, null when duplicates = no
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("userEmail"));
+                    webPage.write(" & " + '\n');
+                    webPage.write(request.queryParams("userColor"));
+                    response.redirect("/Settings");
+                } else {
+                    response.redirect("/Error/UpdateCFG");
+                }
             }
         });
 
@@ -128,6 +163,7 @@ public class Controller {
         get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                redirectToSettings(response);
                 String rout = "/ID/"+request.params("idNr")+"/invNr/";
 
                 Renderer invNr = htmlFactory.getInvNrView(request, rout);
@@ -178,13 +214,7 @@ public class Controller {
 
     }
     // TODO: rout   /ID/:id
-    // TODO: rout   /ID/:id/scan
-    // TODO: rout   /ID/:id/AuthEmail
-    // TODO: rout   /Filter/Supplier/:supplier
-    // TODO: rout   /Filter/AuthContact/:authContact  hmm... or more generic: /Filter/:filterKey/:filterValue
-    // TODO: rout   /ID/:${ID}/invNr
-    // TODO: rout
-    // TODO: rout
+    // TODO: take care off nullPointerException for Imcfg and Users database querys!
 }
 
 //                int pageNr = Integer.parseInt(request.params(":Nr"));

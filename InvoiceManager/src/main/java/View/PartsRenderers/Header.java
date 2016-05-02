@@ -1,4 +1,4 @@
-package View.Parts;
+package View.PartsRenderers;
 
 import Model.InvoiceManagerCFG;
 import Model.InvoiceManagerDB_DAO;
@@ -8,7 +8,6 @@ import View.FreeMarkerTemplate;
 import View.Renderer;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,6 +15,9 @@ import java.util.List;
  * Created by Karol Kistela on 28-Apr-16.
  */
 public class Header extends FreeMarkerTemplate implements Renderer {
+    private final String headerFTL = "Parts/DBview/Header.ftl";
+    private final String headerFilterListFTL = "Parts/DBview/Header_FilterList.ftl";
+    private final String headerTableHeaderFTL = "Parts/DBview/Header_tableHeader.ftl";
     private int menuButtonActive;
     private String rout;
     private int pageNr;
@@ -23,7 +25,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private boolean tabHeader;
     private boolean pagination;
     private InvoiceManagerCFG ImCFG;
-    private List<String[]> invoicesMetaData;
+//    private List<String[]> invoicesMetaData;
 
     public static void main(String[] args) throws ClassNotFoundException, TemplateException, SQLException, IOException {
         Header h = new Header(1,"/DB/",1,"DB Main View", true, true);
@@ -40,12 +42,12 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.tabHeader = tabHeader;
         this.pagination = pagination;
         this.ImCFG = new InvoiceManagerCFG();
-        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
+//        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
     }
 
     @Override
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
-        Template template = getTemplate("Parts/DBview/Header.ftl");
+        Template template = getTemplate(this.headerFTL);
         String filterList = this.getFilterList();
         String tableHeader = this.getTableHeader();
 
@@ -85,7 +87,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     }
 
     private String getFilterList() throws IOException, ClassNotFoundException, TemplateException {
-        Template template = getTemplate("Parts/DBview/Header_FilterList.ftl");
+        Template template = getTemplate(this.headerFilterListFTL);
         String filterList = "";
 
         for (String[] s:ImCFG.getFilters()
@@ -103,9 +105,9 @@ public class Header extends FreeMarkerTemplate implements Renderer {
 
     private String getTableHeader() throws IOException, ClassNotFoundException, SQLException, TemplateException {
         String tableHeader = "";
-        Template template = getTemplate("Parts/DBview/Header_tableHeader.ftl");
+        Template template = getTemplate(this.headerTableHeaderFTL);
 
-        for (String[] s:invoicesMetaData) {
+        for (String[] s:ImCFG.getInvoicesMetaData()) {
             replaceMap.put("className", s[1]);
             replaceMap.put("viewName", s[4]);
 

@@ -1,8 +1,8 @@
 package View;
 
-import View.Parts.DBTable;
-import View.Parts.Header;
-import View.Parts.Style;
+import View.PartsRenderers.DBTable;
+import View.PartsRenderers.Header;
+import View.PartsRenderers.Style;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -10,7 +10,6 @@ import spark.Request;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static Model.Helpers.sqlQueryConstructor;
 import static Model.Helpers.sqlQueryConstructorInvNr;
 
 /**

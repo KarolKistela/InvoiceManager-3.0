@@ -1,3 +1,4 @@
+<#-- ======================================= template for Settings ================================================= -->
 <#-- VARIABLES for replecaMap:
         ${Style}    Styl.class
             |-- Style.ftl
@@ -5,8 +6,9 @@
         ${Header}   Heeader.class
             | -- Header.ftl
                 | -- Header_FilterList.ftl
+        ${SettingsInputForm}
+            | -- SettingsInputForm.ftl
 -->
-<!-- template for DBview view with many records per page -->
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -20,120 +22,11 @@
 ${Style}
 </head>
 <body>
-<!-- =========================================== TopBar ============================================================ -->
+<!-- ==========================================|__TopBar__|========================================================= -->
 ${Header}
-<!-- ============================ InvoicesList content for 2 rowed header ========================================== -->
-<main style="margin-top: 50px; padding: 0 5%">
-    <article class="card">
-        <div class="row" style="padding-top: 7.5% 4%">
-            <form class="col s12" method="post">
-                <div class="row" style="margin-top: 15px">
-<!-- =============== Folder Path =================================================================================== -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-folder fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="input-field col s4">
-                        <input  id="imExternalFolderPath" name="imExternalFolderPath" type="text">
-                        <label for="imExternalFolderPath">Path to Folder with invoices files</label>
-                    </div>
-<!-- =============== Databse Path ================================================================================== -->
-                    <div class="col s2 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-database fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="input-field col s4">
-                        <input  id="imDBPath" type="text" name="imDBPath">
-                        <label for="imDBPath">Path to InvoicesManager.db</label>
-                    </div>
-                </div>
-                <div class="row">
-<!-- =============== Rows Per Page ================================================================================= -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-list fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="input-field col s10">
-                        <p class="range-field">
-                            <input type="range" id="rowsPerPage" name="rowsPerPage" min="5" max="250" value="150"/>
-                        </p>
-                        <label for="rowsPerPage">How many rows display per page?</label>
-                    </div>
-                </div>
-                <div class="row">
-<!-- =============== Order by ====================================================================================== -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Order by</label>
-                    </div>
-                    <div class="col s2 input-field">
-                            <input list="browsers" name="orderBy" value="Firefox"/>
-                                <datalist id="browsers">
-                                    <option value="Internet Explorer">
-                                    <option value="Firefox">
-                                    <option value="Chrome">
-                                    <option value="Opera">
-                                    <option value="Safari">
-                                </datalist>
-                    </div>
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-sort fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="switch col s2" style="padding: 23px 0 0 23px; ">
-                        <label>
-                            Ascending
-                            <input type="checkbox" name="orderByDirection" checked style="padding-top: 5px">
-                            <span class="lever"></span>
-                            Descending
-                        </label>
-                    </div>
-<!-- =============== Duplicates ==================================================================================== -->
-                    <div class="col s3 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Find Duplicates by Invoic Nr?</label>
-                    </div>
-                    <div class="switch col s3" style="padding: 23px 0 0 23px">
-                        <label>
-                            no
-                            <input type="checkbox" name="duplicates" checked>
-                            <span class="lever"></span>
-                            yes
-                        </label>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 20px">
-<!-- =============== User settings ================================================================================= -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-user fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="input-field col s2">
-                        <input id="netId" type="text" name="netId" length="6">
-                        <label for="netId">netid</label>
-                    </div>
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
-                        <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>
-                    </div>
-                    <div class="col s3">
-                        <div class="input-field col s12">
-                            <input id="email" type="email" name="userEmail" class="validate">
-                            <label for="email" data-error="wrong" data-success="right">Email</label>
-                        </div>
-                    </div>
-                    <div class="col s2 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Choose your color</label>
-                    </div>
-                    <div class="col s2">
-                        <div class="input-field col s12" style="padding-top: 9px">
-                            <input id="userColor" type="color" name="userColor">
-                        </div>
-                    </div>
-                </div>
-<!-- =============== Submit btn ==================================================================================== -->
-                <div class="row" style="margin: 50px 0">
-                    <div class="col s12 center">
-                        <input class="btn Im-save" type="submit" value="Save" id="save changes">
-                    </div>
-                </div>
-            </form>
-        </div>
-    </article>
-</main>
-<!-- ================================================== Footer ===================================================== -->
+<!-- ==========================================|_Settings_|========================================================= -->
+${SettingsInputForm}
+<!-- ==========================================|__Footer__|========================================================= -->
 <footer class="page-footer blue">
     <div class="container">
         <div class="row">
@@ -159,7 +52,6 @@ ${Header}
         </div>
     </div>
 </footer>
-<!--TODO: footer-->
 
 <script>
     function w3_open() {

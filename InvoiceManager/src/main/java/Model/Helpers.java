@@ -5,7 +5,7 @@ import spark.Request;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -85,6 +85,52 @@ public class Helpers {
             return s+"0";
         } else {
             return s;
+        }
+    }
+
+    public static boolean InvoicesManagerDBconnection(String imDBPath) throws ClassNotFoundException {
+        String query = "SELECT count(ID) FROM Invoices;";
+        System.err.println("Testing connection to DB");
+        System.err.println("DB path: " + imDBPath);
+        System.err.println("  Query: " + query);
+
+        Connection connection = null;
+
+        Class.forName("org.sqlite.JDBC"); //ClassNotFoundException
+
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + imDBPath);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            ResultSet rs = statement.executeQuery(query);
+            System.out.println("Nr of records in DB: " + rs.getInt(1));
+            return true;
+        } catch (SQLException e) {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (connection != null)
+                connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+                }
+            }
+    }
+
+    public static boolean isNull(Request req, String s){
+        String retVal;
+        try{
+            retVal = req.queryParams(s);
+            if (retVal.equals("")) {}
+            return false;
+        } catch (Exception e) {
+            return true;
         }
     }
 }

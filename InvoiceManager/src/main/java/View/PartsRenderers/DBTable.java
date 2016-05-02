@@ -1,4 +1,4 @@
-package View.Parts;
+package View.PartsRenderers;
 
 import Model.InvoiceManagerCFG;
 import Model.InvoiceManagerDB_DAO;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.SplittableRandom;
 
 import static Model.Helpers.doubleFormat;
 import static Model.Helpers.fileExists;
@@ -21,6 +20,8 @@ import static Model.Helpers.truncuate;
  * Created by Karol Kistela on 29-Apr-16.
  */
 public class DBTable extends FreeMarkerTemplate implements Renderer {
+    private final String dbTableFTL = "Parts/DBview/DBTable.ftl";
+    private final String dbTableRowFTL = "Parts/DBview/DBTable_row.ftl";
     private InvoiceManagerCFG ImCFG;
     private InvoiceManagerDB_DAO db;
     private String pathToExternalFolder;
@@ -29,7 +30,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
     private List<String[]> rs;
 
     public static void main(String[] args) throws ClassNotFoundException, TemplateException, SQLException, IOException {
-        DBTable t = new DBTable("SELECT * FROM Invoices ",1);
+        DBTable t = new DBTable("SELECT * FROM Invoices WHERE ID=51704",1);
         System.out.println(t.render());
     }
 
@@ -45,7 +46,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
 
     @Override
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
-        Template template = getTemplate("Parts/DBview/DBTable.ftl");
+        Template template = getTemplate(this.dbTableFTL);
         String table = getTable();
 
         replaceMap.put("Table", table);
@@ -55,7 +56,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
 
     private String getTable() throws IOException, ClassNotFoundException, SQLException, TemplateException {
         String table = "";
-        Template template = getTemplate("Parts/DBview/DBTable_row.ftl");
+        Template template = getTemplate(this.dbTableRowFTL);
 
         System.err.println("check for duplicates = " + ImCFG.isCheckForInvDuplicates() );
         for (String[] record:rs) {

@@ -30,6 +30,7 @@ public class Invoice {
     private String User;
     private String RowColor;
     private String ProcessStatus;
+    private int ProcessStage;
 
     public Invoice(ResultSet rs) throws SQLException {
         setID(rs.getInt("ID"));
@@ -57,6 +58,46 @@ public class Invoice {
         setUser(rs.getString("User"));
         setRowColor(rs.getString("RowColor"));
         setProcessStatus(rs.getString("ProcessStatus"));
+        setProcessStage(rs.getInt("ProcessStage"));
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "ID=" + ID +
+                ", BC='" + BC + '\'' +
+                ", EntryDate='" + EntryDate + '\'' +
+                ", ContactGenpact='" + ContactGenpact + '\'' +
+                ", Supplier='" + Supplier + '\'' +
+                ", InvoiceNR='" + InvoiceNR + '\'' +
+                ", InvScanPath='" + InvScanPath + '\'' +
+                ", PO='" + PO + '\'' +
+                ", NetPrice=" + NetPrice +
+                ", Currency='" + Currency + '\'' +
+                ", InvDate='" + InvDate + '\'' +
+                ", EmailSubject='" + EmailSubject + '\'' +
+                ", AuthContact='" + AuthContact + '\'' +
+                ", AuthDate='" + AuthDate + '\'' +
+                ", AuthReplyDate='" + AuthReplyDate + '\'' +
+                ", AuthEmail='" + AuthEmail + '\'' +
+                ", EndDate='" + EndDate + '\'' +
+                ", GR='" + GR + '\'' +
+                ", GenpactLastReply='" + GenpactLastReply + '\'' +
+                ", UserComments='" + UserComments + '\'' +
+                ", Status=" + Status +
+                ", User='" + User + '\'' +
+                ", RowColor='" + RowColor + '\'' +
+                ", ProcessStatus='" + ProcessStatus + '\'' +
+                ", ProcessStage=" + ProcessStage +
+                '}';
+    }
+
+    public int getProcessStage() {
+        return ProcessStage;
+    }
+
+    public void setProcessStage(int processStage) {
+        ProcessStage = processStage;
     }
 
     public int getID() {

@@ -9,11 +9,11 @@ import java.sql.SQLException;
  */
 public class HtmlFactory {
 
-    public Renderer getDataBaseView(Request request){
+    public Renderer getDataBaseView(Request request) throws ClassNotFoundException {
         return new DBview(request);
     }
 
-    public Renderer getSelectWhereView(Request request, String rout){
+    public Renderer getSelectWhereView(Request request, String rout) throws ClassNotFoundException {
         return new SelectWhereView(request);
     }
 

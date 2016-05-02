@@ -1,9 +1,9 @@
 package View;
 
 import Model.InvoiceManagerCFG;
-import View.Parts.DBTable;
-import View.Parts.Header;
-import View.Parts.Style;
+import View.PartsRenderers.Header;
+import View.PartsRenderers.SettingsInputForm;
+import View.PartsRenderers.Style;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -21,13 +21,11 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
     private final boolean pagination = false;
     private final int menuButtonActive = 2;
     private final int pageNr = 1;
-    private InvoiceManagerCFG ImCFG;
     private String rout;
 
     public SettingsView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
-        this.ImCFG = new InvoiceManagerCFG();
     }
 
     @Override
@@ -41,6 +39,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                                             this.viewTitle,
                                             this.tabHeader,
                                             this.pagination).render());
+        replaceMap.put("SettingsInputForm", new SettingsInputForm().render());
 
         template.process(replaceMap, retVal);
 

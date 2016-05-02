@@ -1,8 +1,8 @@
 package View;
 
-import View.Parts.DBTable;
-import View.Parts.Header;
-import View.Parts.Style;
+import View.PartsRenderers.DBTable;
+import View.PartsRenderers.Header;
+import View.PartsRenderers.Style;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -26,7 +26,7 @@ public class SelectWhereView extends FreeMarkerTemplate implements Renderer{
     private String sqlQuery;
 ;
 
-    public SelectWhereView(Request request) {
+    public SelectWhereView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));

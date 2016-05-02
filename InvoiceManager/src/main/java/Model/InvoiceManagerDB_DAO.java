@@ -2,6 +2,7 @@ package Model;
 
 /**
  * Created by mzjdx6 on 20-Mar-16.
+ * TODO: clean up this s..t
  */
 
 import java.sql.*;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InvoiceManagerDB_DAO implements IMsqlite{
+public class InvoiceManagerDB_DAO implements IMsqlite {
     private final String DB_Path;
     private InvoiceManagerCFG ImCFG;
 
@@ -23,26 +24,26 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
         this.DB_Path = DB_Path;
     }
 
-    public List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause ,boolean withLimitClause) throws ClassNotFoundException, SQLException {
+    public List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause, boolean withLimitClause) throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
         List<String[]> retVal = new LinkedList<>();
         String orderByClause;
-            if (withOrderByClause) {
-                orderByClause = ImCFG.getOrderByClause();
-            } else {
-                orderByClause = "";
-            }
+        if (withOrderByClause) {
+            orderByClause = ImCFG.getOrderByClause();
+        } else {
+            orderByClause = "";
+        }
 
         String limitClause;
             /* Make sure that LIMIT is correct sql statment: */
-            if (withLimitClause) {
-                if (pageNr < 0) pageNr = 0;
-                if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
-                    pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
-                limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
-            } else {
-                limitClause = ";";
-            }
+        if (withLimitClause) {
+            if (pageNr < 0) pageNr = 0;
+            if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
+                pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
+            limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+        } else {
+            limitClause = ";";
+        }
 
         System.err.println("List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause ,boolean withLimitClause):");
         System.err.println("DB path: " + this.DB_Path);
@@ -61,8 +62,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
                 String[] row;
                 row = new String[rs.getMetaData().getColumnCount()];
 
-                for (int i=1; i <= rs.getMetaData().getColumnCount(); i++){
-                    row[i-1]=rs.getString(i);
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                    row[i - 1] = rs.getString(i);
                 }
 
                 retVal.add(row);
@@ -166,16 +167,16 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
             System.err.println(" Return: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
 
             return ("\"" + ImCFG.getImExternalFolderPath() + rs.getString(1) + "\"");
-            } catch (SQLException e) {
+        } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
-                System.err.println(e.getMessage());
-                return null;
-            } finally {
-                try {
-                    if (connection != null)
-                        connection.close();
-                } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
                 // connection close failed.
                 System.err.println(e);
             }
@@ -251,6 +252,60 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
             }
         }
     }
+
+    public void insertUser(User u) throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+
+        Connection connection = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            PreparedStatement prepStmt = connection.prepareStatement(
+                    "INSERT INTO Users (NetID, Email, UserColor) VALUES (?,?,?);");
+            prepStmt.setString(1, u.getUserID().toUpperCase());
+            prepStmt.setString(2, u.getUserMail());
+            prepStmt.setString(3, u.getUserColor());
+
+            String preperedQuery = "INSERT INTO Users (NetID, Email, UserColor) VALUES (1,2,3);";
+            preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
+            System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
+            System.out.println("query: " + preperedQuery);
+
+            prepStmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void upsertUser(User u) throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+
+        Connection connection = null;
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            PreparedStatement prepStmt = connection.prepareStatement(
+                    "UPDATE Users SET Email=?, UserColor=? WHERE NetID = ?;");
+            prepStmt.setString(1, u.getUserMail());
+            prepStmt.setString(2, u.getUserColor());
+            prepStmt.setString(3, u.getUserID().toUpperCase());
+
+            String preperedQuery = "UPDATE Users SET Email=2, UserColor=3 WHERE NetID = 1;";
+            preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
+            System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
+            System.out.println("query: " + preperedQuery);
+
+            prepStmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
     // Depreciated
 
@@ -300,7 +355,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
 //        SimpleHash replaceMap = new SimpleHash();
 //        StringWriter tableRow = new StringWriter();
 //        String retVal = new String();
-//        Template template = cfg.getTemplate("/Parts/tableRow.ftl");
+//        Template template = cfg.getTemplate("/PartsRenderers/tableRow.ftl");
 //        System.out.println("DB: " + this.DB_Path);
 //        System.out.println("Query: " + SQLquery + limit);
 //
@@ -316,7 +371,6 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
 //            ResultSet rs = statement.executeQuery(SQLquery + limit);
 //            while (rs.next()){
 //                System.out.println("inside while");
-////          TODO: add user color to ImCFG
 ////          userColor - color of left border, depend on which user added record to getDBview
 //                replaceMap.put("userColor","red");
 ////          rowColor - row color default ""
@@ -325,7 +379,6 @@ public class InvoiceManagerDB_DAO implements IMsqlite{
 //                replaceMap.put("ID",rs.getString(1));
 ////          barCode - BC for ID, from InvoiceManagerDB.sql
 //                replaceMap.put("barCode",rs.getString(2));
-////          scan - TODO: "barcode" for inv from scanning center, "print" for inv from floor scaner
 //                replaceMap.put("scan","barcode");
 ////          EntryDate - from InvoiceManagerDB.sql converter 23 apr, 2016 <-> 20160423
 //                replaceMap.put("EntryDate",rs.getString(3));

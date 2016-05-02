@@ -1,14 +1,13 @@
 package View;
 
-import View.Parts.DBTable;
+import View.PartsRenderers.DBTable;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import View.Parts.Header;
-import View.Parts.Style;
+import View.PartsRenderers.Header;
+import View.PartsRenderers.Style;
 import spark.Request;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.SQLException;
 
 /**
@@ -27,7 +26,7 @@ public class DBview extends FreeMarkerTemplate implements Renderer {
     private int pageNr;
     private String sqlQuery;
 
-    public DBview(Request request) {
+    public DBview(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));

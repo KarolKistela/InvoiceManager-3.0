@@ -8269,8 +8269,8 @@ ul {
     margin: 0 0 0 0;
 }
 header form input[type=search] {
-    height: 2em;
-    padding-top: 4px;
+    height: 34px;
+    /*padding-top: 4px;*/
     width: 95%;
 }
 

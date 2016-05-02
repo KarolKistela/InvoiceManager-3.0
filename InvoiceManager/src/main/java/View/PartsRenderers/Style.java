@@ -1,4 +1,4 @@
-package View.Parts;
+package View.PartsRenderers;
 
 import Model.InvoiceManagerCFG;
 import Model.InvoiceManagerDB_DAO;
@@ -15,7 +15,10 @@ import java.util.List;
  * Created by Karol Kistela on 28-Apr-16.
  */
 public class Style extends FreeMarkerTemplate implements Renderer {
-    private List<String[]> invoicesMetaData;
+    private final String styleFTL = "Parts/DBview/Style.ftl";
+    private final String stylColumnClassesFTL = "Parts/DBview/Style_columnClasses.ftl";
+
+//    private List<String[]> invoicesMetaData;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Style s = new Style();
@@ -29,25 +32,26 @@ public class Style extends FreeMarkerTemplate implements Renderer {
 
     public Style() throws ClassNotFoundException, SQLException {
         super();
-        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
+//        this.invoicesMetaData = ImCFG.getInvoicesMetaData();
+//                new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
     }
 
     @Override
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
-        Template template = getTemplate("Parts/DBview/Style.ftl");
-        String columnStyl = this.getColumnClasses();
+        Template template = getTemplate(this.styleFTL);
+        String columnStyle = this.getColumnClasses();
 
-        replaceMap.put("backGroundColor", new InvoiceManagerCFG().getBackgroundColor());
-        replaceMap.put("columnStyle", columnStyl);
+        replaceMap.put("backGroundColor", ImCFG.getBackgroundColor());
+        replaceMap.put("columnStyle", columnStyle);
 
         return process(template);
     }
 
     private String getColumnClasses() throws IOException, ClassNotFoundException, SQLException, TemplateException {
         String columnClasses = "";
-        Template template = getTemplate("Parts/DBview/Style_columnClasses.ftl");
+        Template template = getTemplate(this.stylColumnClassesFTL);
 
-        for (String[] s:invoicesMetaData) {
+        for (String[] s:ImCFG.getInvoicesMetaData()) {
             replaceMap.put("className", s[1]);
             replaceMap.put("styling", s[3]);
 
