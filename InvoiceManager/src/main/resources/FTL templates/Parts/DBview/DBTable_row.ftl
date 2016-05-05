@@ -29,12 +29,12 @@
         ${processStatus}
 -->
 ${rowComment}
-    <article class="hoverable">
+    <article class="card">
         <table class="${rowColor}" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
             <tbody>
     <#-- TODO: more generic solution -> create rows based on data from InvoicesMetaData. New columns with additonal instructions need to be added -->
             <tr>
-                <td class="IM-ID"><a href="/ID/${ID}" target="_blank">${ID}</a></td>
+                <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
                 <td class="IM-InvScanPath ">
                     <a href="/ID/${ID}/scan" onClick="scan${ID}=window.open('/ID/${ID}/scan','scan${ID}','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { scan${ID}.close();}, 500); return false;">
                         <i class="fa fa-${fileExists}" aria-hidden="true"></i>
@@ -56,14 +56,14 @@ ${rowComment}
                 </td>
                 <td class="IM-AuthEmail"><a ${emailLink}">${email}</a></td>
                 <td class="IM-GR">${GR}</td>
-                <td class="IM-details"><i class="fa fa-chevron-down" onclick="myFunction('${ID}')"></i></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('${ID}')"></i></td>
             </tr>
             </tbody>
         </table>
         <!-- ========================================== Process stage Indicator -->
     <#-- TODO: export color of progres bar to settings -->
-        <div class="progress grey">
-            <div class="determinate grey darken-4" style="width: ${processStage}%"></div>
+        <div class="progress cyan lighten-2">
+            <div class="determinate light-blue darken-4" style="width: ${processStage}%"></div>
         </div>
         <!-- ================================================ Details for inv ID -->
         <section id="${ID}" class="w3-accordion-content" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">

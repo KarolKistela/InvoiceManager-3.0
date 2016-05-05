@@ -1,7 +1,6 @@
-package View.PartsRenderers;
+package View.Renderers.PartCodeRenderers;
 
 import Model.InvoiceManagerCFG;
-import Model.InvoiceManagerDB_DAO;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import View.FreeMarkerTemplate;
@@ -9,7 +8,6 @@ import View.Renderer;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by Karol Kistela on 28-Apr-16.
@@ -21,6 +19,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private int menuButtonActive;
     private String rout;
     private int pageNr;
+    private String pageNrString;
     private String viewTitle;
     private boolean tabHeader;
     private boolean pagination;
@@ -38,6 +37,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.menuButtonActive = menuButtonActive;
         this.rout = rout;
         this.pageNr = pageNr;
+        this.pageNrString = Integer.toString(pageNr).replace(",","");
         this.viewTitle = viewTitle;
         this.tabHeader = tabHeader;
         this.pagination = pagination;
@@ -68,8 +68,6 @@ public class Header extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("pagePreviousOff2", "");
         }
 
-
-
         replaceMap.put("filterList", filterList);
         replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active":"");
         replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active":"");
@@ -78,9 +76,9 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("menu5", (menuButtonActive == 5) ? " IM-menu-active":"");
         replaceMap.put("viewTitle", this.viewTitle);
         replaceMap.put("rout", this.rout);
-        replaceMap.put("previous", (this.pageNr < 1) ? "1": this.pageNr - 1);
-        replaceMap.put("pageNr", this.pageNr);
-        replaceMap.put("next", this.pageNr + 1);
+        replaceMap.put("previous", (this.pageNr < 1) ? "1": Integer.toString(this.pageNr - 1).replace(",",""));
+        replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",",""));
+        replaceMap.put("next", Integer.toString(this.pageNr + 1).replace(",",""));
         replaceMap.put("tableHeader", (tabHeader) ? tableHeader:"");
 
         return process(template);

@@ -1,16 +1,21 @@
 <#-- VARIABLES for replecaMap:
     ${value_imExternalFolderPath}
     ${activeClass_imExternalFolderPath}
+    ${folderExists}
     ${value_imDBPath}
     ${activeClass_imDBPath}
+    ${dbExists}
     ${value_rowsPerPage}
+    ${rowsSetup}
     ${placeHolder_orderBy}
     ${order_chcked}
     ${duplicates_chcked}
     ${value_userID}
     ${activeClass_userID}
+    ${netIDok}
     ${value_userEmail}
-    ${activeClass_userID}
+    ${isEmail}
+    $${activeClass_userEmail}
     ${value_userColor}
 -->
 <main style="margin-top: 50px; padding: 0 5%">
@@ -19,7 +24,7 @@
             <form class="col s12" method="post">
                 <div class="row" style="margin-top: 15px">
                     <!-- =============== Folder Path =================================================================================== -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${folderExists}>
                         <i class="fa fa-folder fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="input-field col s4">
@@ -27,7 +32,7 @@
                         <label class="${activeClass_imExternalFolderPath}" for="imExternalFolderPath">Path to Folder with invoices files</label>
                     </div>
                     <!-- =============== Databse Path ================================================================================== -->
-                    <div class="col s2 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s2 IM-SettingsLabels" style="padding-top: 25px${dbExists}>
                         <i class="fa fa-database fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="input-field col s4">
@@ -37,7 +42,7 @@
                 </div>
                 <div class="row">
                     <!-- =============== Rows Per Page ================================================================================= -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${rowsSetup}>
                         <i class="fa fa-list fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="input-field col s10">
@@ -50,7 +55,7 @@
                 <div class="row">
                     <!-- =============== Order by ====================================================================================== -->
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Order by</label>
+                        <label style="font-size: 1.25em; color: dodgerblue">Order by</label>
                     </div>
                     <div class="col s2 input-field">
                         <input placeholder="${placeHolder_orderBy}" list="columnName" name="orderBy"/>
@@ -63,7 +68,7 @@
                             <option value="AuthDate">
                         </datalist>
                     </div>
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px; color: dodgerblue"">
                         <i class="fa fa-sort fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="switch col s2" style="padding: 23px 0 0 23px; ">
@@ -76,7 +81,7 @@
                     </div>
                     <!-- =============== Duplicates ==================================================================================== -->
                     <div class="col s3 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Find Duplicates by Invoic Nr?</label>
+                        <label style="font-size: 1.25em; color: dodgerblue"">Find Duplicates by Invoice Nr?</label>
                     </div>
                     <div class="switch col s3" style="padding: 23px 0 0 23px">
                         <label>
@@ -89,24 +94,24 @@
                 </div>
                 <div class="row" style="margin-top: 20px">
                     <!-- =============== User settings ================================================================================= -->
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${netIDok}>
                         <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="input-field col s2">
                         <input value="${value_userID}" id="userID" type="text" name="userID" length="6">
                         <label class="${activeClass_userID}" for="userID">netid</label>
                     </div>
-                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${isEmail}>
                         <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>
                     </div>
                     <div class="col s3">
                         <div class="input-field col s12">
                             <input value="${value_userEmail}" id="email" type="email" name="userEmail" class="validate">
-                            <label class="${activeClass_userID}" for="email" data-error="wrong" data-success="right">Email</label>
+                            <label class="${activeClass_userEmail}" for="email" data-error="wrong" data-success="right">Email</label>
                         </div>
                     </div>
                     <div class="col s2 IM-SettingsLabels" style="padding-top: 23px">
-                        <label style="font-size: 1.25em">Choose your color</label>
+                        <label style="font-size: 1.25em;color: dodgerblue"">Choose your color</label>
                     </div>
                     <div class="col s2">
                         <div class="input-field col s12" style="padding-top: 9px">

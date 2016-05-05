@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 /**
@@ -10,7 +11,7 @@ public class User {
     private String userMail;
     private String userColor;
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
         InvoiceManagerCFG cfg = new InvoiceManagerCFG();
         User u = new User(cfg.getUserNetID(), cfg.getUserColor(), cfg.getUserEmail());
 
@@ -37,20 +38,24 @@ public class User {
     }
 
     public void upsertUserToIMDB() throws ClassNotFoundException {
-        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
-
-        if (isUserInDB()) {
-            db.upsertUser(this);
-        } else {
-            db.insertUser(this);
+        InvoiceManagerDB_DAO db = null;
+        try {
+            db = new InvoiceManagerDB_DAO();
+            if (isUserInDB()) {
+                db.upsertUser(this);
+            } else {
+                db.insertUser(this);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-
     }
 
     public Boolean isUserInDB() throws ClassNotFoundException {
-            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
+        InvoiceManagerDB_DAO db = null;
 
         try {
+            db = new InvoiceManagerDB_DAO();
             int i = db.sqlCOUNT("SELECT count(NetID) FROM Users WHERE NetID='"+this.getUserID()+"'");
             if (i == 0) {
                 return false;
@@ -60,9 +65,11 @@ public class User {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
         }
-
-    }
+    };
 
     public String getUserID() {
         return userID;

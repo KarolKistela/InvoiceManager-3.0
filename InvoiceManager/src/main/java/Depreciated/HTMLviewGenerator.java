@@ -62,7 +62,7 @@
 //    private StringWriter getStyle() throws IOException, TemplateException {
 //        SimpleHash replaceMap = new SimpleHash();
 //        StringWriter HEAD = new StringWriter();
-//        Template template = cfg.getTemplate("/PartsRenderers/style.ftl");
+//        Template template = cfg.getTemplate("/Renderers/style.ftl");
 //
 //        replaceMap.put("backGroundColor", this.ImCFG.getBackgroundColor());
 //        replaceMap.put("IMcolumnClasses", this.getColumnStyleClasses());
@@ -75,7 +75,7 @@
 //    private StringWriter getHeader1rowed(String viewName, int activateMenuItemNR, boolean pagination, int pageNR) throws IOException, TemplateException {
 //        SimpleHash replaceMap = new SimpleHash();
 //        StringWriter header2rowed = new StringWriter();
-//        Template template = cfg.getTemplate("/PartsRenderers/header1rowed.ftl");
+//        Template template = cfg.getTemplate("/Renderers/header1rowed.ftl");
 //
 //        if (pagination) {
 //            replaceMap.put("previous", (pageNR == 1) ? "#" : pageNR - 1);
@@ -99,7 +99,7 @@
 //    private StringWriter getHeader2rowed(String viewName, int activateMenuItemNR, int pageNr, int totalPages) throws IOException, TemplateException {
 //        SimpleHash replaceMap = new SimpleHash();
 //        StringWriter header2rowed = new StringWriter();
-//        Template template = cfg.getTemplate("/PartsRenderers/header2rowed.ftl");
+//        Template template = cfg.getTemplate("/Renderers/header2rowed.ftl");
 //
 //        replaceMap.put("previous",(pageNr == 1) ? "#" : pageNr - 1);
 //        replaceMap.put("pagination", (pageNr + " / " + totalPages));
@@ -153,7 +153,7 @@
 ////    private String getTableRow(ResultSet rs) throws IOException, TemplateException, SQLException {
 ////        SimpleHash replaceMap = new SimpleHash();
 ////        StringWriter tableRow = new StringWriter();
-////        Template template = cfg.getTemplate("/PartsRenderers/tableRow.ftl");
+////        Template template = cfg.getTemplate("/Renderers/tableRow.ftl");
 ////
 ////        // TODO: mayby some list of ftl variables and: foreach (v: list) { replaceMap(V,rs.getString(V) } ? ...
 ////        // var need to be the same as column name and since it ends up in HTML it doesnt care if it is String

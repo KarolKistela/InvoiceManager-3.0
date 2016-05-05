@@ -23,14 +23,15 @@
         <!-- =========================================== SideNav -->
         <ul class="IM-sidenav">
             <li><a href="javascript:void(0)" onclick="w3_close()">Close &times;</a></li>
-            <li><a href="/NewFilter">New filter</a></li>
+         <#--<li><a href="/NewFilter">New filter</a></li>-->
+            <li><a href="#">Super dluga nazwa ciekawe czy sie zmiesci</a></li>
 ${filterList}        </ul>
         <!-- ========================================== MainManu -->
         <ul>
             <li><a href="/DB/1"><i class="fa fa-home${menu1}"></i></a></li>
             <li><a href="/Settings"><i class="fa fa-cog${menu2}"></i></a></li>
             <li onclick="w3_open()"><a href="#"><i class="fa fa-filter${menu3}"></i></a></li>
-            <li><a href="/Sqlquery"><i class="fa fa-database${menu4}"></i></a></li>
+        <#--<li><a href="/Sqlquery"><i class="fa fa-database${menu4}"></i></a></li>-->
             <li><a href="/Reports"><i class="fa fa-bar-chart${menu5}"></i></a></li>
         </ul>
     </nav>
@@ -50,29 +51,64 @@ ${filterList}        </ul>
     <nav class="col s3">
         <!-- Modal Trigger   -->
         <ul style="float: right">
-            <li><a onclick="openModal('searchHelp');"><i class="fa fa-info"></i></a></li>
+            <li><a onclick="openModal('searchHelp');"><i class="fa fa-search-plus"></i></a></li>
         </ul>
         <!-- Modal Structure -->
-        <div id="searchHelp" class="modal">
-            <div class="modal-content white">
+        <div id="searchHelp" class="modal" style="border-top: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
                 <h4>Advance Search</h4>
                 <form method="post">
-                    <label for="search_query"></label>
-                    <input placeholder="search" id="search_query" name="search_query" type="text" style="width: 40%">
-                    <input id="search_query2" list="browsers" name="search_query2" type="text" style="width: 40%">
-                    <datalist id="browsers">
-                        <option value="Internet Explorer">
-                        <option value="Firefox">
-                        <option value="Chrome">
-                        <option value="Opera">
-                        <option value="Safari">
+                <div class="row center">
+                    <div class="col s4">
+                        <input placeholder="search column" id="search_query_columns" list="columns" name="search_query_columns" type="text">
+                    </div>
+                    <div class="col s1 center">
+                        <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="=">
+                    </div>
+                    <div class="col s4">
+                        <input placeholder="search value" id="search_query_value" name="search_query_value" type="text">
+                    </div>
+                    <div class="col s3">
+                        <input type="submit" class="btn" style="padding: 0 30px">
+                    </div>
+                </div>
+                    <datalist id="columns">
+                        <option value="EntryDate">
+                        <option value="ContactGenpact">
+                        <option value="Supplier">
+                        <option value="InvoiceNR">
+                        <option value="InvScanPath">
+                        <option value="PO">
+                        <option value="NetPrice">
+                        <option value="Currency">
+                        <option value="InvDate">
+                        <option value="EmailSubject">
+                        <option value="AuthContact">
+                        <option value="AuthDate">
+                        <option value="AuthReplyDate">
+                        <option value="AuthEmail">
+                        <option value="EndDate">
+                        <option value="GR">
+                        <option value="GenpactLastReply">
+                        <option value="UserComments">
+                        <option value="Status">
+                        <option value="User">
+                        <option value="RowColor">
+                        <option value="ProcessStatus">
+                        <option value="ProcessStage">
                     </datalist>
-                    <input type="submit">
+                    <datalist id="signs">
+                        <option value="=">
+                        <option value=">">
+                        <option value=">=">
+                        <option value="<">
+                        <option value="<=">
+                    </datalist>
                 </form>
             </div>
-            <div class="modal-fixed-footer white">
+            <div class="modal-fixed-footer blue">
                 <a onclick="closeModal('searchHelp');" class="modal-close">
-                    <h5>Close</h5>
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
                 </a>
             </div>
         </div>

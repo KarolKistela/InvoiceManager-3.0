@@ -1,7 +1,9 @@
 package View;
 
+import View.Renderers.*;
 import spark.Request;
 
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 /**
@@ -17,11 +19,15 @@ public class HtmlFactory {
         return new SelectWhereView(request);
     }
 
-    public Renderer getInvNrView(Request request, String rout) throws SQLException, ClassNotFoundException {
+    public Renderer getInvNrView(Request request, String rout) throws SQLException, ClassNotFoundException, FileNotFoundException {
         return new InvNrView(request);
     }
 
     public static Renderer getSettingsView(Request request) throws ClassNotFoundException {
         return new SettingsView(request);
+    }
+
+    public static Renderer getIDView(Request request) throws ClassNotFoundException {
+        return new IDView(request);
     }
 }

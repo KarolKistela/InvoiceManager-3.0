@@ -1,5 +1,6 @@
-package View.PartsRenderers;
+package View.Renderers.PartCodeRenderers;
 
+import Model.Invoice;
 import Model.InvoiceManagerCFG;
 import Model.InvoiceManagerDB_DAO;
 import View.FreeMarkerTemplate;
@@ -7,6 +8,7 @@ import View.Renderer;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -29,12 +31,31 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
     private HashMap<String, Integer> invDuplicatesMap;
     private List<String[]> rs;
 
+    private Invoice invoice;
+
     public static void main(String[] args) throws ClassNotFoundException, TemplateException, SQLException, IOException {
         DBTable t = new DBTable("SELECT * FROM Invoices WHERE ID=51704",1);
         System.out.println(t.render());
     }
 
-    public DBTable(String sqlQuery, int pageNr) throws ClassNotFoundException, SQLException {
+    public DBTable(Invoice invoice, HashMap<String,String> usersColors, HashMap<String, Integer> invDuplicatesMap) throws ClassNotFoundException {
+        super();
+        this.ImCFG = new InvoiceManagerCFG();
+        this.pathToExternalFolder = ImCFG.getImExternalFolderPath();
+        this.rs = invoice.getResultSet();
+        this.usersColors = usersColors;
+        this.invDuplicatesMap = invDuplicatesMap;
+    }
+    public DBTable(List<String[]> rs, HashMap<String,String> usersColors, HashMap<String, Integer> invDuplicatesMap) throws ClassNotFoundException {
+        super();
+        this.ImCFG = new InvoiceManagerCFG();
+        this.pathToExternalFolder = ImCFG.getImExternalFolderPath();
+        this.rs = rs;
+        this.usersColors = usersColors;
+        this.invDuplicatesMap = invDuplicatesMap;
+    }
+
+    public DBTable(String sqlQuery, int pageNr) throws ClassNotFoundException, SQLException, FileNotFoundException {
         super();
         this.ImCFG = new InvoiceManagerCFG();
         this.db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());

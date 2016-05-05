@@ -1,5 +1,6 @@
 import Model.InvoiceManagerDB_DAO;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.*;
 
@@ -7,7 +8,7 @@ import java.util.*;
  * Created by Karol Kistela on 01-May-16.
  */
 public class duplicatesTest {
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
         InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
         HashMap invDuplicMap = db.findDuplicatedInvNr();
 

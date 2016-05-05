@@ -5,28 +5,55 @@ package Model;
  * TODO: clean up this s..t
  */
 
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import static Model.Helpers.fileExists;
+
 public class InvoiceManagerDB_DAO implements IMsqlite {
     private final String DB_Path;
     private InvoiceManagerCFG ImCFG;
+    private Connection connection;
+    private Integer nrOfrecods;
 
-    public InvoiceManagerDB_DAO() throws ClassNotFoundException {
-        ImCFG = new InvoiceManagerCFG();
-        this.DB_Path = ImCFG.getImDBPath();
+    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
+        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
+
+        String preperedQuery = "INSERT INTO Users (NetID, Email, UserColor) VALUES (1,2,3);";
+        preperedQuery = preperedQuery.replace("1","mzjdx6").replace("2","karol.kistela@gmial.com").replace("3","red");
+        System.out.println("query: " + preperedQuery);
+
     }
 
-    public InvoiceManagerDB_DAO(String DB_Path) throws ClassNotFoundException {
+    public InvoiceManagerDB_DAO() throws ClassNotFoundException, FileNotFoundException {
         ImCFG = new InvoiceManagerCFG();
-        this.DB_Path = DB_Path;
+        if (fileExists(ImCFG.getImDBPath())) {
+            this.DB_Path = ImCFG.getImDBPath();
+        } else {
+            this.DB_Path = "src/main/resources/InvoiceManagerCFG/saveToDelete.file";
+            throw new FileNotFoundException();
+        }
+    }
+
+    public InvoiceManagerDB_DAO(String DB_Path) throws ClassNotFoundException, FileNotFoundException {
+        ImCFG = new InvoiceManagerCFG();
+        Class.forName("org.sqlite.JDBC");
+        this.connection = null;
+        if (fileExists(ImCFG.getImDBPath())) {
+            this.DB_Path = ImCFG.getImDBPath();
+        } else {
+            this.DB_Path = "src/main/resources/InvoiceManagerCFG/saveToDelete.file";
+            throw new FileNotFoundException();
+        }
+
     }
 
     public List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause, boolean withLimitClause) throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
         List<String[]> retVal = new LinkedList<>();
+
         String orderByClause;
         if (withOrderByClause) {
             orderByClause = ImCFG.getOrderByClause();
@@ -45,28 +72,20 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             limitClause = ";";
         }
 
-        System.err.println("List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause ,boolean withLimitClause):");
-        System.err.println("DB path: " + this.DB_Path);
-        System.err.println("  Query: " + query + orderByClause + limitClause);
+        System.out.println("Model.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
 
-        Connection connection = null;
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            System.out.println("  Query: " + query + orderByClause + limitClause);
 
             ResultSet rs = statement.executeQuery(query + orderByClause + limitClause);
 
             while (rs.next()) {
-                String[] row;
-                row = new String[rs.getMetaData().getColumnCount()];
-
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    row[i - 1] = rs.getString(i);
-                }
-
-                retVal.add(row);
+                retVal.add(this.toStringArray(rs));
             }
             return retVal;
         } catch (SQLException e) {
@@ -85,21 +104,34 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         return null;
     }
 
-    public List<Invoice> sqlSELECT(String query) throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        List<Invoice> retVal = new LinkedList<>();
+    private String[] toStringArray(ResultSet rs) throws SQLException {
+        String[] retVal;
+        retVal = new String[rs.getMetaData().getColumnCount()];
 
-        Connection connection = null;
+        for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+            retVal[i - 1] = rs.getString(i);
+        }
+        return retVal;
+    }
+
+    public Invoice sqlSELECTid(Integer id) throws ClassNotFoundException, SQLException {
+        Invoice retVal = new Invoice();
+        String query = "SELECT * FROM Invoices WHERE ID="+id;
+
+        System.out.println("Model.InvoiceManagerDB_DAO.sqlSELECTid("+id+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            System.out.println("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
-                retVal.add(new Invoice(rs));
+                retVal = new Invoice(rs);
             }
+            System.out.println("Returns: " + retVal.toString());
             return retVal;
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -118,21 +150,17 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public int sqlCOUNT(String query) throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        System.err.println("sqlCOUNT(String query)");
-        System.err.println("DB path: " + this.DB_Path);
-        System.err.println("  Query: " + query);
-
-        Connection connection = null;
+        System.out.println("Model.InvoiceManagerDB_DAO.sqlCOUNT("+query+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
+            System.out.println("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
-
+            System.out.println("Returns: " + rs.getInt(1));
             return rs.getInt(1);
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -151,21 +179,19 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public String filePath(String ID, String columnName) throws ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-
-        Connection connection = null;
+        System.out.println("Model.InvoiceManagerDB_DAO.filePath("+ID+", "+columnName+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT " + columnName + " FROM Invoices WHERE ID = " + ID + ";";
+            System.out.println("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
-            System.err.println("DB path: " + this.DB_Path);
-            System.err.println("  Query: " + query);
-            System.err.println(" Return: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
-
+            System.out.println("Returns: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
+            // returns path in quotation b/c without them files with spaces in path will not open
             return ("\"" + ImCFG.getImExternalFolderPath() + rs.getString(1) + "\"");
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -184,20 +210,18 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public HashMap<String, Integer> findDuplicatedInvNr() throws ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
         HashMap invDuplicatesMap = new HashMap();
-
-        Connection connection = null;
+        System.out.println("Model.InvoiceManagerDB_DAO.findDuplicatedInvNr()");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT InvoiceNR, repeatNr FROM (SELECT count(ID) as repeatNr, InvoiceNR FROM Invoices GROUP BY InvoiceNR) as tymTab WHERE repeatNr>1 ORDER BY InvoiceNR DESC";
-
+            System.out.println("  Query: " + query);
             ResultSet rs = statement.executeQuery(query);
-            System.err.println("DB path: " + this.DB_Path);
-            System.err.println("  Query: " + query);
+
             while (rs.next()) {
                 invDuplicatesMap.put(rs.getString("InvoiceNR"), rs.getInt("repeatNR"));
             }
@@ -219,20 +243,19 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public HashMap<String, String> usersColorMap() throws ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
         HashMap usersColorMap = new HashMap();
-
-        Connection connection = null;
+        System.out.println("Model.InvoiceManagerDB_DAO.usersColorMap()");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT * FROM Users";
+            System.out.println("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
-            System.err.println("DB path: " + this.DB_Path);
-            System.err.println("  Query: " + query);
+
             while (rs.next()) {
                 usersColorMap.put(rs.getString("NetID"), rs.getString("UserColor"));
             }
@@ -254,12 +277,11 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public void insertUser(User u) throws ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
 
-        Connection connection = null;
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -270,8 +292,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             prepStmt.setString(3, u.getUserColor());
 
             String preperedQuery = "INSERT INTO Users (NetID, Email, UserColor) VALUES (1,2,3);";
-            preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
-            System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
+            preperedQuery = preperedQuery.replace("1",u.getUserID()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
+            System.out.println("Model.InvoiceManagerDB_DAO.insertUser: " + u.getUserID());
             System.out.println("query: " + preperedQuery);
 
             prepStmt.execute();
@@ -281,12 +303,11 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public void upsertUser(User u) throws ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
 
-        Connection connection = null;
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -297,7 +318,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             prepStmt.setString(3, u.getUserID().toUpperCase());
 
             String preperedQuery = "UPDATE Users SET Email=2, UserColor=3 WHERE NetID = 1;";
-            preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
+            preperedQuery = preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
             System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
             System.out.println("query: " + preperedQuery);
 
@@ -307,138 +328,3 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         }
     }
 }
-    // Depreciated
-
-//    public InvoicesList sqlQuery(String query) throws ClassNotFoundException, SQLException {
-//        Class.forName("org.sqlite.JDBC");
-//        InvoicesList retVal = new InvoicesList();
-//
-//        Connection connection = null;
-//        try
-//        {
-//            // create a database connection
-//            connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
-//            Statement statement = connection.createStatement();
-//            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-//
-//            ResultSet rs = statement.executeQuery(query);
-//            while (rs.next()){
-//                retVal.addInvoice(new Invoice(rs));
-//            }
-//            return retVal;
-//        }
-//        catch(SQLException e)
-//        {
-//            // if the error message is "out of memory",
-//            // it probably means no database file is found
-//            System.err.println(e.getMessage());
-//        }
-//        finally
-//        {
-//            try
-//            {
-//                if(connection != null)
-//                    connection.close();
-//            }
-//            catch(SQLException e)
-//            {
-//                // connection close failed.
-//                System.err.println(e);
-//            }
-//        }
-//        return null;
-//    }
-//    public String getTable(String SQLquery, int pageNr, int rowsPerPage, double tableWidth) throws ClassNotFoundException, IOException, TemplateException {
-//        // load the sqlite-JDBC driver using the current class loader
-//        Class.forName("org.sqlite.JDBC");
-//        String limit = "LIMIT " + (pageNr - 1)*rowsPerPage + ", " + rowsPerPage + ";";
-//        SimpleHash replaceMap = new SimpleHash();
-//        StringWriter tableRow = new StringWriter();
-//        String retVal = new String();
-//        Template template = cfg.getTemplate("/PartsRenderers/tableRow.ftl");
-//        System.out.println("DB: " + this.DB_Path);
-//        System.out.println("Query: " + SQLquery + limit);
-//
-//        Connection connection = null;
-//        try
-//        {
-//            System.out.println("tutaj");
-//            // create a database connection
-//            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-//            Statement statement = connection.createStatement();
-//            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-//            // "LIMIT 0,1" change to limit
-//            ResultSet rs = statement.executeQuery(SQLquery + limit);
-//            while (rs.next()){
-//                System.out.println("inside while");
-////          userColor - color of left border, depend on which user added record to getDBview
-//                replaceMap.put("userColor","red");
-////          rowColor - row color default ""
-//                replaceMap.put("rowColor",rs.getString(23));
-////          ID - from InvoiceManagerDB.sql
-//                replaceMap.put("ID",rs.getString(1));
-////          barCode - BC for ID, from InvoiceManagerDB.sql
-//                replaceMap.put("barCode",rs.getString(2));
-//                replaceMap.put("scan","barcode");
-////          EntryDate - from InvoiceManagerDB.sql converter 23 apr, 2016 <-> 20160423
-//                replaceMap.put("EntryDate",rs.getString(3));
-////          tableWidth - from ImCFG
-//                replaceMap.put("tableWidth",tableWidth);
-////          headerWidth - 100 - tableWidth
-//                replaceMap.put("headerWidth",100-tableWidth);
-////          Supplier
-//                replaceMap.put("Supplier",rs.getString(5));
-////          InvoiceNR
-//                replaceMap.put("InvoiceNR",rs.getString(6));
-////          PO
-//                replaceMap.put("PO",rs.getString(8));
-////          NetPrice
-//                replaceMap.put("NetPrice", rs.getString(9) + " " + rs.getString(10));
-////          Authorization
-//                replaceMap.put("Authorization",rs.getString(13));
-////          GR
-//                replaceMap.put("GR",rs.getString(18));
-//
-//                template.process(replaceMap, tableRow);
-//
-//                retVal = (tableRow.toString());
-//            }
-//
-//            return retVal;
-//        }
-//        catch(SQLException e)
-//        {
-//            // if the error message is "out of memory",
-//            // it probably means no database file is found
-//            System.err.println(e.getMessage());
-//            return "Upss DB is sick!!!";
-//        }
-//        finally
-//        {
-//            try
-//            {
-//                if(connection != null)
-//                    connection.close();
-//            }
-//            catch(SQLException e)
-//            {
-//                // connection close failed.
-//                System.err.println(e);
-//            }
-//        }
-//    }
-
-
-//while(rs.next())
-//        {
-//        // read the result set
-//        TableRow = TableRow.replace("ID", rs.getString("ID"));
-//        TableRow = TableRow.replace("BarCode", rs.getString("BarCode"));
-//        TableRow = TableRow.replace("Supplier", rs.getString("Suplier"));
-//        TableRow = TableRow.replace("Invoice_Number", rs.getString("Invoice_Number"));
-//        TableRow = TableRow.replace("Purchase_Order", rs.getString("Purchase_Order"));
-//        TableRow = TableRow.replace("Net_Price", rs.getString("Net_Price"));
-//        TableRow = TableRow.replace("Currency", rs.getString("Currency"));
-//        TableRow = TableRow.replace("Goods Receipt nr", rs.getString("GR_Nr"));
-//        TableRow = TableRow.replace("*nr", Integer.toString(i));
-//        }

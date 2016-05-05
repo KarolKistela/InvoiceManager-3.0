@@ -1,6 +1,11 @@
 package Model;
 
+import java.io.FileNotFoundException;
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import static Model.Helpers.decimal;
 
 /**
  * Created by mzjdx6 on 21-Apr-16.
@@ -32,33 +37,77 @@ public class Invoice {
     private String ProcessStatus;
     private int ProcessStage;
 
+    private int NetPriceDecimal;
+
     public Invoice(ResultSet rs) throws SQLException {
-        setID(rs.getInt("ID"));
-        setBC(rs.getString("BC"));
-        setEntryDate(rs.getString("EntryDate"));
-        setContactGenpact(rs.getString("ContactGenpact"));
-        setSupplier(rs.getString("Supplier"));
-        setInvoiceNR(rs.getString("InvoiceNR"));
-        setInvScanPath(rs.getString("InvScanPath"));
-        setPO(rs.getString("PO"));
-        setNetPrice(rs.getDouble("NetPrice"));
-        setCurrency(rs.getString("Currency"));
-        setInvDate(rs.getString("InvDate"));
-        setEmailSubject(rs.getString("EmailSubject"));
-        setAuthContact(rs.getString("AuthContact"));
-        setAuthDate(rs.getString("AuthDate"));
-        setAuthReplyDate(rs.getString("AuthReplyDate"));
-        setAuthEmail(rs.getString("AuthEmail"));
-        setEndDate(rs.getString("EndDate"));
-        setGR(rs.getString("GR"));
-        setGR(rs.getString("GR"));
-        setGenpactLastReply(rs.getString("GenpactLastReply"));
-        setUserComments(rs.getString("UserComments"));
-        setStatus(rs.getInt("Status"));
-        setUser(rs.getString("User"));
-        setRowColor(rs.getString("RowColor"));
-        setProcessStatus(rs.getString("ProcessStatus"));
-        setProcessStage(rs.getInt("ProcessStage"));
+        this.ID = rs.getInt("ID");
+        this.BC = (rs.getString("BC"));
+        this.EntryDate = (rs.getString("EntryDate"));
+        this.ContactGenpact = (rs.getString("ContactGenpact"));
+        this.Supplier = (rs.getString("Supplier"));
+        this.InvoiceNR = (rs.getString("InvoiceNR"));
+        this.InvScanPath = (rs.getString("InvScanPath"));
+        this.PO = (rs.getString("PO"));
+        this.NetPrice = (rs.getDouble("NetPrice"));
+        this.Currency = (rs.getString("Currency"));
+        this.InvDate = (rs.getString("InvDate"));
+        this.EmailSubject = (rs.getString("EmailSubject"));
+        this.AuthContact = (rs.getString("AuthContact"));
+        this.AuthDate = (rs.getString("AuthDate"));
+        this.AuthReplyDate = (rs.getString("AuthReplyDate"));
+        this.AuthEmail = (rs.getString("AuthEmail"));
+        this.EndDate = (rs.getString("EndDate"));
+        this.GR = (rs.getString("GR"));
+        this.GR = (rs.getString("GR"));
+        this.GenpactLastReply = (rs.getString("GenpactLastReply"));
+        this.UserComments = (rs.getString("UserComments"));
+        this.Status = (rs.getInt("Status"));
+        this.User = (rs.getString("User"));
+        this.RowColor = (rs.getString("RowColor"));
+        this.ProcessStatus = (rs.getString("ProcessStatus"));
+        this.ProcessStage = (rs.getInt("ProcessStage"));
+        this.NetPriceDecimal = decimal(this.NetPrice);
+    }
+
+    public Invoice() {
+
+    }
+
+    public Invoice(Integer pageNr) throws FileNotFoundException, ClassNotFoundException, SQLException {
+        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
+        db.sqlSELECTid(pageNr);
+    }
+
+    public List<String[]> getResultSet() {
+        List<String[]> retVal = new LinkedList<>();
+        String[] row = new String[25];
+        row[0] = Integer.toString(ID).replace(",","");
+        row[1] = BC;
+        row[2] = EntryDate;
+        row[3] = ContactGenpact;
+        row[4] = Supplier;
+        row[5] = InvoiceNR;
+        row[6] = InvScanPath;
+        row[7] = PO;
+        row[8] = Double.toString(NetPrice);
+        row[9] = Currency;
+        row[10] = InvDate;
+        row[11] = EmailSubject;
+        row[12] = AuthContact;
+        row[13] = AuthDate;
+        row[14] = AuthReplyDate;
+        row[15] = AuthEmail;
+        row[16] = EndDate;
+        row[17] = GR;
+        row[18] = GenpactLastReply;
+        row[19] = UserComments;
+        row[20] = Integer.toString(Status);
+        row[21] = User;
+        row[22] = RowColor;
+        row[23] = ProcessStatus;
+        row[24] = Integer.toString(ProcessStage);
+        retVal.add(row);
+        return retVal;
     }
 
     @Override
@@ -290,5 +339,13 @@ public class Invoice {
 
     public void setProcessStatus(String processStatus) {
         ProcessStatus = processStatus;
+    }
+
+    public int getNetPriceDecimal() {
+        return NetPriceDecimal;
+    }
+
+    public void setNetPriceDecimal(int netPriceDecimal) {
+        NetPriceDecimal = netPriceDecimal;
     }
 }

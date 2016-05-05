@@ -1,7 +1,5 @@
-package View.PartsRenderers;
+package View.Renderers.PartCodeRenderers;
 
-import Model.InvoiceManagerCFG;
-import Model.InvoiceManagerDB_DAO;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import View.FreeMarkerTemplate;
@@ -9,7 +7,6 @@ import View.Renderer;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by Karol Kistela on 28-Apr-16.

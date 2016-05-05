@@ -1,6 +1,7 @@
 import Model.Invoice;
 import Model.InvoiceManagerDB_DAO;
 
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by mzjdx6 on 21-Apr-16.
  */
 public class InvoiceManagerDB_DAO_test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         if (args.length == 0) {
             new InvoiceManagerDB_DAO_test("C:\\InvoiceManagerExt\\Invoices_manager_DB\\InvoiceManager.db");
         }
@@ -18,7 +19,7 @@ public class InvoiceManagerDB_DAO_test {
         }
     }
 
-    public InvoiceManagerDB_DAO_test(String s) {
+    public InvoiceManagerDB_DAO_test(String s) throws FileNotFoundException {
         InvoiceManagerDB_DAO db = null;
         try {
             db = new InvoiceManagerDB_DAO();

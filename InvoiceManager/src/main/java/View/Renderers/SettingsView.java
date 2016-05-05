@@ -1,9 +1,10 @@
-package View;
+package View.Renderers;
 
-import Model.InvoiceManagerCFG;
-import View.PartsRenderers.Header;
-import View.PartsRenderers.SettingsInputForm;
-import View.PartsRenderers.Style;
+import View.FreeMarkerTemplate;
+import View.Renderer;
+import View.Renderers.PartCodeRenderers.Header;
+import View.Renderers.PartCodeRenderers.SettingsInputForm;
+import View.Renderers.PartCodeRenderers.Style;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -26,6 +27,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
     public SettingsView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
+        System.out.println("********View.Renderers.IDView.Settings(Request request ROUT: " + this.rout + " ********");
     }
 
     @Override

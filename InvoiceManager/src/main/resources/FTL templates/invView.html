@@ -1,5 +1,4 @@
 
-<!-- template for DBview view with many records per page -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,36 +71,35 @@
         <!-- =========================================== SideNav -->
         <ul class="IM-sidenav">
             <li><a href="javascript:void(0)" onclick="w3_close()">Close &times;</a></li>
-            <li><a href="/NewFilter">New filter</a></li>
+            <li><a href="#">Super dluga nazwa ciekawe czy sie zmiesci</a></li>
             <li><a href="/FilterView/1">by user</a></li>
             <li><a href="/FilterView/2">by supplier</a></li>
         </ul>
         <!-- ========================================== MainManu -->
         <ul>
             <li><a href="/DB/1"><i class="fa fa-home"></i></a></li>
-            <li><a href="/Settings"><i class="fa fa-cog IM-menu-active"></i></a></li>
-            <li onclick="w3_open()"><a href="#"><i class="fa fa-filter"></i></a></li>
-            <li><a href="/Sqlquery"><i class="fa fa-database"></i></a></li>
+            <li><a href="/Settings"><i class="fa fa-cog"></i></a></li>
+            <li onclick="w3_open()"><a href="#"><i class="fa fa-filter IM-menu-active"></i></a></li>
             <li><a href="/Reports"><i class="fa fa-bar-chart"></i></a></li>
         </ul>
     </nav>
     <!-- ======================================== View Title style="padding-top: 5px" -->
     <div class="col s2 center">
-        <a href="#"><strong class="waves-effect">Settings</strong></a>
+        <a href="#"><strong class="waves-effect">Filter view</strong></a>
     </div>
     <!-- ======================================== Pagination -->
     <nav class="col s2">
         <ul id="topPagination">
-            <!--<li class="waves-effect"><a href="/0"><i class="fa fa-angle-double-left"></i></a></li>
+            <li class="waves-effect"><!--<a href="/Filter/Select/ID/eq/51894/0">--><i class="fa fa-angle-double-left"></i><!--</a>--></li>
             <li class="waves-effect"><a>1</a></li>
-            <li class="waves-effect"><a href="/2"><i class="fa fa-angle-double-right"></i></a></li>--><p></p>
+            <li class="waves-effect"><a href="/Filter/Select/ID/eq/51894/2"><i class="fa fa-angle-double-right"></i></a></li>
         </ul>
     </nav>
     <!-- ======================================= Search Info -->
     <nav class="col s3">
         <!-- Modal Trigger   -->
         <ul style="float: right">
-            <li><a onclick="openModal('searchHelp');"><i class="fa fa-info"></i></a></li>
+            <li><a onclick="openModal('searchHelp');"><i class="fa fa-search-plus"></i></a></li>
         </ul>
         <!-- Modal Structure -->
         <div id="searchHelp" class="modal">
@@ -138,6 +136,16 @@
         <table>
             <tbody>
             <tr>
+                <td class="IM-ID">ID</td>
+                <td class="IM-InvScanPath">Inv</td>
+                <td class="IM-EntryDate">Date</td>
+                <td class="IM-Supplier">Supplier</td>
+                <td class="IM-InvoiceNR">InvoiceNR</td>
+                <td class="IM-PO">PO</td>
+                <td class="IM-NetPrice">NetPrice</td>
+                <td class="IM-AuthContact">Authorization</td>
+                <td class="IM-AuthEmail">Email</td>
+                <td class="IM-GR">GR</td>
                 <td class="IM-details"></td>
             </tr>
             </tbody>
@@ -145,26 +153,96 @@
     </aside>
 </header>
 <!-- ============================ InvoicesList content for 2 rowed header ========================================== -->
-<main style="margin-top: 50px">
-    <article class="card">
-        <form class="container" action="#" method="post" style="padding-top: 25px">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>File</span>
-                    <input type="file">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" name="imDBPath">
-                </div>
-            </div>
-        </form>
+<main class="row">
+    <! -- ===================================== Row for ID = 51894  ===================================== -->
+    <article class="hoverable">
+        <table class="white" style="border-left: 4px solid #b71c1c;border-right: 4px solid #b71c1c">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/ID/51894" target="_blank">51894</a></td>
+                <td class="IM-InvScanPath ">
+                    <a href="/ID/51894/scan" onClick="scan51894=window.open('/ID/51894/scan','scan51894','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { scan51894.close();}, 500); return false;">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-04-06</td>
+                <td class="IM-Supplier">
+                    <a href="/Filter/Select/Supplier/eq/Remondis/1">
+                        Remondis
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR">4121247294</td>
+                <td class="IM-PO"></td>
+                <td class="IM-NetPrice">3661.8 PLN</td>
+                <td class="IM-AuthContact" >
+                    <a href="/Filter/Select//AuthContact/eq//1">
+
+                    </a>
+                </td>
+                <td class="IM-AuthEmail"><a href="mailto: "><i class="fa fa-envelope-o" aria-hidden="true"></i></a></td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('51894')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ========================================== Process stage Indicator -->
+        <div class="progress cyan lighten-2">
+            <div class="determinate light-blue darken-4" style="width: 0%"></div>
+        </div>
+        <!-- ================================================ Details for inv ID -->
+        <section id="51894" class="w3-accordion-content" style="border-left: 4px solid #b71c1c;border-right: 4px solid #b71c1c">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>4801274424</td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>resolutionap@delphi.com</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-02-29</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>EXT SENDER-Invoice Resolution Required#[ref:_Case-000019297:ref]:BarCode#4801274424:Supplier#REMONDIS SP Z OO:Reason#Goods Receipt missing in SAP</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ProcessStatus:</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
     </article>
 </main>
-
-<!--<form class="col s2 no-padding" method="post">-->
-    <!--<label for="search_query"></label>-->
-    <!--<input placeholder="search" id="search_query" name="search_query" type="search">-->
-<!--</form>-->
 <!-- ================================================== Footer ===================================================== -->
 <footer class="page-footer blue">
     <div class="container">
@@ -202,7 +280,6 @@
         document.getElementsByClassName("IM-sidenav")[0].style.display = "none";
         document.getElementsByClassName("IM-overlay")[0].style.display = "none";
     }
-
     function myAccFunc() {
         var x = document.getElementById("demoAcc");
         if (x.className.indexOf("w3-show") == -1) {
@@ -214,7 +291,6 @@
                     x.previousElementSibling.className.replace(" w3-green", "");
         }
     }
-
     function myDropFunc() {
         var x = document.getElementById("demoDrop");
         if (x.className.indexOf("w3-show") == -1) {
@@ -231,7 +307,6 @@
             accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
         });
     });
-
     function myFunction(id) {
         var x = document.getElementById(id);
         if (x.className.indexOf("w3-show") == -1) {
@@ -240,29 +315,23 @@
             x.className = x.className.replace(" w3-show", "");
         }
     }
-
     function popUpModal(id) {
         var modalId = document.getElementById(id);
         modalId.style.display='block';
         setTimeout(function () { document.getElementById(id).style.display='none';}, 1500);
         return false;
     }
-
     function openModal(id) {
         var modalId = document.getElementById(id)
         modalId.style.display='block';
     }
-
     function closeModal(id) {
         var modalId = document.getElementById(id)
         modalId.style.display='none';
-
     }
-
     $(document).ready(function(){
         $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
     });
-
     $(document).ready(function(){
         $('.tooltipped').tooltip({delay: 50});
     });

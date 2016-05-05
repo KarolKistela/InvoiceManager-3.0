@@ -12,7 +12,7 @@ import java.io.StringWriter;
 /**
  * Created by Karol Kistela on 27-Apr-16.
  */
-public class FreeMarkerTemplate{
+public class FreeMarkerTemplate {
     private final Configuration cfg = new Configuration();
     public InvoiceManagerCFG ImCFG;
     public SimpleHash replaceMap;
