@@ -27,7 +27,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
     public SettingsView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
-        System.out.println("********View.Renderers.IDView.Settings(Request request ROUT: " + this.rout + " ********");
+        System.out.println("********View.Renderers.SettingsView ROUT: " + this.rout + " ********");
     }
 
     @Override
@@ -43,8 +43,8 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                                             this.pagination).render());
         replaceMap.put("SettingsInputForm", new SettingsInputForm().render());
 
-        template.process(replaceMap, retVal);
+//        template.process(replaceMap, retVal);
 
-        return retVal.toString();
+        return process(template);
     }
 }

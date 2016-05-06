@@ -84,7 +84,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             String scanPath = pathToExternalFolder + record[6];
             String emailAuthPath = pathToExternalFolder + record[15];
 
-            // remove null from row:
+            // remove null from row: is it necessary?
             for (String s:record
                  ) {
                 if (s == null) {s = "";}
@@ -104,7 +104,12 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             }
             replaceMap.put("rowComment", "<! -- ===================================== Row for ID = " + record[0] + "  ===================================== -->");
             replaceMap.put("rowColor", (record[22].length() == 0) ? "white":record[22]);
-            replaceMap.put("userColor", this.usersColors.get(record[21]));
+
+            if (this.usersColors.get(record[21]) == null) {
+                replaceMap.put("userColor", this.usersColors.get("DB")); // TODO: in sql sdript for creating user db make sure that default record has ID='DB'
+            } else {
+                replaceMap.put("userColor", this.usersColors.get(record[21])); // TODO: when updating inv with new user app doesn't find userColor
+            }
             replaceMap.put("ID", record[0]);
             replaceMap.put("fileExists", (fileExists(scanPath)) ? "file-text":"file-text-o");
             replaceMap.put("entryDate", record[2]);

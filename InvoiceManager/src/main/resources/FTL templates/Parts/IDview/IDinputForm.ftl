@@ -102,13 +102,16 @@ ${ProcessStatus-activeClass}
                         <label class="${NetPrice_activeClass}" for="NetPrice">Net Price</label>
                     </div>
                     <#--<div class="input-field col s1">-->
-                        <#--<input value="${NetPriceDecimal}" id="NetPriceDecimal" name="NetPriceDecimal" type="number">-->
-                        <#--<label class="${NetPriceDecimal_activeClass}" for="NetPriceDecimal">.00</label>-->
+                        <#--<input value=" {NetPriceDecimal}" id="NetPriceDecimal" name="NetPriceDecimal" type="number">-->
+                        <#--<label class=" {NetPriceDecimal_activeClass}" for="NetPriceDecimal">.00</label>-->
                     <#--</div>-->
 <!-- ============== 2.5 Currency =================================================================================== -->
                     <div class="input-field col s1">
-                        <input value="${Currency}" id="Currency" name="Currency" type="text">
-                        <label class="${Currency_activeClass}" for="Currency">Currency</label>
+                        <input value="${Currency}" list="Currency" name="Currency" >
+                        <label class="active" for="Currency">Currency</label>
+                        <datalist id="Currency">
+                        ${CurrencyList}
+                        </datalist>
                     </div>
                 </div>
 <!-- ========== 3rd Row - 4 columns ================================================================================ -->
@@ -166,31 +169,49 @@ ${ProcessStatus-activeClass}
                     </div>
 <!-- ============== 5.2 UserComments =============================================================================== -->
                     <div class="input-field col s7">
-                        <input value="${UserComments}" id="UserComments" name="UserComments" type="email">
+                        <input value="${UserComments}" id="UserComments" name="UserComments" type="text">
                         <label class="${UserComments_activeClass}" for="UserComments">User Comments</label>
                     </div>
 <!-- ============== 5.3 Status ===================================================================================== -->
                     <div class="input-field col s3">
-                        <input value="${Status}" id="Status" name="Status" type="number">
-                        <label class="${Status_activeClass}" for="Status">Status</label>
+                        <input value="${Status}" list="Status" name="Status" >
+                        <label class="active" for="Status">Status</label>
+                        <datalist id="Status">
+                        ${StatusList}
+                        </datalist>
                     </div>
                 </div>
 <!-- ========== 6th Row - 3 columns ================================================================================ -->
                 <div class="row" style="margin-top: 15px">
 <!-- ============== 6.1 User ======================================================================================= -->
                     <div class="input-field col s2">
-                        <input value="${User}" id="User" name="User" type="text">
-                        <label class="${User_activeClass}" for="User">User</label>
+                        <#--<input value="${User}" id="User" name="User" type="text">-->
+                        <#--<label class="${User_activeClass}" for="User">User</label>-->
+                        <input value="${User}" list="User" name="User" >
+                        <label class="active" for="User">Status</label>
+                        <datalist id="User">
+                        ${UserList}
+                        </datalist>
                     </div>
 <!-- ============== 6.2 RowColor =================================================================================== -->
                     <div class="input-field col s2">
-                        <input value="${RowColor}" id="RowColor" name="RowColor" type="text">
-                        <label class="${RowColor_activeClass}" for="RowColor">Mark Invoice with color</label>
+                        <#--<input value="${RowColor}" id="RowColor" name="RowColor" type="text">-->
+                        <#--<label class="${RowColor_activeClass}" for="RowColor">Mark Invoice with color</label>-->
+                        <input value="${RowColor}" list="RowColor" name="RowColor" >
+                        <label class="active" for="RowColor">Mark ID with color</label>
+                        <datalist id="RowColor">
+                        ${RowColorList}
+                        </datalist>
                     </div>
 <!-- ============== 6.3 ProcessStatus ============================================================================== -->
                     <div class="input-field col s2">
-                        <input value="${ProcessStatus}" id="ProcessStatus" name="ProcessStatus" type="number">
-                        <label class="${ProcessStatus_activeClass}" for="ProcessStatus">Process Status</label>
+                        <#--<input value="${ProcessStatus}" id="ProcessStatus" name="ProcessStatus" type="number">-->
+                        <#--<label class="${ProcessStatus_activeClass}" for="ProcessStatus">Process Status</label>-->
+                        <input value="${ProcessStatus}" list="ProcessStatus" name="ProcessStatus" >
+                        <label class="active" for="ProcessStatus">Process Status</label>
+                        <datalist id="ProcessStatus">
+                        ${ProcessStatusList}
+                        </datalist>
                     </div>
 <!-- ============== ProcessStage =================================================================================== -->
                     <div class="input-field col s6">

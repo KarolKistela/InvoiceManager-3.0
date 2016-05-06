@@ -46,10 +46,17 @@
       <column name="ViewName" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <primary-key columns="id"/>
     </table>
+    <table name="ProcessStatus" schema="" catalog="" type="TABLE">
+      <column name="ProcessStatus" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <primary-key columns="processstatus"/>
+    </table>
+    <table name="RowColors" schema="" catalog="" type="TABLE">
+      <column name="colorClass" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <primary-key columns="colorclass"/>
+    </table>
     <table name="StatusMetaData" schema="" catalog="" type="TABLE">
-      <column name="ID" sqlType="INT" precision="0" scale="-1" nullable="true" jdbcType="4"/>
-      <column name="Desc" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <primary-key columns="id"/>
+      <column name="Status" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <primary-key columns="status"/>
     </table>
     <table name="columnsAndWidth" schema="" catalog="" type="TABLE">
       <column name="columnID" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>

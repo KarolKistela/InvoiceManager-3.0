@@ -28,6 +28,10 @@ public class InvoiceManagerCFG {
     private String userEmail;
     private String userColor;
     private List<String[]> invoicesMetaData;
+    private List<String> statusMetaData = new LinkedList<>();
+    private List<String> curencies = new LinkedList<>();
+    private List<String> rowColor = new LinkedList<>();
+    private List<String> processStatus = new LinkedList<>();
 
     public static void main(String[] args) throws ClassNotFoundException {
         InvoiceManagerCFG imcfg = new InvoiceManagerCFG();
@@ -95,6 +99,26 @@ public class InvoiceManagerCFG {
                 metaDataList.add(metaData);
             }
             this.setInvoicesMetaData(metaDataList);
+
+            resultSet = statement.executeQuery("SELECT * FROM StatusMetaData");
+            while (resultSet.next()) {
+                this.statusMetaData.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM Currencies");
+            while (resultSet.next()) {
+                this.curencies.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM RowColors");
+            while (resultSet.next()) {
+                this.rowColor.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM ProcessStatus");
+            while (resultSet.next()) {
+                this.processStatus.add(resultSet.getString(1));
+            }
         }
         catch(SQLException e)
         {
@@ -296,6 +320,22 @@ public class InvoiceManagerCFG {
 
     public void setInvoicesMetaData(List<String[]> invoicesMetaData) {
         this.invoicesMetaData = invoicesMetaData;
+    }
+
+    public List<String> getStatusMetaData() {
+        return statusMetaData;
+    }
+
+    public List<String> getCurencies() {
+        return curencies;
+    }
+
+    public List<String> getRowColor() {
+        return rowColor;
+    }
+
+    public List<String> getProcessStatus() {
+        return processStatus;
     }
 
     @Override

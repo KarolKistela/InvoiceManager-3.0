@@ -79,7 +79,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("id").replace(",",""));
         try {
-            System.out.println("********View.Renderers.IDView.IDView(Request request ROUT: " + this.rout + this.pageNr + " ********");
+            System.out.println("********View.Renderers.IDView ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
             this.invoice = db.sqlSELECTid(pageNr);                  // get Invoice
             this.usersColors = db.usersColorMap();                  // get colors
@@ -115,12 +115,13 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("DBTable", new DBTable(this.invoice,
                                                   this.usersColors,
                                                   this.invDuplicatesMap).render());
-            replaceMap.put("InputForm", new IDinputForm(invoice).render());//"hello world!");
+            replaceMap.put("InputForm", new IDinputForm(invoice,
+                                                        this.usersColors).render());//"hello world!");
         }
 
-        template.process(replaceMap,retVal);
+//        template.process(replaceMap,retVal);
 
-        return retVal.toString();
+        return process(template);
     }
 }
 

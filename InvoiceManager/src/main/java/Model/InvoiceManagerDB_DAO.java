@@ -5,6 +5,8 @@ package Model;
  * TODO: clean up this s..t
  */
 
+import spark.Request;
+
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.HashMap;
@@ -319,6 +321,78 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
             String preperedQuery = "UPDATE Users SET Email=2, UserColor=3 WHERE NetID = 1;";
             preperedQuery = preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
+            System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
+            System.out.println("query: " + preperedQuery);
+
+            prepStmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void upsertInvoice(Request request) {
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            PreparedStatement prepStmt = connection.prepareStatement(
+                    "UPDATE Invoices SET BC=?, EntryDate=?, ContactGenpact=?, Supplier=?, InvoiceNR=?, InvScanPath=?, PO=?, NetPrice=?, Currency=?, InvDate=?, EmailSubject=?, AuthContact=?, AuthDate=?, AuthReplyDate=?, AuthEmail=?, EndDate=?, GR=?, GenpactLastReply=?, UserComments=?, Status=?, User=?, RowColor=?, ProcessStatus=?, ProcessStage=? WHERE ID = ?;");
+            prepStmt.setString(1, request.queryParams("BC"));
+            prepStmt.setString(2, request.queryParams("EntryDate"));
+            prepStmt.setString(3, request.queryParams("ContactGenpact"));
+            prepStmt.setString(4, request.queryParams("Supplier"));
+            prepStmt.setString(5, request.queryParams("InvoiceNR"));
+            prepStmt.setString(6, request.queryParams("InvScanPath"));
+            prepStmt.setString(7, request.queryParams("PO"));
+            prepStmt.setString(8, request.queryParams("NetPrice"));
+            prepStmt.setString(9, request.queryParams("Currency"));
+            prepStmt.setString(10, request.queryParams("InvDate"));
+            prepStmt.setString(11, request.queryParams("EmailSubject"));
+            prepStmt.setString(12, request.queryParams("AuthContact"));
+            prepStmt.setString(13, request.queryParams("AuthDate"));
+            prepStmt.setString(14, request.queryParams("AuthReplyDate"));
+            prepStmt.setString(15, request.queryParams("AuthEmail"));
+            prepStmt.setString(16, request.queryParams("EndDate"));
+            prepStmt.setString(17, request.queryParams("GR"));
+            prepStmt.setString(18, request.queryParams("GenpactLastReply"));
+            prepStmt.setString(19, request.queryParams("UserComments"));
+            prepStmt.setString(20, request.queryParams("Status"));
+            prepStmt.setString(21, request.queryParams("User"));
+            prepStmt.setString(22, request.queryParams("RowColor"));
+            prepStmt.setString(23, request.queryParams("ProcessStatus"));
+            prepStmt.setString(24, request.queryParams("ProcessStage"));
+            prepStmt.setString(25, request.params("ID"));
+
+
+            String preperedQuery = "UPDATE Invoices SET BC=1, EntryDate=2, ContactGenpact=3, Supplier=4, InvoiceNR=5, InvScanPath=6, PO=7, NetPrice=8, Currency=9, InvDate=10, EmailSubject=11, AuthContact=12, AuthDate=13, AuthReplyDate=14, AuthEmail=15, EndDate=16, GR=17, GenpactLastReply=18, UserComments=19, Status=20, User=21, RowColor=22, ProcessStatus=23, ProcessStage=24 WHERE ID = 25;\"";
+            preperedQuery = preperedQuery.replace("1",request.queryParams("BC"))
+                                         .replace("2",request.queryParams("EntryDate"))
+                                         .replace("3",request.queryParams("ContactGenpact"))
+                                         .replace("4", request.queryParams("Supplier"))
+                                         .replace("5", request.queryParams("InvoiceNR"))
+                                         .replace("6", request.queryParams("InvScanPath"))
+                                         .replace("7", request.queryParams("PO"))
+                                         .replace("8", request.queryParams("NetPrice"))
+                                         .replace("9", request.queryParams("Currency"))
+                                         .replace("10", request.queryParams("InvDate"))
+                                         .replace("11", request.queryParams("EmailSubject"))
+                                         .replace("12", request.queryParams("AuthContact"))
+                                         .replace("13", request.queryParams("AuthDate"))
+                                         .replace("14", request.queryParams("AuthReplyDate"))
+                                         .replace("15", request.queryParams("AuthEmail"))
+                                         .replace("16", request.queryParams("EndDate"))
+                                         .replace("17", request.queryParams("GR"))
+                                         .replace("18", request.queryParams("GenpactLastReply"))
+                                         .replace("19", request.queryParams("UserComments"))
+                                         .replace("20", request.queryParams("Status"))
+                                         .replace("21", request.queryParams("User"))
+                                         .replace("22", request.queryParams("RowColor"))
+                                         .replace("23", request.queryParams("ProcessStatus"))
+                                         .replace("24", request.queryParams("ProcessStage"))
+                                         .replace("25", request.params("ID"));
             System.out.println("Model.InvoiceManagerDB_DAO.insertUser: ");
             System.out.println("query: " + preperedQuery);
 

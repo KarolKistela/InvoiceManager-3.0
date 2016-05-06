@@ -40,7 +40,7 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
 
         try {
-            System.out.println("********View.Renderers.IDView.DBView(Request request ROUT: " + this.rout + this.pageNr + " ********");
+            System.out.println("********View.Renderers.InvNrView ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
             this.sqlQuery = sqlQueryConstructorInvNr(request);
             this.resultSet = db.sqlSELECT(sqlQuery, pageNr, true, true);    // get resultSet of query
@@ -81,8 +81,8 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("DBTable", new DBTable(this.resultSet,
                                               this.usersColors,
                                               this.invDuplicatesMap).render());
-        template.process(replaceMap, retVal);
+//        template.process(replaceMap, retVal);
 
-        return retVal.toString();
+        return process(template);
     }
 }

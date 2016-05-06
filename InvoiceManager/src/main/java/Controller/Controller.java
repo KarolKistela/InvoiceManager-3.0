@@ -140,6 +140,11 @@ public class Controller {
                                 ) {
                             System.out.println(s + " = " + request.queryParams(s));
                         }
+                        if (new Invoice().save(request)) {
+                            response.redirect("/ID/" + request.params("id"));
+                        } else {
+                            response.redirect("/Error/InvoiceUpadate");
+                        }
                         response.redirect("/ID/" + request.params("id"));
                     } else {
                         System.out.println("Advanced search: ");

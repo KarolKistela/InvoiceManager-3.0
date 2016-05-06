@@ -9,25 +9,28 @@ import freemarker.template.TemplateException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by Karol Kistela on 03-May-16.
  */
 public class IDinputForm extends FreeMarkerTemplate implements Renderer {
     private final String settingsInputFormFTL = "Parts/IDview/IDinputForm.ftl";
-    private final Invoice invoice;
+    private Invoice invoice;
+    private HashMap<String,String> usersColors;
     private Integer ID;
 
-    public static void main(String[] args) throws ClassNotFoundException, TemplateException, IOException, SQLException {
-        IDinputForm inv = new IDinputForm(new InvoiceManagerDB_DAO().sqlSELECTid(51893));
+//    public static void main(String[] args) throws ClassNotFoundException, TemplateException, IOException, SQLException {
+//        IDinputForm inv = new IDinputForm(new InvoiceManagerDB_DAO().sqlSELECTid(51893), this.usersColors);
+//
+//        System.out.println(inv.render());
+//    }
 
-        System.out.println(inv.render());
-    }
-
-    public IDinputForm(Invoice invoice) throws ClassNotFoundException, SQLException {
+    public IDinputForm(Invoice invoice, HashMap<String, String> usersColors) throws ClassNotFoundException, SQLException {
         super();
         this.ID = invoice.getID();
         this.invoice = invoice;
+        this.usersColors = usersColors; // TODO: dataList for user input
     }
 
     @Override
@@ -43,6 +46,9 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         // TODO: paths to file cannot contains signs: /\:*?<>"| make sure this will not get into DB!!!
         // TODO: option in settings for lists for Supplier, AuthContact, Users
         // TODO: /Settings search not working!!!
+        // TODO: clean up datalists - remove activClass replacMap, add static datalist creator to Helpers.class
+        // TODO: net price presentation doesn't work for 1 digit value
+
         replaceMap.put("BC", this.invoice.getBC());
         if (this.invoice.getBC().equals("")) { replaceMap.put("BC_activeClass","");} else {replaceMap.put("BC_activeClass","active");}
         replaceMap.put("EntryDate", this.invoice.getEntryDate());
@@ -59,10 +65,18 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         if (this.invoice.getPO().equals("")) { replaceMap.put("PO_activeClass","");} else {replaceMap.put("PO_activeClass","active");}
         replaceMap.put("NetPrice", this.invoice.getNetPrice().toString().replace(",",""));
         if (this.invoice.getNetPrice() == 0.00) { replaceMap.put("NetPrice_activeClass","");} else {replaceMap.put("NetPrice_activeClass","active");}
-        replaceMap.put("NetPriceDecimal",this.invoice.getNetPriceDecimal());
-        if (this.invoice.getBC().equals("")) { replaceMap.put("NetPriceDecimal_activeClass","");} else {replaceMap.put("NetPriceDecimal_activeClass","active");}
+//        replaceMap.put("NetPriceDecimal",this.invoice.getNetPriceDecimal());
+//        if (this.invoice.getBC().equals("")) { replaceMap.put("NetPriceDecimal_activeClass","");} else {replaceMap.put("NetPriceDecimal_activeClass","active");}
+
         replaceMap.put("Currency", this.invoice.getCurrency());
         if (this.invoice.getCurrency().equals("")) { replaceMap.put("Currency_activeClass","");} else {replaceMap.put("Currency_activeClass","active");}
+        String currencyOption = "";
+        for (String s: ImCFG.getCurencies()
+                ) {
+            currencyOption = currencyOption + "<option value=\"" + s + "\">\n";
+        }
+        replaceMap.put("CurrencyList", currencyOption);
+
         replaceMap.put("InvDate", this.invoice.getInvDate());
         if (this.invoice.getInvDate().equals("")) { replaceMap.put("InvDate_activeClass","");} else {replaceMap.put("InvDate_activeClass","active");}
         replaceMap.put("EmailSubject", this.invoice.getEmailSubject());
@@ -83,16 +97,48 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         if (this.invoice.getGenpactLastReply().equals("")) { replaceMap.put("GenpactLastReply_activeClass","");} else {replaceMap.put("GenpactLastReply_activeClass","active");}
         replaceMap.put("UserComments", this.invoice.getUserComments());
         if (this.invoice.getUserComments().equals("")) { replaceMap.put("UserComments_activeClass","");} else {replaceMap.put("UserComments_activeClass","active");}
+
         replaceMap.put("Status", this.invoice.getStatus());
-        if (this.invoice.getStatus() == 0) { replaceMap.put("Status_activeClass","");} else {replaceMap.put("Status_activeClass","active");}
+        System.err.println(this.invoice.getStatus());
+//        if (this.invoice.getStatus() == 0) { replaceMap.put("Status_activeClass","active");} else {replaceMap.put("Status_activeClass","active");}
+        String statusOption = "";
+        for (String s: ImCFG.getStatusMetaData()
+                ) {
+            statusOption = statusOption + "<option value=\"" + s + "\">\n";
+        }
+        replaceMap.put("StatusList", statusOption);
+
         replaceMap.put("User", this.invoice.getUser());
         if (this.invoice.getUser().equals("")) { replaceMap.put("User_activeClass","");} else {replaceMap.put("User_activeClass","active");}
+        String userOption = "";
+        for (String s: this.usersColors.keySet()
+                ) {
+            userOption = userOption + "<option value=\"" + s + "\">\n";
+        }
+        replaceMap.put("UserList", userOption);
+
         replaceMap.put("RowColor", this.invoice.getRowColor());
         if (this.invoice.getRowColor().equals("")) { replaceMap.put("RowColor_activeClass","");} else {replaceMap.put("RowColor_activeClass","active");}
+        String rowColorOption = "";
+        for (String s: ImCFG.getRowColor()
+                ) {
+            rowColorOption = rowColorOption + "<option value=\"" + s + "\">\n";
+        }
+        replaceMap.put("RowColorList", rowColorOption);
+
         replaceMap.put("ProcessStatus", this.invoice.getProcessStatus());
         if (this.invoice.getProcessStatus().equals("")) { replaceMap.put("ProcessStatus_activeClass","");} else {replaceMap.put("ProcessStatus_activeClass","active");}
+        String processStatusOption = "";
+        for (String s: ImCFG.getProcessStatus()
+                ) {
+            processStatusOption = processStatusOption + "<option value=\"" + s + "\">\n";
+        }
+        replaceMap.put("ProcessStatusList", processStatusOption);
+
         replaceMap.put("ProcessStage", this.invoice.getProcessStage());
         if (this.invoice.getProcessStage() == 0) { replaceMap.put("ProcessStage_activeClass","");} else {replaceMap.put("ProcessStage_activeClass","active");}
+
+
 
         return process(template);
     }

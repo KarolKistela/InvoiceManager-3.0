@@ -62,8 +62,8 @@ ${rowComment}
         </table>
         <!-- ========================================== Process stage Indicator -->
     <#-- TODO: export color of progres bar to settings -->
-        <div class="progress cyan lighten-2">
-            <div class="determinate light-blue darken-4" style="width: ${processStage}%"></div>
+        <div class="progress grey">
+            <div class="determinate black" style="width: ${processStage}%"></div>
         </div>
         <!-- ================================================ Details for inv ID -->
         <section id="${ID}" class="w3-accordion-content" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">

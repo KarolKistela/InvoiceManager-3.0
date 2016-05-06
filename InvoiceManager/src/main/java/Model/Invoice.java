@@ -1,5 +1,7 @@
 package Model;
 
+import spark.Request;
+
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.LinkedList;
@@ -31,13 +33,11 @@ public class Invoice {
     private String GR;
     private String GenpactLastReply;
     private String UserComments;
-    private int Status;
+    private String Status;
     private String User;
     private String RowColor;
     private String ProcessStatus;
     private int ProcessStage;
-
-    private int NetPriceDecimal;
 
     public Invoice(ResultSet rs) throws SQLException {
         this.ID = rs.getInt("ID");
@@ -61,16 +61,23 @@ public class Invoice {
         this.GR = (rs.getString("GR"));
         this.GenpactLastReply = (rs.getString("GenpactLastReply"));
         this.UserComments = (rs.getString("UserComments"));
-        this.Status = (rs.getInt("Status"));
+        this.Status = (rs.getString("Status"));
         this.User = (rs.getString("User"));
         this.RowColor = (rs.getString("RowColor"));
         this.ProcessStatus = (rs.getString("ProcessStatus"));
         this.ProcessStage = (rs.getInt("ProcessStage"));
-        this.NetPriceDecimal = decimal(this.NetPrice);
     }
 
     public Invoice() {
 
+    }
+
+    public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException {
+        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
+
+        db.upsertInvoice(request);
+
+        return true;
     }
 
     public Invoice(Integer pageNr) throws FileNotFoundException, ClassNotFoundException, SQLException {
@@ -101,7 +108,7 @@ public class Invoice {
         row[17] = GR;
         row[18] = GenpactLastReply;
         row[19] = UserComments;
-        row[20] = Integer.toString(Status);
+        row[20] = Status;
         row[21] = User;
         row[22] = RowColor;
         row[23] = ProcessStatus;
@@ -309,11 +316,11 @@ public class Invoice {
         UserComments = userComments;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return Status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         Status = status;
     }
 
@@ -339,13 +346,5 @@ public class Invoice {
 
     public void setProcessStatus(String processStatus) {
         ProcessStatus = processStatus;
-    }
-
-    public int getNetPriceDecimal() {
-        return NetPriceDecimal;
-    }
-
-    public void setNetPriceDecimal(int netPriceDecimal) {
-        NetPriceDecimal = netPriceDecimal;
     }
 }
