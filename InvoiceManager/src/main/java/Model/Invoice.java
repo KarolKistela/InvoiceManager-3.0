@@ -86,7 +86,7 @@ public class Invoice {
     }
 
     public List<String[]> getResultSet() {
-        List<String[]> retVal = new LinkedList<>();
+        List<String[]> retVal = new LinkedList();
         String[] row = new String[25];
         row[0] = Integer.toString(ID).replace(",","");
         row[1] = BC;

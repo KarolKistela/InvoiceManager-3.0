@@ -29,10 +29,9 @@
         ${processStatus}
 -->
 ${rowComment}
-    <article class="card">
-        <table class="${rowColor}" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
+    <article class="card" style="margin-top: 5px">
+        <table class="${rowColor}"> <#--style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">-->
             <tbody>
-    <#-- TODO: more generic solution -> create rows based on data from InvoicesMetaData. New columns with additonal instructions need to be added -->
             <tr>
                 <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
                 <td class="IM-InvScanPath ">
@@ -60,13 +59,12 @@ ${rowComment}
             </tr>
             </tbody>
         </table>
-        <!-- ========================================== Process stage Indicator -->
-    <#-- TODO: export color of progres bar to settings -->
+<!-- ============================ Process stage Indicator ========================================================== -->
         <div class="progress grey">
-            <div class="determinate black" style="width: ${processStage}%"></div>
+            <div class="determinate" style="width: ${processStage}%; background-color: ${userColor}"></div>
         </div>
-        <!-- ================================================ Details for inv ID -->
-        <section id="${ID}" class="w3-accordion-content" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
+<!-- ============================ Details for inv ID =============================================================== -->
+        <section id="${ID}" class="w3-accordion-content"> <#--style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">-->
             <table class="highlight IM-detailsTabel" style="border-top: none">
                 <tbody>
                 <tr>
@@ -115,6 +113,5 @@ ${rowComment}
                 </tr>
                 </tbody>
             </table>
-
         </section>
     </article>

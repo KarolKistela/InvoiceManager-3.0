@@ -48,7 +48,7 @@ public class DBview extends FreeMarkerTemplate implements Renderer {
             if (ImCFG.isCheckForInvDuplicates()) {                          // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
-                this.invDuplicatesMap = new HashMap<>();
+                this.invDuplicatesMap = new HashMap();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class DBview extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("DBTable", new DBTable(this.resultSet,
                                               this.usersColors,
                                               this.invDuplicatesMap).render());
-//        template.process(replaceMap, retVal);
+        replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());
 
         return process(template);
     }

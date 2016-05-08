@@ -54,7 +54,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public List<String[]> sqlSELECT(String query, int pageNr, boolean withOrderByClause, boolean withLimitClause) throws ClassNotFoundException, SQLException {
-        List<String[]> retVal = new LinkedList<>();
+        List<String[]> retVal = new LinkedList();
 
         String orderByClause;
         if (withOrderByClause) {

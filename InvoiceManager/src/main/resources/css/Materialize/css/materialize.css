@@ -8408,8 +8408,8 @@ header aside {
 }
 header aside table {
     font-weight: bold;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
+    /*border-left: 4px solid transparent;*/
+    /*border-right: 4px solid transparent;*/
 }
 .processStage {
     margin-bottom: 0px;

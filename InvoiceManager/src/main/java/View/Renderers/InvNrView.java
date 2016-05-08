@@ -59,13 +59,6 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
         }
 
     }
-//
-//    public InvNrView(Request request) throws SQLException, ClassNotFoundException, FileNotFoundException {
-//        super();
-//        this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
-//        this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
-//        this.sqlQuery = sqlQueryConstructorInvNr(request);
-//    }
 
     @Override
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
@@ -81,7 +74,7 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("DBTable", new DBTable(this.resultSet,
                                               this.usersColors,
                                               this.invDuplicatesMap).render());
-//        template.process(replaceMap, retVal);
+        replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());
 
         return process(template);
     }

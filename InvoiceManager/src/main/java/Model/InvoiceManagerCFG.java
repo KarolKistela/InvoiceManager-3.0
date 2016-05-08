@@ -28,10 +28,10 @@ public class InvoiceManagerCFG {
     private String userEmail;
     private String userColor;
     private List<String[]> invoicesMetaData;
-    private List<String> statusMetaData = new LinkedList<>();
-    private List<String> curencies = new LinkedList<>();
-    private List<String> rowColor = new LinkedList<>();
-    private List<String> processStatus = new LinkedList<>();
+    private List<String> statusMetaData = new LinkedList();
+    private List<String> curencies = new LinkedList();
+    private List<String> rowColor = new LinkedList();
+    private List<String> processStatus = new LinkedList();
 
     public static void main(String[] args) throws ClassNotFoundException {
         InvoiceManagerCFG imcfg = new InvoiceManagerCFG();
@@ -75,7 +75,7 @@ public class InvoiceManagerCFG {
             this.setUserColor(resultSet.getString("userColor"));
 
             resultSet = statement.executeQuery("SELECT * FROM Filters");
-            List<String[]> l = new LinkedList<>();
+            List<String[]> l = new LinkedList();
             while (resultSet.next()){
                 String[] filter;
                 filter = new String[resultSet.getMetaData().getColumnCount()];
@@ -88,7 +88,7 @@ public class InvoiceManagerCFG {
             this.setFilters(l);
 
             resultSet = statement.executeQuery("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC");
-            List<String[]> metaDataList = new LinkedList<>();
+            List<String[]> metaDataList = new LinkedList();
             while (resultSet.next()){
                 String[] metaData;
                 metaData = new String[resultSet.getMetaData().getColumnCount()];

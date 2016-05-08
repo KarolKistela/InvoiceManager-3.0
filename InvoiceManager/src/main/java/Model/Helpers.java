@@ -3,13 +3,15 @@ package Model;
 import Controller.Controller;
 import spark.Request;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.*;
 import java.io.*;
-import java.nio.file.attribute.DosFileAttributes;
 import java.sql.*;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.Object.*;
 
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
@@ -71,6 +73,7 @@ public class Helpers {
     public static String signConvertor(String s) {
         switch (s) {
             case "=":  return "eq";
+            case "!=": return "neq";
             case ">":  return "gt";
             case ">=": return "gte";
             case "<":  return "lt";
@@ -84,14 +87,19 @@ public class Helpers {
         String sign;
         switch (request.params("sign")){
             case "eq":  sign = "=";     break;
-            case "neq": sign = "<>";    break;
+            case "neq": sign = "!=";    break;
             case "gt":  sign = ">";     break;
             case "gte": sign = ">=";    break;
             case "lt":  sign = "<";     break;
             case "lte": sign = "<=";    break;
             default: sign = "="; break;
         }
-        String value = request.params("value").replace("%20"," ");
+        String value = null;
+        try {
+            value = URLDecoder.decode(request.params("value"),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
         System.out.println("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);

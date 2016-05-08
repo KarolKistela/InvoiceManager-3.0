@@ -18,12 +18,12 @@
     $${activeClass_userEmail}
     ${value_userColor}
 -->
-<main style="margin-top: 50px; padding: 0 5%">
+<main style="margin-top: 70px; padding: 0 5%">
     <article class="card">
         <div class="row" style="padding-top: 7.5% 4%">
             <form class="col s12" method="post">
                 <div class="row" style="margin-top: 15px">
-                    <!-- =============== Folder Path =================================================================================== -->
+<!-- ============================ Folder Path ====================================================================== -->
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${folderExists}>
                         <i class="fa fa-folder fa-2x" aria-hidden="true"></i>
                     </div>
@@ -31,7 +31,7 @@
                         <input  value="${value_imExternalFolderPath}" id="imExternalFolderPath" name="imExternalFolderPath" type="text">
                         <label class="${activeClass_imExternalFolderPath}" for="imExternalFolderPath">Path to Folder with invoices files</label>
                     </div>
-                    <!-- =============== Databse Path ================================================================================== -->
+<!-- ============================ Databse Path ===================================================================== -->
                     <div class="col s2 IM-SettingsLabels" style="padding-top: 25px${dbExists}>
                         <i class="fa fa-database fa-2x" aria-hidden="true"></i>
                     </div>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- =============== Rows Per Page ================================================================================= -->
+<!-- =============================== Rows Per Page ================================================================= -->
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${rowsSetup}>
                         <i class="fa fa-list fa-2x" aria-hidden="true"></i>
                     </div>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- =============== Order by ====================================================================================== -->
+<!-- ================================ Order by ===================================================================== -->
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 23px">
                         <label style="font-size: 1.25em; color: dodgerblue">Order by</label>
                     </div>
@@ -79,7 +79,7 @@
                             Descending
                         </label>
                     </div>
-                    <!-- =============== Duplicates ==================================================================================== -->
+<!-- ================================== Duplicates ================================================================= -->
                     <div class="col s3 IM-SettingsLabels" style="padding-top: 23px">
                         <label style="font-size: 1.25em; color: dodgerblue"">Find Duplicates by Invoice Nr?</label>
                     </div>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top: 20px">
-                    <!-- =============== User settings ================================================================================= -->
+<!-- ============================ User settings ==================================================================== -->
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${netIDok}>
                         <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                     </div>
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- =============== Submit btn ==================================================================================== -->
+=<!-- =========================== Submit btn ======================================================================= -->
                 <div class="row" style="margin: 50px 0">
                     <div class="col s12 center">
                         <input class="btn Im-save" type="submit" value="Save" id="save changes">

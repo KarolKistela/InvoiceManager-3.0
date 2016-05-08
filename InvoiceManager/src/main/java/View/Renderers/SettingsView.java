@@ -42,8 +42,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                                             this.tabHeader,
                                             this.pagination).render());
         replaceMap.put("SettingsInputForm", new SettingsInputForm().render());
-
-//        template.process(replaceMap, retVal);
+        replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());
 
         return process(template);
     }

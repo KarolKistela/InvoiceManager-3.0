@@ -21,6 +21,8 @@ import java.sql.SQLException;
 import static Model.Helpers.*;
 import static spark.Spark.*;
 
+import org.joda.time.LocalDate;
+
 public class Controller {
     private final InvoiceManagerCFG ImCFG;
     private final HtmlFactory htmlFactory;
@@ -43,7 +45,7 @@ public class Controller {
         if (fileExists(ImCFG.getImDBPath())) {
             isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
         }
-        System.err.println("Connectioned to DB: " + isConnectedToDB);
+        System.err.println(new LocalDate().toString() + " testing connection to DB: " + isConnectedToDB);
 
 
         setPort(8082);

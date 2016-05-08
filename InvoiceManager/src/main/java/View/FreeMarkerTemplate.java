@@ -38,8 +38,6 @@ public class FreeMarkerTemplate {
     }
 
     public void clearData() {
-//        this.replaceMap = null;
-//        this.retVal = null;
         this.replaceMap = new SimpleHash();
         this.retVal = new StringWriter();
     }

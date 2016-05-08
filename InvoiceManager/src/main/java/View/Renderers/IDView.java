@@ -46,7 +46,6 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public IDView(int pageNr) throws ClassNotFoundException {
@@ -61,7 +60,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
             if (ImCFG.isCheckForInvDuplicates()) {                  // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
-                this.invDuplicatesMap = new HashMap<>();
+                this.invDuplicatesMap = new HashMap();
             }
 
 
@@ -86,7 +85,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
             if (ImCFG.isCheckForInvDuplicates()) {                  // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
-                this.invDuplicatesMap = new HashMap<>();
+                this.invDuplicatesMap = new HashMap();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,10 +115,9 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
                                                   this.usersColors,
                                                   this.invDuplicatesMap).render());
             replaceMap.put("InputForm", new IDinputForm(invoice,
-                                                        this.usersColors).render());//"hello world!");
+                                                        this.usersColors).render());
         }
-
-//        template.process(replaceMap,retVal);
+        replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());
 
         return process(template);
     }

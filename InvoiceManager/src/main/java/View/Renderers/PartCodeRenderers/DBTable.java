@@ -102,7 +102,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
                 replaceMap.put("invNrLink", "");
                 replaceMap.put("invNrLink_a", "");
             }
-            replaceMap.put("rowComment", "<! -- ===================================== Row for ID = " + record[0] + "  ===================================== -->");
+            replaceMap.put("rowComment", "<!-- ============================ ID = "+record[0]+" ======================================================================= -->");
             replaceMap.put("rowColor", (record[22].length() == 0) ? "white":record[22]);
 
             if (this.usersColors.get(record[21]) == null) {
