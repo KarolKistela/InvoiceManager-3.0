@@ -12,10 +12,12 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import View.HtmlFactory;
+import java.net.URLEncoder;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 
 import static Model.Helpers.*;
@@ -82,7 +84,8 @@ public class Controller {
                 } else {
                     response.redirect("/Filter/Select/" + request.queryParams("search_query_columns")
                                                         + "/" + signConvertor(request.queryParams("search_query_sign"))
-                                                        + "/" + request.queryParams("search_query_value") +"/1");
+                                                        + "/" + URLEncoder.encode(request.queryParams("search_query_value"))
+                                                        +"/1");
                 }
             } else {
                 response.redirect("/ID/" + request.queryParams("search_query"));
@@ -185,6 +188,28 @@ public class Controller {
                 this.searchRespons(request, response);
             }
         });
+
+//        UNDER IMPLEMENTATION
+
+        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                if (redirectToSettings()) {
+                    response.redirect("/Settings");
+                } else {
+                    Renderer queryView = htmlFactory.getQueryView(request);
+                    webPage.write(queryView.render());
+                }
+            }
+        });
+        post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                this.searchRespons(request, response);
+            }
+        });
+
+//        UNDER IMPLEMENTATION
 
         get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
             @Override

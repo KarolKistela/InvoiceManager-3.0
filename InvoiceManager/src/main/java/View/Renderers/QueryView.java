@@ -16,13 +16,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-import static Model.Helpers.sqlQueryConstructorInvNr;
+import static Model.Helpers.sqlQueryConstructor;
+import static Model.Helpers.sqlQueryConstructor2;
 
 /**
- * Created by Karol Kistela on 30-Apr-16.
+ * Created by Karol Kistela on 26-May-16.
  */
-public class InvNrView extends FreeMarkerTemplate implements Renderer {
-    private final String viewTitle = "Duplicated Inv Nrs";
+public class QueryView extends FreeMarkerTemplate implements Renderer {
+    private final String viewTitle = "Filter view";
     private final String ftlFile = "DBview.ftl";
     private boolean tabHeader = true;
     private final boolean pagination = true;
@@ -35,22 +36,22 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
     private HashMap<String, String> usersColors;
     private HashMap<String, Integer> invDuplicatesMap;
 
-    public InvNrView(Request request) throws ClassNotFoundException, FileNotFoundException, SQLException {
+    public QueryView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
 
         try {
-            System.out.println("********View.Renderers.InvNrView ROUT: " + this.rout + this.pageNr + " ********");
+            System.out.println("********View.Renderers.SelectWhere ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
-            this.sqlQuery = sqlQueryConstructorInvNr(request);
-            this.resultSet = db.sqlSELECT(sqlQuery, pageNr, true, true);    // get resultSet of query
+            this.sqlQuery = sqlQueryConstructor2(request);
+            this.resultSet = db.sqlSELECT(sqlQuery, pageNr, false, true);    // get resultSet of query
             this.usersColors = db.usersColorMap();                          // get colors
-            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));  // get how many records will return query
+            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
             if (ImCFG.isCheckForInvDuplicates()) {                          // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
-                this.invDuplicatesMap = new HashMap<>();
+                this.invDuplicatesMap = new HashMap();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +60,6 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
             e.printStackTrace();
             this.resultSet = null;
         }
-
     }
 
     @Override
@@ -68,15 +68,15 @@ public class InvNrView extends FreeMarkerTemplate implements Renderer {
 
         replaceMap.put("Style", new Style().render());
         replaceMap.put("Header", new Header(this.menuButtonActive,
-                                            this.rout,
-                                            this.pageNr,
-                                            this.records,
-                                            this.viewTitle,
-                                            this.tabHeader,
-                                            this.pagination).render());
+                this.rout,
+                this.pageNr,
+                this.records,
+                this.viewTitle,
+                this.tabHeader,
+                this.pagination).render());
         replaceMap.put("DBTable", new DBTable(this.resultSet,
-                                              this.usersColors,
-                                              this.invDuplicatesMap).render());
+                this.usersColors,
+                this.invDuplicatesMap).render());
         replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());
 
         return process(template);

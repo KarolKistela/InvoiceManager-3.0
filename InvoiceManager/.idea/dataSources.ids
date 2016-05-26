@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="fc203b58-0249-4ca0-9912-0b3d90b0f97b">
+  <data-source name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="1fa96ad0-7465-4936-8bf3-2088df7973b3">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
@@ -16,17 +16,6 @@
       <column name="userEmail" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12" def="Jyc="/>
       <column name="userColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12" def="Jyc="/>
       <primary-key name="cfg_pk" columns="id"/>
-    </table>
-    <table name="CFGold" schema="" catalog="" type="TABLE">
-      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
-      <column name="imExternalFolderPath" sqlType="TEXT" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="imDBPath" sqlType="TEXT" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="rowsPerPage" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
-      <column name="backgroundColor" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <column name="tableWidth" sqlType="REAL" precision="0" scale="-1" nullable="false" jdbcType="6" def="ODcuNQ=="/>
-      <column name="OrderByClause" sqlType="TEXT" precision="0" scale="-1" nullable="false" jdbcType="12" def="J09SREVSIEJZIElEIERFU0Mn"/>
-      <column name="checkForInvDuplicates" sqlType="BOOLEAN" precision="0" scale="-1" nullable="true" jdbcType="4" def="MQ=="/>
-      <column name="user" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
     <table name="Currencies" schema="" catalog="" type="TABLE">
       <column name="currency" sqlType="VARCHAR(3)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
@@ -68,7 +57,7 @@
       <column name="seq" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
   </data-source>
-  <data-source name="Sqlite (Xerial) - InvoiceManager.db" uuid="fbddaae1-8a35-4d79-b318-bdef9f788a1d">
+  <data-source name="Sqlite (Xerial) - InvoicesManager.db" uuid="3ecc8eab-645e-4d18-8e3d-69b944133666">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
@@ -93,36 +82,18 @@
       <column name="GR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="GenpactLastReply" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="UserComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <column name="Status" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="Status" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="User" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="RowColor" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="ProcessStatus" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <column name="ProcessStage" sqlType="INT" precision="0" scale="-1" nullable="true" jdbcType="4"/>
-      <primary-key columns="id"/>
-    </table>
-    <table name="InvoicesMetaData" schema="" catalog="" type="TABLE">
-      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
-      <column name="ColumnName" sqlType="TEXT" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="DisplayOrder" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
-      <column name="Styling" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <column name="ViewName" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-    </table>
-    <table name="RowColors" schema="" catalog="" type="TABLE">
-      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
-      <column name="rgb" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="MaterialiseClass" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
-      <column name="Description" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <primary-key columns="id"/>
+      <column name="ProcessStage" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <primary-key name="invoices_pk" columns="id"/>
     </table>
     <table name="Users" schema="" catalog="" type="TABLE">
       <column name="NetID" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="Email" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="false" jdbcType="12" def="JyNmZmZmZmYn"/>
-      <primary-key columns="netid"/>
-    </table>
-    <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
-      <column name="name" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
-      <column name="seq" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Email" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <primary-key name="users_pk" columns="netid"/>
     </table>
   </data-source>
 </component>

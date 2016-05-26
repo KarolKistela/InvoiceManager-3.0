@@ -117,11 +117,12 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         }
         replaceMap.put("UserList", userOption);
 
-        replaceMap.put("RowColor", this.invoice.getRowColor());
+        replaceMap.put("RowColor", this.invoice.getRowColor().replace(" lighten-4", ""));
         if (this.invoice.getRowColor().equals("")) { replaceMap.put("RowColor_activeClass","");} else {replaceMap.put("RowColor_activeClass","active");}
         String rowColorOption = "";
         for (String s: ImCFG.getRowColor()
                 ) {
+            s = s.substring(0,s.indexOf(" ")); // remove lighten-4 from row color picker - it is not needed to be seen by user
             rowColorOption = rowColorOption + "<option value=\"" + s + "\">\n";
         }
         replaceMap.put("RowColorList", rowColorOption);
@@ -137,8 +138,6 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
 
         replaceMap.put("ProcessStage", this.invoice.getProcessStage());
         if (this.invoice.getProcessStage() == 0) { replaceMap.put("ProcessStage_activeClass","");} else {replaceMap.put("ProcessStage_activeClass","active");}
-
-
 
         return process(template);
     }

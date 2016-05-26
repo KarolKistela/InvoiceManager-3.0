@@ -20,6 +20,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private String rout;
     private int pageNr;
     private String pageNrString;
+    private int totalPages;
     private String viewTitle;
     private boolean tabHeader;
     private boolean pagination;
@@ -27,21 +28,38 @@ public class Header extends FreeMarkerTemplate implements Renderer {
 //    private List<String[]> invoicesMetaData;
 
     public static void main(String[] args) throws ClassNotFoundException, TemplateException, SQLException, IOException {
-        Header h = new Header(1,"/DB/",1,"DB Main View", true, true);
+        Header h = new Header(1,"/DB/",1, 1000, "DB Main View", true, true);
 
         System.out.println(h.render());
     }
 
-    public Header(int menuButtonActive, String rout, int pageNr, String viewTitle, boolean tabHeader, boolean pagination) throws ClassNotFoundException, SQLException {
+    public Header(int menuButtonActive, String rout, int pageNr, int records, String viewTitle, boolean tabHeader, boolean pagination) throws ClassNotFoundException, SQLException {
         super();
+        this.ImCFG = new InvoiceManagerCFG();
         this.menuButtonActive = menuButtonActive;
         this.rout = rout;
         this.pageNr = pageNr;
         this.pageNrString = Integer.toString(pageNr).replace(",","");
+        this.totalPages = (Integer) records/ImCFG.getRowsPerPage() + 1;
         this.viewTitle = viewTitle;
         this.tabHeader = tabHeader;
         this.pagination = pagination;
+
+//        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
+    }
+
+    public Header(int menuButtonActive, String rout, int pageNr, String viewTitle, boolean tabHeader, boolean pagination) throws ClassNotFoundException, SQLException {
+        super();
         this.ImCFG = new InvoiceManagerCFG();
+        this.menuButtonActive = menuButtonActive;
+        this.rout = rout;
+        this.pageNr = pageNr;
+        this.pageNrString = Integer.toString(pageNr).replace(",","");
+        this.totalPages = 1;
+        this.viewTitle = viewTitle;
+        this.tabHeader = tabHeader;
+        this.pagination = pagination;
+
 //        this.invoicesMetaData = new InvoiceManagerDB_DAO().sqlSELECT("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC ",1,false,false);
     }
 
@@ -77,7 +95,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("viewTitle", this.viewTitle);
         replaceMap.put("rout", this.rout);
         replaceMap.put("previous", (this.pageNr < 1) ? "1": Integer.toString(this.pageNr - 1).replace(",",""));
-        replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",",""));
+        replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",","") + "/" + Integer.toString(this.totalPages).replace(",",""));
         replaceMap.put("next", Integer.toString(this.pageNr + 1).replace(",",""));
         replaceMap.put("tableHeader", (tabHeader) ? tableHeader:"");
 

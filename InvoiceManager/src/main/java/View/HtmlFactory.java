@@ -30,4 +30,8 @@ public class HtmlFactory {
     public static Renderer getIDView(Request request) throws ClassNotFoundException {
         return new IDView(request);
     }
+
+    public static Renderer getQueryView(Request request) throws ClassNotFoundException {
+        return new QueryView(request);
+    }
 }

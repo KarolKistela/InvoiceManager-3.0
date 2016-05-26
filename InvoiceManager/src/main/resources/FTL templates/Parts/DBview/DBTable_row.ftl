@@ -29,8 +29,8 @@
         ${processStatus}
 -->
 ${rowComment}
-    <article class="card" style="margin-top: 5px">
-        <table class="${rowColor}"> <#--style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">-->
+    <article class="card"> <#--style="margin-top: 5px">-->
+        <table class="${rowColor}" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
             <tbody>
             <tr>
                 <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
@@ -60,11 +60,11 @@ ${rowComment}
             </tbody>
         </table>
 <!-- ============================ Process stage Indicator ========================================================== -->
-        <div class="progress grey">
-            <div class="determinate" style="width: ${processStage}%; background-color: ${userColor}"></div>
-        </div>
+        <#--<div class="progress grey">-->
+            <#--<div class="determinate" style="width: ${processStage}%; background-color: ${userColor}"></div>-->
+        <#--</div>-->
 <!-- ============================ Details for inv ID =============================================================== -->
-        <section id="${ID}" class="w3-accordion-content"> <#--style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">-->
+        <section id="${ID}" class="w3-accordion-content" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
             <table class="highlight IM-detailsTabel" style="border-top: none">
                 <tbody>
                 <tr>

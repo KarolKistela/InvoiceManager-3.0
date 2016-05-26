@@ -29,6 +29,7 @@ public class SelectWhereView extends FreeMarkerTemplate implements Renderer {
     private final int menuButtonActive = 3;
     private String rout;
     private int pageNr;
+    private int records;
     private String sqlQuery;
     private List<String[]> resultSet;
     private HashMap<String, String> usersColors;
@@ -45,6 +46,7 @@ public class SelectWhereView extends FreeMarkerTemplate implements Renderer {
             this.sqlQuery = sqlQueryConstructor(request);
             this.resultSet = db.sqlSELECT(sqlQuery, pageNr, true, true);    // get resultSet of query
             this.usersColors = db.usersColorMap();                          // get colors
+            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
             if (ImCFG.isCheckForInvDuplicates()) {                          // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
@@ -67,6 +69,7 @@ public class SelectWhereView extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("Header", new Header(this.menuButtonActive,
                                             this.rout,
                                             this.pageNr,
+                                            this.records,
                                             this.viewTitle,
                                             this.tabHeader,
                                             this.pagination).render());

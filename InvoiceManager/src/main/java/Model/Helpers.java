@@ -107,6 +107,35 @@ public class Helpers {
         return ("SELECT * FROM Invoices " + whereClause);
     }
 
+    public static String sqlQueryConstructor2(Request request) {
+        String columnName = request.params("columnName");
+        String columnName2 = request.params("columnName2");
+        String direction = request.params("direction");
+        String sign;
+        switch (request.params("sign")){
+            case "eq":  sign = "=";     break;
+            case "neq": sign = "!=";    break;
+            case "gt":  sign = ">";     break;
+            case "gte": sign = ">=";    break;
+            case "lt":  sign = "<";     break;
+            case "lte": sign = "<=";    break;
+            default: sign = "="; break;
+        }
+        String value = null;
+        try {
+            value = URLDecoder.decode(request.params("value"),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
+        System.out.println("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
+
+        String orderByClause = "ORDER BY " + columnName2 + " " + direction;
+
+        return ("SELECT * FROM Invoices " + whereClause + orderByClause);
+    }
+
     public static String sqlQueryConstructorInvNr(Request request) throws ClassNotFoundException, SQLException, FileNotFoundException {
         List<String[]> rs = new InvoiceManagerDB_DAO().sqlSELECT("SELECT InvoiceNr FROM Invoices WHERE ID="+request.params("idNr"),1,false,false);
         String[] row = rs.get(0);
@@ -136,13 +165,13 @@ public class Helpers {
     }
 
     public static String doubleFormat(String s) {
-        if (s.indexOf(".") == -1) {
-            return s+".00";
-        } else if (s.indexOf(".") == 2) {
-            return s+"0";
-        } else {
+//        if (s.indexOf(".") == -1) {
+//            return s+".00";
+//        } else if (s.indexOf(".") == 2) {
+//            return s+"0";
+//        } else {
             return s;
-        }
+//        }
     }
 
     public static boolean InvoicesManagerDBconnection(String imDBPath) throws ClassNotFoundException {

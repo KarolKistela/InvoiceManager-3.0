@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="54779607">
-    <data-source source="LOCAL" name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="fc203b58-0249-4ca0-9912-0b3d90b0f97b">
+  <component name="DataSourceManagerImpl" format="xml" hash="1312966025">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="1fa96ad0-7465-4936-8bf3-2088df7973b3">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\GitHub\InvoiceManager-3.0\InvoiceManager\src\main\resources\InvoiceManagerCFG\InvoiceManager.cfg</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="Sqlite (Xerial) - InvoiceManager.db" uuid="fbddaae1-8a35-4d79-b318-bdef9f788a1d">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - InvoicesManager.db" uuid="3ecc8eab-645e-4d18-8e3d-69b944133666">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:/InvoiceManagerExt/Invoices_manager_DB/InvoiceManager.db</jdbc-url>
-      <default-dialect>SQLite</default-dialect>
+      <jdbc-url>jdbc:sqlite:C:\InvoiceManagerExt\Invoices_manager_DB\InvoicesManager.db</jdbc-url>
     </data-source>
   </component>
 </project>

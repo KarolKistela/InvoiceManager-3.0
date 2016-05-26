@@ -70,7 +70,7 @@ ${ProcessStatus-activeClass}
                     </div>
 <!-- ============== 1.3 ContactGenpact ============================================================================= -->
                     <div class="input-field col s3">
-                        <input value="${ContactGenpact}" id="ContactGenpact" name="ContactGenpact" type="email" class="validate">
+                        <input value="${ContactGenpact}" id="ContactGenpact" name="ContactGenpact" type="text">
                         <label class="${ContactGenpact_activeClass}" for="ContactGenpact">Contact Genpact</label>
                     </div>
 <!-- ============== 1.4 Supplier =================================================================================== -->
@@ -188,7 +188,7 @@ ${ProcessStatus-activeClass}
                         <#--<input value="${User}" id="User" name="User" type="text">-->
                         <#--<label class="${User_activeClass}" for="User">User</label>-->
                         <input value="${User}" list="User" name="User" >
-                        <label class="active" for="User">Status</label>
+                        <label class="active" for="User">User</label>
                         <datalist id="User">
                         ${UserList}
                         </datalist>
