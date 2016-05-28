@@ -7,26 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8286e939-237c-4dbd-9946-4b18abec8bbb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Archive/DB_DAO.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Archive/DB_DAOtest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Archive/WebAppController.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg" afterPath="$PROJECT_DIR$/src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" afterPath="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Model/Helpers.java" afterPath="$PROJECT_DIR$/src/main/java/Model/Helpers.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java" afterPath="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java" afterPath="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/HtmlFactory.java" afterPath="$PROJECT_DIR$/src/main/java/View/HtmlFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/DBview.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/DBview.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/InvNrView.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/InvNrView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/Header.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/Header.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/IDinputForm.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/IDinputForm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/SelectWhereView.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/SelectWhereView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java" afterPath="$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable_row.ftl" afterPath="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable_row.ftl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/IDview/IDinputForm.ftl" afterPath="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/IDview/IDinputForm.ftl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/FTL templates/invView.html" afterPath="$PROJECT_DIR$/src/main/resources/FTL templates/invView.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/css/Materialize/css/materialize.css" afterPath="$PROJECT_DIR$/src/main/resources/css/Materialize/css/materialize.css" />
     </list>
     <ignored path="InvoiceManager.iws" />
@@ -84,20 +76,6 @@
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
       </PATH_ELEMENT>
     </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$Root" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="Sqlite (Xerial) - InvoiceManager.cfg" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="columnsAndWidth" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-    </PATH>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -105,70 +83,52 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="193" column="100" selection-start-line="193" selection-start-column="91" selection-end-line="193" selection-end-column="100" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+      <file leaf-file-name="Invoices" pinned="false" current-in-tab="false">
+        <entry file="dbDummy://dbtable:/b45968a0/3ecc8eab-645e-4d18-8e3d-69b944133666/Invoices">
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Helpers.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Model/Helpers.java">
+      <file leaf-file-name="console.sql" pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3ecc8eab-645e-4d18-8e3d-69b944133666/console.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="133" column="56" selection-start-line="133" selection-start-column="56" selection-end-line="133" selection-end-column="56" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1464286211232" expanded="true" signature="5863:5893" ph="SELECT count... Invoices" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HtmlFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/View/HtmlFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" column="22" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+      <file leaf-file-name="CFG" pinned="false" current-in-tab="false">
+        <entry file="dbDummy://dbtable:/b45968a0/1fa96ad0-7465-4936-8bf3-2088df7973b3/CFG">
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java">
+      <file leaf-file-name="DBTable.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="47" column="65" selection-start-line="47" selection-start-column="65" selection-end-line="47" selection-end-column="65" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InvoiceManagerDB_DAO.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="55" column="26" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
-              <folding>
-                <marker date="1464275345322" expanded="true" signature="4449:4481" ph="SELECT * FRO... Invoices" />
-                <marker date="1464275345322" expanded="true" signature="7415:7466" ph="SELECT missi... Invoices" />
-                <marker date="1464275345322" expanded="true" signature="8947:9104" ph="SELECT Invoi... count" />
-                <marker date="1464275345322" expanded="true" signature="8980:9052" ph="SELECT count... Invoices" />
-                <marker date="1464275345322" expanded="true" signature="10448:10467" ph="SELECT * FRO... Users" />
-                <marker date="1464275345322" expanded="true" signature="11734:11792" ph="INSERT INTO Users... " />
-                <marker date="1464275345322" expanded="true" signature="12954:13007" ph="UPDATE Users... " />
-                <marker date="1464275345322" expanded="true" signature="14143:14481" ph="UPDATE Invoi... " />
-              </folding>
+            <state relative-caret-position="408">
+              <caret line="129" column="183" selection-start-line="129" selection-start-column="183" selection-end-line="129" selection-end-column="183" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -220,18 +180,14 @@
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/test.html" />
         <option value="$PROJECT_DIR$/webApp_design/TI.js" />
         <option value="$PROJECT_DIR$/webApp_design/TIlab.html" />
-        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/invView.html" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/fbddaae1-8a35-4d79-b318-bdef9f788a1d/console.sql" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/DBview.ftl" />
-        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/Header.ftl" />
-        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/IDView.ftl" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Settings.ftl" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/SettingsView.java" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/Settings/SettingsInputForm.ftl" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/Footer.ftl" />
         <option value="$PROJECT_DIR$/src/main/java/Model/Invoice.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/IDView.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/View/FreeMarkerTemplate.java" />
@@ -239,20 +195,24 @@
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/44090333-a233-4482-8164-ff9c63031913/console.sql" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/1fa96ad0-7465-4936-8bf3-2088df7973b3/console.sql" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/fc203b58-0249-4ca0-9912-0b3d90b0f97b/console.sql" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/3ecc8eab-645e-4d18-8e3d-69b944133666/console.sql" />
-        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable_row.ftl" />
-        <option value="$PROJECT_DIR$/src/main/resources/css/Materialize/css/materialize.css" />
-        <option value="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/IDinputForm.java" />
         <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/IDview/IDinputForm.ftl" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/DBview.java" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/SelectWhereView.java" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/InvNrView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/Header.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
         <option value="$PROJECT_DIR$/src/main/java/View/HtmlFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/invView.html" />
+        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/IDinputForm.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java" />
+        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/Header.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/Header.ftl" />
+        <option value="$PROJECT_DIR$/src/main/resources/css/Materialize/css/materialize.css" />
         <option value="$PROJECT_DIR$/src/main/java/Model/Helpers.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Controller/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable_row.ftl" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/3ecc8eab-645e-4d18-8e3d-69b944133666/console.sql" />
+        <option value="$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java" />
       </list>
     </option>
   </component>
@@ -336,10 +296,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
-      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Production">
@@ -363,6 +319,10 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -434,6 +394,74 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="View" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="View" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Renderers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="View" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Renderers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PartCodeRenderers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -458,6 +486,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InvoiceManager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1065,8 +1115,8 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.Controller" />
-        <item index="1" class="java.lang.String" itemvalue="Application.nullTestFFS" />
-        <item index="2" class="java.lang.String" itemvalue="Application.Helpers" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Helpers" />
+        <item index="2" class="java.lang.String" itemvalue="Application.nullTestFFS" />
         <item index="3" class="java.lang.String" itemvalue="Application.IDView" />
         <item index="4" class="java.lang.String" itemvalue="Application.IDinputForm" />
       </list>
@@ -1130,7 +1180,8 @@
       <workItem from="1462991484189" duration="1833000" />
       <workItem from="1463030714438" duration="2527000" />
       <workItem from="1463591235950" duration="190000" />
-      <workItem from="1464263192357" duration="9621000" />
+      <workItem from="1464263192357" duration="10073000" />
+      <workItem from="1464364486293" duration="24380000" />
     </task>
     <task id="LOCAL-00001" summary="db main view">
       <created>1460304857458</created>
@@ -1258,11 +1309,18 @@
       <option name="project" value="LOCAL" />
       <updated>1462723135615</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Add new generic view for queries, small UI redesign">
+      <created>1464286917450</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1464286917450</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="548635000" />
+    <option name="totallyTimeSpent" value="573467000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1278,33 +1336,33 @@
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41220558" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33832976" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41220558" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3372591" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31477517" sideWeight="0.50488997" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31477517" sideWeight="0.50488997" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15138593" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28372592" sideWeight="0.49511003" order="2" side_tool="false" content_ui="tabs" x="2319" y="143" width="1060" height="847" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28372592" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28372592" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29122055" sideWeight="0.49511003" order="12" side_tool="false" content_ui="tabs" x="2319" y="143" width="1060" height="847" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294621" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32792208" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32762313" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42505354" sideWeight="0.49755502" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1900978" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19376528" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17603911" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.627409" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19315404" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27705628" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55139184" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12286063" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22510374" sideWeight="0.49755502" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="CSS Styles" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40748662" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.627409" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="CSS Styles" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40748662" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1371,37 +1429,32 @@
     <MESSAGE value="Add view for ID, search and Adv search" />
     <MESSAGE value="Add save for ID input form" />
     <MESSAGE value="beta ver 0,9" />
-    <option name="LAST_COMMIT_MESSAGE" value="beta ver 0,9" />
+    <MESSAGE value="Add new generic view for queries, small UI redesign" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add new generic view for queries, small UI redesign" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Model/User.java</url>
-          <line>42</line>
+          <url>file://$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java</url>
+          <line>58</line>
           <properties />
-          <option name="timeStamp" value="98" />
+          <option name="timeStamp" value="128" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Model/User.java</url>
-          <line>57</line>
+          <url>file://$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java</url>
+          <line>84</line>
           <properties />
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java</url>
-          <line>126</line>
-          <properties />
-          <option name="timeStamp" value="118" />
+          <option name="timeStamp" value="130" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java</url>
-          <line>121</line>
+          <line>72</line>
           <properties />
-          <option name="timeStamp" value="119" />
+          <option name="timeStamp" value="132" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="121" />
+      <option name="time" value="133" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1412,360 +1465,24 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/resources/FTL templates/DBview.ftl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-629">
-          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://MAVEN/InvoiceManger3:IM3:1.0-SNAPSHOT">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>MAVEN</ID>
-          <OriginalElement>InvoiceManger3:IM3:1.0-SNAPSHOT</OriginalElement>
-          <nodes>
-            <node x="0.0" y="248.6111111111111">InvoiceManger3:IM3:Beta 0.9</node>
-            <node x="146.5" y="7.361111111111086">org.xerial:sqlite-jdbc:jar:3.8.9.1</node>
-            <node x="146.5" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1</node>
-            <node x="343.0" y="0.0">com.sparkjava:spark-core:jar:1.1.1/org.slf4j:slf4j-api:jar:1.7.2</node>
-            <node x="334.5" y="70.0">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417</node>
-            <node x="513.0" y="7.361111111111086">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016</node>
-            <node x="519.5" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417</node>
-            <node x="702.0" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-util:jar:9.0.2.v20130417</node>
-            <node x="525.5" y="147.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-io:jar:9.0.2.v20130417</node>
-            <node x="329.0" y="252.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417</node>
-            <node x="521.0" y="217.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-xml:jar:9.0.2.v20130417</node>
-            <node x="513.5" y="287.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417</node>
-            <node x="690.0" y="287.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-security:jar:9.0.2.v20130417</node>
-            <node x="146.0" y="213.6111111111111">org.freemarker:freemarker:jar:2.3.19</node>
-            <node x="134.0" y="335.41666666666663">ch.qos.logback:logback-classic:jar:1.1.1</node>
-            <node x="329.0" y="335.41666666666663">ch.qos.logback:logback-classic:jar:1.1.1/ch.qos.logback:logback-core:jar:1.1.1</node>
-            <node x="147.0" y="405.41666666666663">org.slf4j:jul-to-slf4j:jar:1.7.9</node>
-            <node x="162.5" y="475.41666666666663">junit:junit:jar:3.8.1</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.slf4j:slf4j-api:jar:1.7.2">
-              <point x="45.0" y="-10.0" />
-              <point x="249.0" y="82.36111111111109" />
-              <point x="329.0" y="15.0" />
-              <point x="-38.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-xml:jar:9.0.2.v20130417">
-              <point x="52.0" y="-7.5" />
-              <point x="-40.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="ch.qos.logback:logback-classic:jar:1.1.1">
-              <point x="27.0" y="2.5" />
-              <point x="-57.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.freemarker:freemarker:jar:2.3.19">
-              <point x="27.0" y="-2.5" />
-              <point x="-45.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-io:jar:9.0.2.v20130417">
-              <point x="46.5" y="10.0" />
-              <point x="513.0" y="162.3611111111111" />
-              <point x="-36.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016">
-              <point x="46.5" y="-10.0" />
-              <point x="-48.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417">
-              <point x="45.0" y="10.0" />
-              <point x="249.0" y="102.36111111111109" />
-              <point x="-52.0" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="junit:junit:jar:3.8.1">
-              <point x="27.0" y="12.5" />
-              <point x="134.0" y="490.41666666666663" />
-              <point x="-29.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417">
-              <point x="46.5" y="-0.0" />
-              <point x="-42.0" y="-0.0" />
-            </edge>
-            <edge source="ch.qos.logback:logback-classic:jar:1.1.1" target="ch.qos.logback:logback-classic:jar:1.1.1/ch.qos.logback:logback-core:jar:1.1.1">
-              <point x="57.5" y="-0.0" />
-              <point x="-52.0" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.xerial:sqlite-jdbc:jar:3.8.9.1">
-              <point x="27.0" y="-12.5" />
-              <point x="134.0" y="22.361111111111086" />
-              <point x="-45.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-security:jar:9.0.2.v20130417">
-              <point x="48.0" y="-0.0" />
-              <point x="-51.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-util:jar:9.0.2.v20130417">
-              <point x="42.0" y="-0.0" />
-              <point x="-39.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417">
-              <point x="52.0" y="7.5" />
-              <point x="-48.0" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.slf4j:jul-to-slf4j:jar:1.7.9">
-              <point x="27.0" y="7.5" />
-              <point x="134.0" y="420.41666666666663" />
-              <point x="-44.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="com.sparkjava:spark-core:jar:1.1.1">
-              <point x="27.0" y="-7.5" />
-              <point x="134.0" y="92.36111111111109" />
-              <point x="-45.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417">
-              <point x="45.0" y="-0.0" />
-              <point x="-46.5" y="-0.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="1.0" x="228.0" y="207.0" />
-          <SelectedNodes>
-            <node>InvoiceManger3:IM3:Beta 0.9</node>
-          </SelectedNodes>
-          <Categories />
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>All</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://MAVEN/InvoiceManger3:IM3:Beta 0.9">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>MAVEN</ID>
-          <OriginalElement>InvoiceManger3:IM3:Beta 0.9</OriginalElement>
-          <nodes>
-            <node x="0.0" y="248.6111111111111">InvoiceManger3:IM3:Beta 0.9</node>
-            <node x="146.5" y="7.361111111111086">org.xerial:sqlite-jdbc:jar:3.8.9.1</node>
-            <node x="146.5" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1</node>
-            <node x="343.0" y="0.0">com.sparkjava:spark-core:jar:1.1.1/org.slf4j:slf4j-api:jar:1.7.2</node>
-            <node x="334.5" y="70.0">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417</node>
-            <node x="513.0" y="7.361111111111086">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016</node>
-            <node x="519.5" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417</node>
-            <node x="702.0" y="77.36111111111109">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-util:jar:9.0.2.v20130417</node>
-            <node x="525.5" y="147.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-io:jar:9.0.2.v20130417</node>
-            <node x="329.0" y="252.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417</node>
-            <node x="521.0" y="217.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-xml:jar:9.0.2.v20130417</node>
-            <node x="513.5" y="287.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417</node>
-            <node x="690.0" y="287.3611111111111">com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-security:jar:9.0.2.v20130417</node>
-            <node x="146.0" y="213.6111111111111">org.freemarker:freemarker:jar:2.3.19</node>
-            <node x="134.0" y="335.41666666666663">ch.qos.logback:logback-classic:jar:1.1.1</node>
-            <node x="329.0" y="335.41666666666663">ch.qos.logback:logback-classic:jar:1.1.1/ch.qos.logback:logback-core:jar:1.1.1</node>
-            <node x="147.0" y="405.41666666666663">org.slf4j:jul-to-slf4j:jar:1.7.9</node>
-            <node x="162.5" y="475.41666666666663">junit:junit:jar:3.8.1</node>
-          </nodes>
-          <notes />
-          <edges>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.slf4j:slf4j-api:jar:1.7.2">
-              <point x="45.0" y="-10.0" />
-              <point x="249.0" y="82.36111111111109" />
-              <point x="329.0" y="15.0" />
-              <point x="-38.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-xml:jar:9.0.2.v20130417">
-              <point x="52.0" y="-7.5" />
-              <point x="-40.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="ch.qos.logback:logback-classic:jar:1.1.1">
-              <point x="27.0" y="2.5" />
-              <point x="-57.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.freemarker:freemarker:jar:2.3.19">
-              <point x="27.0" y="-2.5" />
-              <point x="-45.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-io:jar:9.0.2.v20130417">
-              <point x="46.5" y="10.0" />
-              <point x="513.0" y="162.3611111111111" />
-              <point x="-36.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016">
-              <point x="46.5" y="-10.0" />
-              <point x="-48.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="junit:junit:jar:3.8.1">
-              <point x="27.0" y="12.5" />
-              <point x="134.0" y="490.41666666666663" />
-              <point x="-29.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417">
-              <point x="45.0" y="10.0" />
-              <point x="249.0" y="102.36111111111109" />
-              <point x="-52.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417">
-              <point x="46.5" y="-0.0" />
-              <point x="-42.0" y="-0.0" />
-            </edge>
-            <edge source="ch.qos.logback:logback-classic:jar:1.1.1" target="ch.qos.logback:logback-classic:jar:1.1.1/ch.qos.logback:logback-core:jar:1.1.1">
-              <point x="57.5" y="-0.0" />
-              <point x="-52.0" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.xerial:sqlite-jdbc:jar:3.8.9.1">
-              <point x="27.0" y="-12.5" />
-              <point x="134.0" y="22.361111111111086" />
-              <point x="-45.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-security:jar:9.0.2.v20130417">
-              <point x="48.0" y="-0.0" />
-              <point x="-51.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-http:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-util:jar:9.0.2.v20130417">
-              <point x="42.0" y="-0.0" />
-              <point x="-39.5" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="org.slf4j:jul-to-slf4j:jar:1.7.9">
-              <point x="27.0" y="7.5" />
-              <point x="134.0" y="420.41666666666663" />
-              <point x="-44.5" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-webapp:jar:9.0.2.v20130417/org.eclipse.jetty:jetty-servlet:jar:9.0.2.v20130417">
-              <point x="52.0" y="7.5" />
-              <point x="-48.0" y="-0.0" />
-            </edge>
-            <edge source="InvoiceManger3:IM3:Beta 0.9" target="com.sparkjava:spark-core:jar:1.1.1">
-              <point x="27.0" y="-7.5" />
-              <point x="134.0" y="92.36111111111109" />
-              <point x="-45.0" y="-0.0" />
-            </edge>
-            <edge source="com.sparkjava:spark-core:jar:1.1.1" target="com.sparkjava:spark-core:jar:1.1.1/org.eclipse.jetty:jetty-server:jar:9.0.2.v20130417">
-              <point x="45.0" y="-0.0" />
-              <point x="-46.5" y="-0.0" />
-            </edge>
-          </edges>
-          <settings layout="Hierarchic Group" zoom="1.0" x="228.0" y="227.0" />
-          <SelectedNodes>
-            <node>junit:junit:jar:3.8.1</node>
-            <node>InvoiceManger3:IM3:Beta 0.9</node>
-          </SelectedNodes>
-          <Categories />
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>All</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="51" column="40" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/FreeMarkerTemplate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Archive/DB_DAOtest.java" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/ProcessStatus" />
-    <entry file="dbDummy://dbtable:/b45968a0/60b3a131-c4ca-4fbc-8dbc-3e8e47851135/Invoices" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/60b3a131-c4ca-4fbc-8dbc-3e8e47851135/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/fbddaae1-8a35-4d79-b318-bdef9f788a1d/Users" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/StatusMetaData" />
-    <entry file="dbDummy://dbtable:/b45968a0/fbddaae1-8a35-4d79-b318-bdef9f788a1d/Invoices" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/InvoicesMetaData" />
-    <entry file="file://$PROJECT_DIR$/Archive/WebAppController.java" />
-    <entry file="file://$PROJECT_DIR$/Archive/DB_DAO.java" />
-    <entry file="dbDummy://dbtable:/b45968a0/44090333-a233-4482-8164-ff9c63031913/Users" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/CFG" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/RowColors" />
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/CFGold" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/44090333-a233-4482-8164-ff9c63031913/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="19" selection-start-line="32" selection-start-column="19" selection-end-line="32" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/44090333-a233-4482-8164-ff9c63031913/Invoices" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/169ae8ec-280c-4f25-bc5d-6b97811c227d/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/169ae8ec-280c-4f25-bc5d-6b97811c227d/Invoices" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/c572fe6c-47c7-480a-876f-eb75fc7fdd2c/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/1fa96ad0-7465-4936-8bf3-2088df7973b3/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="24" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/fc203b58-0249-4ca0-9912-0b3d90b0f97b/Invoices" />
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/fc203b58-0249-4ca0-9912-0b3d90b0f97b/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="553">
-          <caret line="145" column="0" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/1fa96ad0-7465-4936-8bf3-2088df7973b3/CFG">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
+        <state relative-caret-position="-1163">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/3ecc8eab-645e-4d18-8e3d-69b944133666/Invoices">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/Helpers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="41" column="35" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="35" />
+          <folding>
+            <marker date="1464465252721" expanded="true" signature="6270:6300" ph="SELECT count... Invoices" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="dbDummy://dbtable:/b45968a0/1fa96ad0-7465-4936-8bf3-2088df7973b3/columnsAndWidth">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable.ftl">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
@@ -1773,192 +1490,455 @@
       </provider>
     </entry>
     <entry file="dbDummy://dbtable:/b45968a0/1fa96ad0-7465-4936-8bf3-2088df7973b3/InvoicesMetaData">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/FTL templates/Parts/DBview/DBTable_row.ftl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
-          <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
+        <state relative-caret-position="347">
+          <caret line="59" column="316" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="316" />
           <folding>
-            <element signature="n#style#0;n#table#0;n#article#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#section#0;n#article#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#table#0;n#section#0;n#article#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#table#0;n#article#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#a#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#article#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#table#0;n#section#0;n#article#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/css/Materialize/css/materialize.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="8378" column="10" selection-start-line="8378" selection-start-column="10" selection-end-line="8378" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3ecc8eab-645e-4d18-8e3d-69b944133666/console.sql">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.8.9.1/sqlite-jdbc-3.8.9.1.jar!/org/sqlite/jdbc4/JDBC4Connection.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/Invoice.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.8.9.1/sqlite-jdbc-3.8.9.1.jar!/org/sqlite/SQLiteConnection.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
+        <state relative-caret-position="221">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/IDinputForm.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.8.9.1/sqlite-jdbc-3.8.9.1.jar!/org/sqlite/JDBC.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="120" column="88" selection-start-line="120" selection-start-column="88" selection-end-line="120" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/FTL templates/Parts/IDview/IDinputForm.ftl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="221" column="26" selection-start-line="221" selection-start-column="26" selection-end-line="221" selection-end-column="26" />
+        <state relative-caret-position="343">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#div#6;n#form#0;n#div#0;n#article#0;n#main#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding>
-            <marker date="1462652717863" expanded="true" signature="2338:2380" ph="SELECT * FRO... CFG" />
-            <marker date="1462652717863" expanded="true" signature="3138:3159" ph="SELECT * FRO... Filters" />
-            <marker date="1462652717863" expanded="true" signature="3646:3723" ph="SELECT * FRO... InvoicesMetaData" />
-            <marker date="1462652717863" expanded="true" signature="4260:4288" ph="SELECT * FRO... StatusMetaData" />
-            <marker date="1462652717863" expanded="true" signature="4459:4483" ph="SELECT * FRO... Currencies" />
-            <marker date="1462652717863" expanded="true" signature="4649:4672" ph="SELECT * FRO... RowColors" />
-            <marker date="1462652717863" expanded="true" signature="4837:4864" ph="SELECT * FRO... ProcessStatus" />
-            <marker date="1462652717863" expanded="true" signature="8049:8190" ph="UPDATE CFG S... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/DBview.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="48" column="118" selection-start-line="48" selection-start-column="12" selection-end-line="48" selection-end-column="118" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/SettingsView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/IDView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="113" column="46" selection-start-line="113" selection-start-column="46" selection-end-line="113" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/InvNrView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="73" column="59" selection-start-line="73" selection-start-column="59" selection-end-line="73" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/Header.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1249">
-          <caret line="118" column="26" selection-start-line="118" selection-start-column="26" selection-end-line="118" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/SelectWhereView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="83" column="0" selection-start-line="24" selection-start-column="4" selection-end-line="83" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/View/HtmlFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" column="22" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1103#1104#0" expanded="true" />
+            <element signature="e#1185#1186#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Model/InvoiceManagerDB_DAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="55" column="26" selection-start-line="55" selection-start-column="26" selection-end-line="55" selection-end-column="26" />
+        <state relative-caret-position="216">
+          <caret line="296" column="0" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
           <folding>
-            <marker date="1464275345322" expanded="true" signature="4449:4481" ph="SELECT * FRO... Invoices" />
-            <marker date="1464275345322" expanded="true" signature="7415:7466" ph="SELECT missi... Invoices" />
-            <marker date="1464275345322" expanded="true" signature="8947:9104" ph="SELECT Invoi... count" />
-            <marker date="1464275345322" expanded="true" signature="8980:9052" ph="SELECT count... Invoices" />
-            <marker date="1464275345322" expanded="true" signature="10448:10467" ph="SELECT * FRO... Users" />
-            <marker date="1464275345322" expanded="true" signature="11734:11792" ph="INSERT INTO Users... " />
-            <marker date="1464275345322" expanded="true" signature="12954:13007" ph="UPDATE Users... " />
-            <marker date="1464275345322" expanded="true" signature="14143:14481" ph="UPDATE Invoi... " />
+            <marker date="1464372231924" expanded="true" signature="6592:6624" ph="SELECT * FRO... Invoices" />
+            <marker date="1464372231924" expanded="true" signature="9558:9609" ph="SELECT missi... Invoices" />
+            <marker date="1464372231924" expanded="true" signature="11090:11247" ph="SELECT Invoi... count" />
+            <marker date="1464372231924" expanded="true" signature="11123:11195" ph="SELECT count... Invoices" />
+            <marker date="1464372231924" expanded="true" signature="12591:12610" ph="SELECT * FRO... Users" />
+            <marker date="1464372231924" expanded="true" signature="13877:13935" ph="INSERT INTO Users... " />
+            <marker date="1464372231924" expanded="true" signature="15097:15150" ph="UPDATE Users... " />
+            <marker date="1464372231924" expanded="true" signature="16286:16624" ph="UPDATE Invoi... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/View/HtmlFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/log/JDK14LoggerFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+          <folding>
+            <element signature="e#4247#4248#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/cache/SoftCacheStorage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/cache/ClassTemplateLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/cache/URLTemplateSource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="130" column="0" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/cache/URLTemplateLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/cache/TemplateCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="234" column="0" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Model/InvoiceManagerCFG.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="293" column="0" selection-start-line="293" selection-start-column="0" selection-end-line="293" selection-end-column="0" />
+          <folding>
+            <element signature="e#11087#11088#0" expanded="true" />
+            <marker date="1464365531055" expanded="true" signature="2338:2380" ph="SELECT * FRO... CFG" />
+            <marker date="1464365531055" expanded="true" signature="3138:3159" ph="SELECT * FRO... Filters" />
+            <marker date="1464365531055" expanded="true" signature="3646:3723" ph="SELECT * FRO... InvoicesMetaData" />
+            <marker date="1464365531055" expanded="true" signature="4260:4288" ph="SELECT * FRO... StatusMetaData" />
+            <marker date="1464365531055" expanded="true" signature="4459:4483" ph="SELECT * FRO... Currencies" />
+            <marker date="1464365531055" expanded="true" signature="4649:4672" ph="SELECT * FRO... RowColors" />
+            <marker date="1464365531055" expanded="true" signature="4837:4864" ph="SELECT * FRO... ProcessStatus" />
+            <marker date="1464365531055" expanded="true" signature="8024:8165" ph="UPDATE CFG S... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_65/src.zip!/java/lang/Throwable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="720" column="0" selection-start-line="720" selection-start-column="0" selection-end-line="720" selection-end-column="0" />
+          <folding>
+            <element signature="e#29593#29594#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_65/src.zip!/java/lang/Thread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="744" column="0" selection-start-line="744" selection-start-column="0" selection-end-line="744" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-util/9.0.2.v20130417/jetty-util-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/util/thread/QueuedThreadPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="595" column="0" selection-start-line="595" selection-start-column="0" selection-end-line="595" selection-end-column="0" />
+          <folding>
+            <element signature="e#17759#17760#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-io/9.0.2.v20130417/jetty-io-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/io/AbstractConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="239" column="0" selection-start-line="239" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/HttpConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="265" column="0" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/Configuration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="994" column="0" selection-start-line="994" selection-start-column="0" selection-end-line="994" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/DefaultObjectWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/Identifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/SimpleScalar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+          <folding>
+            <element signature="e#3349#3350#0" expanded="true" />
+            <element signature="e#3383#3384#0" expanded="true" />
+            <element signature="e#3469#3470#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/EvaluationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/Expression.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/DollarVariable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/TextBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/MixedContent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="93" column="0" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/Configurable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="569" column="0" selection-start-line="569" selection-start-column="0" selection-end-line="569" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/core/Environment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="210" column="0" selection-start-line="210" selection-start-column="0" selection-end-line="210" selection-end-column="0" />
+          <folding>
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="e#7094#7095#0" expanded="true" />
+            <element signature="e#28145#28146#0" expanded="true" />
+            <element signature="e#28171#28172#0" expanded="true" />
+            <element signature="e#50119#50120#0" expanded="true" />
+            <element signature="e#50160#50161#0" expanded="true" />
+            <element signature="e#50193#50194#0" expanded="true" />
+            <element signature="e#50253#50254#0" expanded="true" />
+            <element signature="e#63781#63782#0" expanded="true" />
+            <element signature="e#63829#63830#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/Template.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/WrappingTemplateModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/View/FreeMarkerTemplate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.19/freemarker-2.3.19-sources.jar!/freemarker/template/SimpleHash.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding>
+            <element signature="e#3851#3852#0" expanded="true" />
+            <element signature="e#3892#3893#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/QueryView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="47" column="65" selection-start-line="47" selection-start-column="65" selection-end-line="47" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="238">
+          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Controller/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="193" column="100" selection-start-line="193" selection-start-column="91" selection-end-line="193" selection-end-column="100" />
+        <state relative-caret-position="147">
+          <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Model/Helpers.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/session/SessionHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="133" column="56" selection-start-line="133" selection-start-column="56" selection-end-line="133" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1464286211232" expanded="true" signature="5863:5893" ph="SELECT count... Invoices" />
-          </folding>
+        <state relative-caret-position="283">
+          <caret line="197" column="0" selection-start-line="197" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/handler/ScopedHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/handler/HandlerList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/handler/HandlerWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="454" column="0" selection-start-line="454" selection-start-column="0" selection-end-line="454" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.0.2.v20130417/jetty-server-9.0.2.v20130417-sources.jar!/org/eclipse/jetty/server/HttpChannel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="325" column="0" selection-start-line="325" selection-start-column="0" selection-end-line="325" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/sparkjava/spark-core/1.1.1/spark-core-1.1.1-sources.jar!/spark/webserver/JettyHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/sparkjava/spark-core/1.1.1/spark-core-1.1.1-sources.jar!/spark/webserver/MatcherFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="211" column="0" selection-start-line="211" selection-start-column="0" selection-end-line="211" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/b45968a0/1fa96ad0-7465-4936-8bf3-2088df7973b3/CFG">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3ecc8eab-645e-4d18-8e3d-69b944133666/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="73" selection-start-line="10" selection-start-column="73" selection-end-line="10" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/b45968a0/3ecc8eab-645e-4d18-8e3d-69b944133666/Invoices">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/View/Renderers/PartCodeRenderers/DBTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="129" column="183" selection-start-line="129" selection-start-column="183" selection-end-line="129" selection-end-column="183" />
+          <folding />
         </state>
       </provider>
     </entry>

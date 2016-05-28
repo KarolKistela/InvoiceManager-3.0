@@ -2,7 +2,7 @@ package Model;
 
 /**
  * Created by mzjdx6 on 20-Mar-16.
- * TODO: clean up this s..t
+ * TODO: clean up this s..t ...actualy it's not so bad
  */
 
 import spark.Request;
@@ -44,8 +44,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         ImCFG = new InvoiceManagerCFG();
         Class.forName("org.sqlite.JDBC");
         this.connection = null;
-        if (fileExists(ImCFG.getImDBPath())) {
-            this.DB_Path = ImCFG.getImDBPath();
+        if (fileExists(DB_Path)) {
+            this.DB_Path = DB_Path;
         } else {
             this.DB_Path = "src/main/resources/InvoiceManagerCFG/saveToDelete.file";
             throw new FileNotFoundException();
@@ -69,6 +69,60 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             if (pageNr < 0) pageNr = 0;
             if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
                 pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
+            limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+        } else {
+            limitClause = ";";
+        }
+
+        System.out.println("Model.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
+
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
+            System.out.println("DB path: " + this.DB_Path);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            System.out.println("  Query: " + query + orderByClause + limitClause);
+
+            ResultSet rs = statement.executeQuery(query + orderByClause + limitClause);
+
+            while (rs.next()) {
+                retVal.add(this.toStringArray(rs));
+            }
+            return retVal;
+        } catch (SQLException e) {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return null;
+    }
+
+    public List<String[]> sqlSELECT2(String query, int pageNr, boolean withOrderByClause, boolean withLimitClause, int records) throws ClassNotFoundException, SQLException {
+        List<String[]> retVal = new LinkedList();
+
+        String orderByClause;
+        if (withOrderByClause) {
+            orderByClause = ImCFG.getOrderByClause();
+        } else {
+            orderByClause = "";
+        }
+
+        String limitClause;
+            /* Make sure that LIMIT is correct sql statment: */
+        if (withLimitClause) {
+            if (pageNr < 0) pageNr = 0;
+            if (pageNr > records / ImCFG.getRowsPerPage()) {
+                pageNr = records / ImCFG.getRowsPerPage() + 1;
+            }
             limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
         } else {
             limitClause = ";";

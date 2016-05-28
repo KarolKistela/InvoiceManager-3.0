@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.nio.file.*;
 import java.io.*;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,10 +23,9 @@ import static java.nio.file.Files.isDirectory;
 public class Helpers {
 
     public static void main(String[] args) {
-        Double d = 5.00;
-        System.out.println(d);
-        System.out.println(Math.floor(d));
-        System.out.println(decimal(d));
+        String s = "967";
+        System.out.println(s);
+        System.out.println(doubleFormat(Double.parseDouble(s)));
     }
 
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
@@ -35,6 +35,12 @@ public class Helpers {
         Process shellProcess = runTime.exec(processCommand);
     }
 
+    public static void runShellCommand2(String cmd) throws IOException, InterruptedException {
+        Runtime runTime = Runtime.getRuntime();
+        System.err.println(" shellCmd: " + cmd);
+        String[] processCommand = {cmd};
+        Process shellProcess = runTime.exec(processCommand);
+    }
     public static int decimal(Double d) {
         return (int) ((d % Math.floor(d))*100);
     }
@@ -78,6 +84,7 @@ public class Helpers {
             case ">=": return "gte";
             case "<":  return "lt";
             case "<=": return "lte";
+            case "LIKE": return "LIKE";
             default: return "eq";
         }
     }
@@ -92,6 +99,7 @@ public class Helpers {
             case "gte": sign = ">=";    break;
             case "lt":  sign = "<";     break;
             case "lte": sign = "<=";    break;
+            case "LIKE": sign = " LIKE "; break;
             default: sign = "="; break;
         }
         String value = null;
@@ -119,6 +127,7 @@ public class Helpers {
             case "gte": sign = ">=";    break;
             case "lt":  sign = "<";     break;
             case "lte": sign = "<=";    break;
+            case "LIKE": sign = " LIKE "; break;
             default: sign = "="; break;
         }
         String value = null;
@@ -164,14 +173,11 @@ public class Helpers {
         }
     }
 
-    public static String doubleFormat(String s) {
-//        if (s.indexOf(".") == -1) {
-//            return s+".00";
-//        } else if (s.indexOf(".") == 2) {
-//            return s+"0";
-//        } else {
-            return s;
-//        }
+
+    public static String doubleFormat(double d) {
+        DecimalFormat myFormatter = new DecimalFormat("###,##0.00");
+        String s = myFormatter.format(d).replace(","," ");
+        return s;
     }
 
     public static boolean InvoicesManagerDBconnection(String imDBPath) throws ClassNotFoundException {

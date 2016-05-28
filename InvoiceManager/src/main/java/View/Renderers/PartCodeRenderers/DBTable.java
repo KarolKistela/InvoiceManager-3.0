@@ -105,29 +105,41 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("rowComment", "<!-- ============================ ID = "+record[0]+" ======================================================================= -->");
             replaceMap.put("rowColor", (record[22].length() == 0) ? "white":record[22]);
 
-            if (this.usersColors.get(record[21]) == null) {
+            if (this.usersColors.get(record[21]) == null) {             // will it work?
                 replaceMap.put("userColor", this.usersColors.get("DB")); // TODO: in sql sdript for creating user db make sure that default record has ID='DB'
             } else {
-                replaceMap.put("userColor", this.usersColors.get(record[21])); // TODO: when updating inv with new user app doesn't find userColor
+                replaceMap.put("userColor", this.usersColors.get(record[21]));
             }
             replaceMap.put("ID", record[0]);
-            replaceMap.put("fileExists", (fileExists(scanPath)) ? "file-text":"file-text-o");
+            //replaceMap.put("fileExists", (fileExists(scanPath)) ? "file-text":"file-text-o");  // for Inv icon
+            replaceMap.put("fileExists", (fileExists(scanPath)) ? "":"black");
+            replaceMap.put("BCrow", truncuate(record[1],10));
             replaceMap.put("entryDate", record[2]);
-            replaceMap.put("supplier", truncuate(record[4],20));
+            replaceMap.put("supplier", truncuate(record[4],18));
             replaceMap.put("supplierLink", record[4]);
-            replaceMap.put("invoiceNR", truncuate(record[5],20));
-            replaceMap.put("PO", record[7]);
+            replaceMap.put("invoiceNR", truncuate(record[5],18));
+            replaceMap.put("PO", truncuate(record[7],18));
             // Net Price: 950 => 950.00 EUR, 1083.4 => 1083.40 EUR, 650.99 => 650.99 EUR
-            replaceMap.put("netPrice", doubleFormat(record[8]) + " " + record[9]);
-            replaceMap.put("authorization", truncuate(record[12],20));
+            if (record[8].equals("")) { record[8] = "0"; }
+            replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8])) + " " + record[9]));
+            replaceMap.put("authorization", truncuate(record[12],18));
             replaceMap.put("authorizationLink", record[12]);
+            replaceMap.put("attachment", record[6].replace("\\","/"));
             // if there is authorization email then we have full envelop icon and it will open it, else we will open outlook with mailto auth contact
             replaceMap.put("emailLink", (fileExists(emailAuthPath)) ? ("href=\"/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;"):("href=\"mailto: " + record[12]));
-            replaceMap.put("email", (fileExists(emailAuthPath)) ? "<i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>":"<i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>");
-            replaceMap.put("GR", truncuate(record[17],30));
+//            replaceMap.put("email", (fileExists(emailAuthPath)) ? "<i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>":"<i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>");
+            // new option, opens folder with inv scan and msg (if already sent)
+            replaceMap.put("emailLink", "href=\"/ID/"+record[0]+"/attachment\" onClick=\"attachment"+record[0]+"=window.open('/ID/"+record[0]+"/attachment','attachment"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { attachment"+record[0]+".close();}, 500); return false;");
+            replaceMap.put("email", "<i class=\"fa fa-folder-open-o\" aria-hidden=\"true\"></i>");
+
+            replaceMap.put("GR", truncuate(record[17],25));
             replaceMap.put("processStage", record[24]);
-            replaceMap.put("BC", record[1]);
             // Details Table:
+            replaceMap.put("BC", record[1]);
+            replaceMap.put("SupplierDetails", record[4]);
+            replaceMap.put("InvNrDetails",record[5]);
+            replaceMap.put("PODetails",record[7]);
+            replaceMap.put("GRDetails",record[17]);
             replaceMap.put("contactGenpact", record[3]);
             replaceMap.put("invDate", record[10]);
             replaceMap.put("emailSubject", record[11]);

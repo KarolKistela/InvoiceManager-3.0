@@ -55,7 +55,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.rout = rout;
         this.pageNr = pageNr;
         this.pageNrString = Integer.toString(pageNr).replace(",","");
-        this.totalPages = 1;
+        this.totalPages = 0;
         this.viewTitle = viewTitle;
         this.tabHeader = tabHeader;
         this.pagination = pagination;
@@ -95,7 +95,11 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("viewTitle", this.viewTitle);
         replaceMap.put("rout", this.rout);
         replaceMap.put("previous", (this.pageNr < 1) ? "1": Integer.toString(this.pageNr - 1).replace(",",""));
-        replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",","") + "/" + Integer.toString(this.totalPages).replace(",",""));
+        if (this.totalPages != 0) {
+            replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",", "") + "/" + Integer.toString(this.totalPages).replace(",", ""));
+        } else {    // case when total nr of pages is not required
+            replaceMap.put("pageNr", Integer.toString(this.pageNr).replace(",", ""));
+        }
         replaceMap.put("next", Integer.toString(this.pageNr + 1).replace(",",""));
         replaceMap.put("tableHeader", (tabHeader) ? tableHeader:"");
 

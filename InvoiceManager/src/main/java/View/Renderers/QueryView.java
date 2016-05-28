@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+import static Controller.Controller.PORT;
 import static Model.Helpers.sqlQueryConstructor;
 import static Model.Helpers.sqlQueryConstructor2;
 
@@ -23,11 +24,11 @@ import static Model.Helpers.sqlQueryConstructor2;
  * Created by Karol Kistela on 26-May-16.
  */
 public class QueryView extends FreeMarkerTemplate implements Renderer {
-    private final String viewTitle = "Filter view";
+    private String viewTitle;
     private final String ftlFile = "DBview.ftl";
     private boolean tabHeader = true;
     private final boolean pagination = true;
-    private final int menuButtonActive = 3;
+    private int menuButtonActive;
     private String rout;
     private int pageNr;
     private int records;
@@ -38,17 +39,24 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
 
     public QueryView(Request request) throws ClassNotFoundException {
         super();
-        this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
+        this.rout = request.url().substring(request.url().indexOf(PORT.toString().replace(",",""))+4,request.url().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
+        if (request.params("columnName").equals("ID") & request.params("sign").equals("gte") & request.params("value").equals("0")) {
+            this.menuButtonActive = 1;
+            this.viewTitle = "Main view";
+        } else {
+            this.menuButtonActive = 3;
+            this.viewTitle = "Filter view";
+        }
 
         try {
             System.out.println("********View.Renderers.SelectWhere ROUT: " + this.rout + this.pageNr + " ********");
-            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
+            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
             this.sqlQuery = sqlQueryConstructor2(request);
-            this.resultSet = db.sqlSELECT(sqlQuery, pageNr, false, true);    // get resultSet of query
-            this.usersColors = db.usersColorMap();                          // get colors
             this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
-            if (ImCFG.isCheckForInvDuplicates()) {                          // if true check for duplicates in invoice nrs
+            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+            this.usersColors = db.usersColorMap();                              // get colors
+            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
             } else {
                 this.invDuplicatesMap = new HashMap();

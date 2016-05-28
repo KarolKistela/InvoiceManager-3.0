@@ -142,7 +142,6 @@ public class InvoiceManagerCFG {
     }
 
     public boolean save(Request request) throws ClassNotFoundException, FileNotFoundException {
-        this.loadData();
         String imExternalFolderPath = request.queryParams("imExternalFolderPath");
         if (imExternalFolderPath.lastIndexOf("\\") != imExternalFolderPath.length()-1) {
             imExternalFolderPath += "\\";
@@ -215,6 +214,7 @@ public class InvoiceManagerCFG {
                 System.err.println(e);
             }
         }
+        this.loadData();
         return true;
     }
 

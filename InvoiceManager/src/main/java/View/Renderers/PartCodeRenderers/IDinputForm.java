@@ -38,16 +38,11 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         Template template = getTemplate(this.settingsInputFormFTL);
 
         this.invoice.toString();
-        // TODO: kick out netPrice decimal!!! depriciated
-        // TODO: color picker list for RowColor
-        // TODO: Status, ProcessStatuss list pisker
-        // TODO: Currency list piscker
+        // TODO: kick out netPrice decimal!!! depreciated
         // TODO: take out polish letters from DB
         // TODO: paths to file cannot contains signs: /\:*?<>"| make sure this will not get into DB!!!
         // TODO: option in settings for lists for Supplier, AuthContact, Users
         // TODO: /Settings search not working!!!
-        // TODO: clean up datalists - remove activClass replacMap, add static datalist creator to Helpers.class
-        // TODO: net price presentation doesn't work for 1 digit value
 
         replaceMap.put("BC", this.invoice.getBC());
         if (this.invoice.getBC().equals("")) { replaceMap.put("BC_activeClass","");} else {replaceMap.put("BC_activeClass","active");}

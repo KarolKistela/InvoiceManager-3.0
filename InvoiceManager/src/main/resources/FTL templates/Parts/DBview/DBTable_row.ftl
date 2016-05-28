@@ -4,6 +4,7 @@
         ${userColor}
         ${ID}
         ${fileExists}
+        ${BCrow}
         ${entryDate}
         ${supplier}
         ${invNrLink} - if inv nr repeats in DB then do link to this repetitions
@@ -12,11 +13,16 @@
         ${PO}
         ${netPrice}
         ${authorization}
+        ${attachment}
         ${email}
         ${emailLink}
         ${GR}
         ${processStage}
-        ${BC
+        ${BC}
+        ${SupplierDetails}
+        ${InvNrDetails}
+        ${PODetails}
+        ${GRDetails}
         ${contactGenpact}
         ${invDate}
         ${emailSubject}
@@ -29,14 +35,15 @@
         ${processStatus}
 -->
 ${rowComment}
-    <article class="card"> <#--style="margin-top: 5px">-->
-        <table class="${rowColor}" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
+    <article>
+        <table class="${rowColor}" style="border-left: 6px solid ${userColor}"> <#--;border-right: 4px solid ${userColor}">-->
             <tbody>
             <tr>
                 <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
-                <td class="IM-InvScanPath ">
+                <td class="IM-BC">
                     <a href="/ID/${ID}/scan" onClick="scan${ID}=window.open('/ID/${ID}/scan','scan${ID}','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { scan${ID}.close();}, 500); return false;">
-                        <i class="fa fa-${fileExists}" aria-hidden="true"></i>
+                        <#--<i class="fa fa-${fileExists}" aria-hidden="true"></i>-->
+                        <span style="color: ${fileExists}">${BCrow}</span>
                     </a>
                 </td>
                 <td class="IM-EntryDate ">${entryDate}</td>
@@ -49,7 +56,8 @@ ${rowComment}
                 <td class="IM-PO">${PO}</td>
                 <td class="IM-NetPrice">${netPrice}</td>
                 <td class="IM-AuthContact" >
-                    <a href="/Filter/Select//AuthContact/eq/${authorizationLink}/1">
+                    <a href='mailto:${authorizationLink}?subject=ID: ${ID}'>
+                    <#--<a href="/ID/${ID}/attachment" onClick="attachment${ID}=window.open('/ID/${ID}/attachment','attachment${ID}','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { attachment${ID}.close();}, 500); return false;">-->
                         ${authorization}
                     </a>
                 </td>
@@ -60,16 +68,33 @@ ${rowComment}
             </tbody>
         </table>
 <!-- ============================ Process stage Indicator ========================================================== -->
+<!-- off -->
         <#--<div class="progress grey">-->
             <#--<div class="determinate" style="width: ${processStage}%; background-color: ${userColor}"></div>-->
         <#--</div>-->
 <!-- ============================ Details for inv ID =============================================================== -->
-        <section id="${ID}" class="w3-accordion-content" style="border-left: 4px solid ${userColor};border-right: 4px solid ${userColor}">
+        <section id="${ID}" class="w3-accordion-content"> <#--style="border-left: 6px solid ${userColor}"><#--;border-right: 4px solid ${userColor}">-->
             <table class="highlight IM-detailsTabel" style="border-top: none">
                 <tbody>
                 <tr>
                     <td>BC:</td>
                     <td>${BC}</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>${SupplierDetails}</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td>${InvNrDetails}</td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td>${PODetails}</td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td>${GRDetails}</td>
                 </tr>
                 <tr>
                     <td>ContactGenpact:</td>
