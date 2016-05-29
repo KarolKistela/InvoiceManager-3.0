@@ -38,8 +38,14 @@ public class InvoiceManagerCFG {
 
         System.out.println(imcfg.toString());
 
-        for (String[] s: imcfg.getInvoicesMetaData()
+        List<String[]> filters2 = imcfg.getFilters();
+
+        System.out.println(filters2.get(0)[3]);
+
+        for (String[] s: imcfg.getFilters()
              ) {
+            System.out.println(s[0]);
+            System.out.println(s[1]);
             System.out.println(s[2]);
         }
     }

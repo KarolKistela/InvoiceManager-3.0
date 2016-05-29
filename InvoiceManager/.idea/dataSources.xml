@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1312966025">
+  <component name="DataSourceManagerImpl" format="xml" hash="1749027706">
     <data-source source="LOCAL" name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="1fa96ad0-7465-4936-8bf3-2088df7973b3">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>

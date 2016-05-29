@@ -3,6 +3,7 @@ package Controller;
 /**
  * Created by mzjdx6 on 24-Mar-16.
  * TODO: rewrite it to use with spark 2.3 - low priority
+ * TODO: ImCFG should be Initiated in controller only, other objects should only do reload method on that object
  */
 
 import Model.*;
@@ -12,6 +13,8 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import View.HtmlFactory;
+
+import java.net.InetAddress;
 import java.net.URLEncoder;
 
 import java.io.IOException;
@@ -27,7 +30,7 @@ import org.joda.time.LocalDate;
 
 public class Controller {
     public static final Integer PORT = 8082;
-    private final InvoiceManagerCFG ImCFG;
+    public static InvoiceManagerCFG ImCFG;
     private final HtmlFactory htmlFactory;
     public static boolean isConnectedToDB;
     public PrintWriter errorMSG; // not sure if it will stay or not
@@ -48,12 +51,18 @@ public class Controller {
         if (fileExists(ImCFG.getImDBPath())) {
             isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
         }
+
         System.err.println(new LocalDate().toString() + " testing connection to DB: " + isConnectedToDB);
 
         setPort(PORT);
         externalStaticFileLocation(ImCFG.getImExternalFolderPath());
         staticFileLocation("/"); // => /resources
         initializeRoutes();
+        try {
+            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + PORT + "/");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     abstract class FreemarkerBasedRoute extends Route {
@@ -82,11 +91,13 @@ public class Controller {
                 if (request.queryParams("search_query_columns") == null) {
                     System.out.println(request.pathInfo());
                 } else {
-                    response.redirect("/Filter/Select/" + request.queryParams("search_query_columns")
-                                                        + "/" + signConvertor(request.queryParams("search_query_sign"))
-                                                        + "/" + URLEncoder.encode(request.queryParams("search_query_value"))
-                                                        +"/1");
+                    response.redirect("/View/" + request.queryParams("search_query_columns")
+                                               + "/" + signConvertor(request.queryParams("search_query_sign"))
+                                               + "/" + URLEncoder.encode(request.queryParams("search_query_value"))
+                                               +"/OrderBy");
                 }
+            } else if (request.queryParams("search_query").length() == 10) {
+                response.redirect("/View/BC/eq/" + request.queryParams("search_query") + "/OrderBy");
             } else {
                 response.redirect("/ID/" + request.queryParams("search_query"));
             }
@@ -181,33 +192,47 @@ public class Controller {
                 }
             }
         });
+        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                response.redirect("/View/" + request.params("columnName") + "/"
+                        + request.params("sign") + "/" + request.params("value")
+                        + "/OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
+            }
+        });
         post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
             }
         });
-// ================================= Duplicate Invoice view =================================================================================
-// TODO: replace this with queryView
-        get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+// ================================= Main view for displaying filter view returning 1 or more records from DB ===================================
+        get(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy/:columnName2/:direction/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 if (redirectToSettings()) {
                     response.redirect("/Settings");
                 } else {
-                    String rout = "/ID/" + request.params("idNr") + "/invNr/";
-
-                    Renderer invNr = htmlFactory.getInvNrView(request, rout);
-                    webPage.write(invNr.render());
+                    Renderer queryView = htmlFactory.getQueryView(request, Integer.parseInt(request.params("filterNR"))-1);
+                    webPage.write(queryView.render());
                 }
             }
         });
-        post(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                response.redirect("/View/" + request.params("columnName") + "/"
+                        + request.params("sign") + "/" + request.params("value")
+                        + "/OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
+            }
+        });
+        post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
             }
         });
+
 // ================================= Settings view ==========================================================================================
         get(new FreemarkerBasedRoute("/Settings") {
             @Override
@@ -250,23 +275,23 @@ public class Controller {
             }
         });
 
-        /* this rout will open email msg file for ID
+        /* DEPRECIATED this rout will open email msg file for ID
          */
         get(new FreemarkerBasedRoute("/ID/:idNr/authEmail") {
             @Override
-            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
-                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"AuthEmail");
+            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 try {
-                    runShellCommand(filePath);
+                    writer.write("Create Authorization msg");
+                    runShellCommand2(Integer.parseInt(request.params("idNr").replace(",","")));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                writer.write("Open Authorization msg");
+
             }
         });
         /* this rout will open foldet with invoice scan file for ID
          */
-        get(new FreemarkerBasedRoute("/ID/:idNr/attachment") {
+        get(new FreemarkerBasedRoute("/ID/:idNr/Folder") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
                 String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"InvScanPath");
@@ -275,7 +300,7 @@ public class Controller {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                writer.write("Open Authorization msg");
+                writer.write("Open Folder for ID " + request.params("idNr"));
             }
         });
 // ================================= Reports view ===========================================================================================
@@ -286,55 +311,71 @@ public class Controller {
                 writer.write("Under construction :)");
             }
         });
-// ================================= Depreciated routs ======================================================================================
-// TODO: delete all occurrence to this routs in FTL templates
-        get(new FreemarkerBasedRoute("/DB/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (redirectToSettings()) {
-                    response.redirect("/Settings");
-                } else {
-                    // change orderByClaouse from Imcfg, eg. 'ORDER BY ID DESC' => 'ID/DESC'
-                    String orderByClause = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/");
-                    response.redirect("/View/ID/gte/0/OrderBy/" + orderByClause + "/" + request.params("pageNr"));
-                }
-            }
-        });
-        post(new FreemarkerBasedRoute("/DB/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                this.searchRespons(request, response);
-            }
-        });
-        get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (redirectToSettings()) {
-                    response.redirect("/Settings");
-                } else {
-//                    String rout = getRout(request);
-//                    System.err.println(request.pathInfo().substring(0, request.pathInfo().lastIndexOf("/") + 1));
-//
-//                    Renderer selectWhereView = htmlFactory.getSelectWhereView(request, rout);
-//                    webPage.write(selectWhereView.render());
-                    // change orderByClaouse from Imcfg, eg. 'ORDER BY ID DESC' => 'ID/DESC'
-                    String orderByClause = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/");
-                    response.redirect("/View/"  + request.params("columnName") + "/"
-                                                + request.params("sign") + "/"
-                                                + request.params("value") + "/OrderBy/" + orderByClause + "/" + request.params("pageNr"));
-                }
-            }
-        });
-        post(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                this.searchRespons(request, response);
-            }
-        });
     }
-
-    // TODO: add to table header dropdown menu with sorting option
-    // TODO: add visual representation which and what direction column is sorted by
-    // TODO: take care off nullPointerException for Imcfg and Users database querys!
 }
 
+// ================================= Duplicate Invoice view =================================================================================
+//        get(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    String rout = "/ID/" + request.params("idNr") + "/invNr/";
+//
+//                    Renderer invNr = htmlFactory.getInvNrView(request, rout);
+//                    webPage.write(invNr.render());
+//                }
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/ID/:idNr/invNr/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+// ================================= Depreciated routs ======================================================================================
+//
+//        get(new FreemarkerBasedRoute("/DB/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    // change orderByClaouse from Imcfg, eg. 'ORDER BY ID DESC' => 'ID/DESC'
+//                    String orderByClause = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/");
+//                    response.redirect("/View/ID/gte/0/OrderBy/" + orderByClause + "/" + request.params("pageNr"));
+//                }
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/DB/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+//        get(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+////                    String rout = getRout(request);
+////                    System.err.println(request.pathInfo().substring(0, request.pathInfo().lastIndexOf("/") + 1));
+////
+////                    Renderer selectWhereView = htmlFactory.getSelectWhereView(request, rout);
+////                    webPage.write(selectWhereView.render());
+//                    // change orderByClaouse from Imcfg, eg. 'ORDER BY ID DESC' => 'ID/DESC'
+//                    String orderByClause = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/");
+//                    response.redirect("/View/"  + request.params("columnName") + "/"
+//                                                + request.params("sign") + "/"
+//                                                + request.params("value") + "/OrderBy/" + orderByClause + "/" + request.params("pageNr"));
+//                }
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/Filter/Select/:columnName/:sign/:value/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });

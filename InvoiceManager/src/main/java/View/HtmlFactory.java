@@ -11,18 +11,6 @@ import java.sql.SQLException;
  */
 public class HtmlFactory {
 
-    public Renderer getDataBaseView(Request request) throws ClassNotFoundException {
-        return new DBview(request);
-    }
-
-    public Renderer getSelectWhereView(Request request, String rout) throws ClassNotFoundException {
-        return new SelectWhereView(request);
-    }
-
-    public Renderer getInvNrView(Request request, String rout) throws SQLException, ClassNotFoundException, FileNotFoundException {
-        return new InvNrView(request);
-    }
-
     public static Renderer getSettingsView(Request request) throws ClassNotFoundException {
         return new SettingsView(request);
     }
@@ -34,4 +22,20 @@ public class HtmlFactory {
     public static Renderer getQueryView(Request request) throws ClassNotFoundException {
         return new QueryView(request);
     }
+
+    public static Renderer getQueryView(Request request, Integer filterNR) throws ClassNotFoundException {
+        return new QueryView(request, filterNR);
+    }
 }
+
+//    public Renderer getDataBaseView(Request request) throws ClassNotFoundException {
+//        return new DBview(request);
+//    }
+
+//    public Renderer getSelectWhereView(Request request, String rout) throws ClassNotFoundException {
+//        return new SelectWhereView(request);
+//    }
+
+//    public Renderer getInvNrView(Request request, String rout) throws SQLException, ClassNotFoundException, FileNotFoundException {
+//        return new InvNrView(request);
+//    }

@@ -3,7 +3,15 @@
         <div class="row">
             <div class="col l6 s12">
                 <h5 class="white-text">Invoices Manager 3.0</h5>
-                <p class="grey-text text-lighten-4">Author: karol.kistela@delphi.com</p>
+                <a href="mailto:karol.kistela@delphi.com?cc=karol.kistela@gmail.com&subject=Invoices%20Manager"
+                    <p class="grey-text text-lighten-4">Author: karol.kistela@delphi.com</p>
+                </a>
+                <a href="https://pl.linkedin.com/in/karol-kistela-65073b5b">
+                    <i class="fa fa-linkedin fa-2x white-text" style="padding: 5px" aria-hidden="true"></i>
+                </a>
+                <a href="https://github.com/KarolKistela">
+                    <i class="fa fa-github fa-2x white-text" style="padding: 5px" aria-hidden="true"></i>
+                </a>
             </div>
             <div class="col l4 offset-l2 s12">
                 <h5 class="white-text">Documentation</h5>
@@ -11,7 +19,7 @@
                     <li><a class="grey-text text-lighten-3" href="#!">User instruction</a></li>
                     <li><a class="grey-text text-lighten-3" href="#!">Java documentation</a></li>
                     <li><a class="grey-text text-lighten-3" href="#!">VBA documentation</a></li>
-                    <li><a class="grey-text text-lighten-3" href="#!">Source Code</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/KarolKistela/InvoiceManager-3.0">Source Code</a></li>
                 </ul>
             </div>
         </div>

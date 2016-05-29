@@ -1,5 +1,6 @@
 package View;
 
+import Controller.Controller;
 import Model.InvoiceManagerCFG;
 import freemarker.template.Configuration;
 import freemarker.template.SimpleHash;
@@ -20,7 +21,8 @@ public class FreeMarkerTemplate {
 
     public FreeMarkerTemplate() throws ClassNotFoundException {
         cfg.setClassForTemplateLoading(FreeMarkerTemplate.class, "/FTL templates/");
-        this.ImCFG = new InvoiceManagerCFG();
+        Controller.ImCFG.loadData();
+        this.ImCFG = Controller.ImCFG;
         this.replaceMap = new SimpleHash();
         this.retVal = new StringWriter();
     }

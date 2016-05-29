@@ -4,7 +4,6 @@ import Controller.Controller;
 import spark.Request;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.file.*;
 import java.io.*;
 import java.sql.*;
@@ -12,7 +11,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.lang.Object.*;
 
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
@@ -22,23 +20,26 @@ import static java.nio.file.Files.isDirectory;
  */
 public class Helpers {
 
-    public static void main(String[] args) {
-        String s = "967";
-        System.out.println(s);
-        System.out.println(doubleFormat(Double.parseDouble(s)));
+    public static void main(String[] args) throws InterruptedException, SQLException, ClassNotFoundException, IOException {
+        int i = 49544;
+        runShellCommand2(i);
     }
 
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        System.err.println(" shellCmd: " + cmd);
+        System.out.println("========================== shellCmd: " + cmd);
         String[] processCommand = {"cmd", "/c", cmd};
         Process shellProcess = runTime.exec(processCommand);
     }
 
-    public static void runShellCommand2(String cmd) throws IOException, InterruptedException {
+    public static void runShellCommand2(int i) throws IOException, InterruptedException, SQLException, ClassNotFoundException {
         Runtime runTime = Runtime.getRuntime();
-        System.err.println(" shellCmd: " + cmd);
-        String[] processCommand = {cmd};
+        Invoice inv = new InvoiceManagerDB_DAO().sqlSELECTid(i);
+
+        String cmd = "\"outlook /c ipm.note /m \"" + inv.getAuthContact() + "&subject=ID%3A%20" + inv.getID() + "\" /a " + Controller.ImCFG.getImExternalFolderPath() + inv.getInvScanPath() + "\"";
+
+        System.out.println("========================== shellCmd: " + cmd);
+        String[] processCommand = {"cmd", "/c", cmd};
         Process shellProcess = runTime.exec(processCommand);
     }
     public static int decimal(Double d) {
@@ -61,20 +62,6 @@ public class Helpers {
 
     }
 
-//        File file = new File(filePath);
-//        long len = file.length();
-//        boolean isD =file.isDirectory();
-
-//        if (file.isDirectory()) {
-//            return false;
-//        } else if (file.length() == 0){
-//
-//            file.delete();
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
 
     public static String signConvertor(String s) {
         switch (s) {
@@ -85,6 +72,7 @@ public class Helpers {
             case "<":  return "lt";
             case "<=": return "lte";
             case "LIKE": return "LIKE";
+            case "NOT LIKE": return  "NOT LIKE";
             default: return "eq";
         }
     }
@@ -100,6 +88,7 @@ public class Helpers {
             case "lt":  sign = "<";     break;
             case "lte": sign = "<=";    break;
             case "LIKE": sign = " LIKE "; break;
+            case "NOT%20LIKE": sign = " NOT LIKE "; break;
             default: sign = "="; break;
         }
         String value = null;
@@ -128,6 +117,7 @@ public class Helpers {
             case "lt":  sign = "<";     break;
             case "lte": sign = "<=";    break;
             case "LIKE": sign = " LIKE "; break;
+            case "NOT%20LIKE": sign = " NOT LIKE "; break;
             default: sign = "="; break;
         }
         String value = null;
@@ -138,11 +128,22 @@ public class Helpers {
         }
 
         String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
-        System.out.println("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
-
         String orderByClause = "ORDER BY " + columnName2 + " " + direction;
 
+        System.out.println("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + orderByClause);
         return ("SELECT * FROM Invoices " + whereClause + orderByClause);
+    }
+
+    public static String sqlQueryConstructor3(Request request, Integer filterNR, List<String[]> filters) {
+        String query;
+        if (filters.get(filterNR)[3].equals("1")) {
+            query = filters.get(filterNR)[2];
+        } else {
+            query = filters.get(filterNR)[2] + " ORDER BY " + request.params(":columnName2") + " " + request.params("direction");
+        }
+
+        System.out.println("sqlQueryConstructor3: " + query);
+        return query;
     }
 
     public static String sqlQueryConstructorInvNr(Request request) throws ClassNotFoundException, SQLException, FileNotFoundException {

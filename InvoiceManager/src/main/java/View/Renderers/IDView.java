@@ -25,6 +25,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
     private final String viewTitle = "View ID";
     private final String ftlFile = "IDView.ftl";
     private boolean tabHeader = true;
+    private final boolean tabHeaderWithSort = false;
     private final boolean pagination = true;
     private final int menuButtonActive = 0;
     private String rout;
@@ -106,6 +107,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
                                             this.pageNr,
                                             this.viewTitle,
                                             this.tabHeader,
+                                            this.tabHeaderWithSort,
                                             this.pagination).render());
         if (this.invoice == null || this.invoice.getID() ==0) {
             replaceMap.put("DBTable", "<h1 style=\"margin-top: 75px; padding-left: 50px\">error</h1>");

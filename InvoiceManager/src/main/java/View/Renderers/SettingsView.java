@@ -19,6 +19,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
     private final String viewTitle = "Settings";
     private final String ftlFile = "Settings.ftl";
     private final boolean tabHeader = false;
+    private final boolean tabHeaderWithSort = false;
     private final boolean pagination = false;
     private final int menuButtonActive = 2;
     private final int pageNr = 1;
@@ -40,6 +41,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                                             this.pageNr,
                                             this.viewTitle,
                                             this.tabHeader,
+                                            this.tabHeaderWithSort,
                                             this.pagination).render());
         replaceMap.put("SettingsInputForm", new SettingsInputForm().render());
         replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());

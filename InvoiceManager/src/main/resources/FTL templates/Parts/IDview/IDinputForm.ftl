@@ -128,7 +128,7 @@ ${ProcessStatus-activeClass}
                     </div>
 <!-- ============== 3.3 AuthContact ================================================================================ -->
                     <div class="input-field col s4">
-                        <input value="${AuthContact}" id="AuthContact" name="AuthContact" type="email">
+                        <input value="${AuthContact}" id="AuthContact" name="AuthContact" type="text">
                         <label class="${AuthContact_activeClass}" for="AuthContact">Authorization Contact</label>
                     </div>
 <!-- ============== 3.4 AuthDate =================================================================================== -->
@@ -218,7 +218,7 @@ ${ProcessStatus-activeClass}
                         <p class="range-field">
                             <input value="${ProcessStage}" id="ProcessStage" name="ProcessStage" type="range" min="0" max="100">
                         </p>
-                        <label class="" for="ProcessStage">Process Stage</label>
+                        <label class="" for="ProcessStage">Process Stage - turned off</label>
                     </div>
                 </div>
 <!-- =============== Submit btn ==================================================================================== -->

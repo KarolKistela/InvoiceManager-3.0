@@ -39,6 +39,12 @@ public class Invoice {
     private String ProcessStatus;
     private int ProcessStage;
 
+    public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
+        Invoice inv = new Invoice(50000);
+        inv.toString();
+        System.out.println(inv.getAuthContact());
+    }
+
     public Invoice(ResultSet rs) throws SQLException {
         this.ID = rs.getInt("ID");
         this.BC = (rs.getString("BC"));
@@ -57,7 +63,7 @@ public class Invoice {
         this.AuthReplyDate = (rs.getString("AuthReplyDate"));
         this.AuthEmail = (rs.getString("AuthEmail"));
         this.EndDate = (rs.getString("EndDate"));
-        this.GR = (rs.getString("GR"));
+//        this.GR = (rs.getString("GR"));
         this.GR = (rs.getString("GR"));
         this.GenpactLastReply = (rs.getString("GenpactLastReply"));
         this.UserComments = (rs.getString("UserComments"));

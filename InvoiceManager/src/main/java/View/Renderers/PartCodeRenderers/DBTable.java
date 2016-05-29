@@ -10,6 +10,8 @@ import freemarker.template.TemplateException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -82,17 +84,16 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
         System.err.println("check for duplicates = " + ImCFG.isCheckForInvDuplicates() );
         for (String[] record:rs) {
             String scanPath = pathToExternalFolder + record[6];
-            String emailAuthPath = pathToExternalFolder + record[15];
 
             // remove null from row: is it necessary?
-            for (String s:record
-                 ) {
-                if (s == null) {s = "";}
-            }
+//            for (String s:record
+//                 ) {
+//                if (s == null) {s = "";}
+//            }
 
             if (ImCFG.isCheckForInvDuplicates()) {
                 if (invDuplicatesMap.containsKey(record[5])) {
-                    replaceMap.put("invNrLink", "<a href=\"/ID/" + record[0] + "/invNr/1\" target=\"_blank\" style=\"color: red\">");
+                    replaceMap.put("invNrLink", "<a href=\"/View/InvoiceNR/eq/" + URLEncoder.encode(record[5],"UTF-8") + "/OrderBy/ID/DESC/1\" target=\"_blank\" style=\"color: red\">");
                     replaceMap.put("invNrLink_a", "</a>");
                 } else {
                     replaceMap.put("invNrLink", "");
@@ -116,20 +117,21 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("BCrow", truncuate(record[1],10));
             replaceMap.put("entryDate", record[2]);
             replaceMap.put("supplier", truncuate(record[4],18));
-            replaceMap.put("supplierLink", record[4]);
+            replaceMap.put("supplierLink", URLEncoder.encode(record[4],"UTF-8"));
             replaceMap.put("invoiceNR", truncuate(record[5],18));
             replaceMap.put("PO", truncuate(record[7],18));
-            // Net Price: 950 => 950.00 EUR, 1083.4 => 1083.40 EUR, 650.99 => 650.99 EUR
-            if (record[8].equals("")) { record[8] = "0"; }
-            replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8])) + " " + record[9]));
+            try {
+                replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8])) + " " + record[9]));
+            } catch (Exception e) {
+                replaceMap.put("netPrice", "");
+            }
             replaceMap.put("authorization", truncuate(record[12],18));
-            replaceMap.put("authorizationLink", record[12]);
-            replaceMap.put("attachment", record[6].replace("\\","/"));
+//            replaceMap.put("authorizationLink", "/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;");
             // if there is authorization email then we have full envelop icon and it will open it, else we will open outlook with mailto auth contact
-            replaceMap.put("emailLink", (fileExists(emailAuthPath)) ? ("href=\"/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;"):("href=\"mailto: " + record[12]));
+//            replaceMap.put("emailLink", (fileExists(emailAuthPath)) ? ("href=\"/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;"):("href=\"mailto: " + record[12]));
 //            replaceMap.put("email", (fileExists(emailAuthPath)) ? "<i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>":"<i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>");
             // new option, opens folder with inv scan and msg (if already sent)
-            replaceMap.put("emailLink", "href=\"/ID/"+record[0]+"/attachment\" onClick=\"attachment"+record[0]+"=window.open('/ID/"+record[0]+"/attachment','attachment"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { attachment"+record[0]+".close();}, 500); return false;");
+//            replaceMap.put("emailLink", "/ID/"+record[0]+"/Folder\" onClick=\"Folder"+record[0]+"=window.open('/ID/"+record[0]+"/Folder','Folder"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { Folder"+record[0]+".close();}, 500); return false;");
             replaceMap.put("email", "<i class=\"fa fa-folder-open-o\" aria-hidden=\"true\"></i>");
 
             replaceMap.put("GR", truncuate(record[17],25));

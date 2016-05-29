@@ -13,9 +13,7 @@
         ${PO}
         ${netPrice}
         ${authorization}
-        ${attachment}
         ${email}
-        ${emailLink}
         ${GR}
         ${processStage}
         ${BC}
@@ -35,20 +33,21 @@
         ${processStatus}
 -->
 ${rowComment}
-    <article>
+    <article class="hoverable">
         <table class="${rowColor}" style="border-left: 6px solid ${userColor}"> <#--;border-right: 4px solid ${userColor}">-->
             <tbody>
             <tr>
                 <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
                 <td class="IM-BC">
-                    <a href="/ID/${ID}/scan" onClick="scan${ID}=window.open('/ID/${ID}/scan','scan${ID}','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { scan${ID}.close();}, 500); return false;">
-                        <#--<i class="fa fa-${fileExists}" aria-hidden="true"></i>-->
+                    <a href="/ID/${ID}/scan" onClick="scan${ID}=window.open('/ID/${ID}/scan','scan${ID}','width=640,height=480');
+                                                    setTimeout(function () { scan${ID}.close();}, 500);
+                                                    return false;">
                         <span style="color: ${fileExists}">${BCrow}</span>
                     </a>
                 </td>
                 <td class="IM-EntryDate ">${entryDate}</td>
                 <td class="IM-Supplier">
-                    <a href="/Filter/Select/Supplier/eq/${supplierLink}/1">
+                    <a href="/View/Supplier/eq/${supplierLink}/OrderBy">
                         ${supplier}
                     </a>
                 </td>
@@ -56,12 +55,19 @@ ${rowComment}
                 <td class="IM-PO">${PO}</td>
                 <td class="IM-NetPrice">${netPrice}</td>
                 <td class="IM-AuthContact" >
-                    <a href='mailto:${authorizationLink}?subject=ID: ${ID}'>
-                    <#--<a href="/ID/${ID}/attachment" onClick="attachment${ID}=window.open('/ID/${ID}/attachment','attachment${ID}','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { attachment${ID}.close();}, 500); return false;">-->
+                    <a href="/ID/${ID}/authEmail" onClick="authEmail${ID}=window.open('/ID/${ID}/authEmail','authEmail${ID}','width=640,height=480');
+                            setTimeout(function () { authEmail${ID}.close();}, 500);
+                            return false;">
                         ${authorization}
                     </a>
                 </td>
-                <td class="IM-AuthEmail"><a ${emailLink}">${email}</a></td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/${ID}/Folder" onClick="Folder${ID}=window.open('/ID/${ID}/Folder','Folder${ID}','width=640,height=480');
+                            setTimeout(function () { Folder${ID}.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
                 <td class="IM-GR">${GR}</td>
                 <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('${ID}')"></i></td>
             </tr>
