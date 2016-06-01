@@ -1,13 +1,19 @@
 package View.Renderers.PartCodeRenderers;
 
+import Controller.Controller;
 import Model.InvoiceManagerCFG;
+import Model.InvoiceManagerDB_DAO;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import View.FreeMarkerTemplate;
 import View.Renderer;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.sql.SQLException;
+import java.util.List;
+
+import static Controller.Controller.suppliers;
 
 /**
  * Created by Karol Kistela on 28-Apr-16.
@@ -20,7 +26,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     private int menuButtonActive;
     private String rout;
     private int pageNr;
-    private String pageNrString;
+    private int nrOfRecords;
     private int totalPages;
     private String viewTitle;
     private boolean tabHeader;
@@ -41,9 +47,9 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.menuButtonActive = menuButtonActive;
         this.rout = rout;
         this.pageNr = pageNr;
-        this.pageNrString = Integer.toString(pageNr).replace(",", "");
+        this.nrOfRecords = records;
         this.totalPages = (Integer) records / ImCFG.getRowsPerPage() + 1;
-        this.viewTitle = viewTitle;
+        this.viewTitle = viewTitle + " " + records + " records";
         this.tabHeader = tabHeader;
         this.tabHeaderWithSort = tabHeaderWithSort;
         this.pagination = pagination;
@@ -57,7 +63,7 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         this.menuButtonActive = menuButtonActive;
         this.rout = rout;
         this.pageNr = pageNr;
-        this.pageNrString = Integer.toString(pageNr).replace(",", "");
+        this.nrOfRecords = 0;
         this.totalPages = 0;
         this.viewTitle = viewTitle;
         this.tabHeader = tabHeader;
@@ -71,11 +77,83 @@ public class Header extends FreeMarkerTemplate implements Renderer {
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
         Template template = getTemplate(this.headerFTL);
         String filterList = this.getFilterList();
+        String supplierList = this.getSupplierList();
         String tableHeader;
         if (this.tabHeaderWithSort) {
             tableHeader = this.getTableHeader();
         } else {
             tableHeader = this.getTableHeaderWithoutSort();
+        }
+
+        switch (this.menuButtonActive){
+            case 2: {
+                replaceMap.put("commentOnMenu1","");
+                replaceMap.put("commentOnMenu2","");
+                replaceMap.put("commentOnMenu3","<!--");
+                replaceMap.put("commentOnMenu4","");
+                replaceMap.put("commentOnMenu5","<!--");
+                replaceMap.put("commentOffMenu1","");
+                replaceMap.put("commentOffMenu2","");
+                replaceMap.put("commentOffMenu3","-->");
+                replaceMap.put("commentOffMenu4","");
+                replaceMap.put("commentOffMenu5","-->");
+                replaceMap.put("commentOnAdvSearch", "<!--");
+                replaceMap.put("commentOffAdvSearch", "-->");
+                replaceMap.put("commentOnSearch", "<!--");
+                replaceMap.put("commentOffSearch", "-->");
+                break;
+            }
+            case 5: {
+                replaceMap.put("commentOnMenu1","");
+                replaceMap.put("commentOnMenu2","");
+                replaceMap.put("commentOnMenu3","<!--");
+                replaceMap.put("commentOnMenu4","");
+                replaceMap.put("commentOnMenu5","");
+                replaceMap.put("commentOffMenu1","");
+                replaceMap.put("commentOffMenu2","");
+                replaceMap.put("commentOffMenu3","-->");
+                replaceMap.put("commentOffMenu4","");
+                replaceMap.put("commentOffMenu5","");
+                replaceMap.put("commentOnAdvSearch", "<!--");
+                replaceMap.put("commentOffAdvSearch", "-->");
+                replaceMap.put("commentOnSearch", "<!--");
+                replaceMap.put("commentOffSearch", "-->");
+                break;
+            }
+            case 0: {
+                replaceMap.put("commentOnMenu1","");
+                replaceMap.put("commentOnMenu2","");
+                replaceMap.put("commentOnMenu3","");
+                replaceMap.put("commentOnMenu4","");
+                replaceMap.put("commentOnMenu5","<!--");
+                replaceMap.put("commentOffMenu1","");
+                replaceMap.put("commentOffMenu2","");
+                replaceMap.put("commentOffMenu3","");
+                replaceMap.put("commentOffMenu4","");
+                replaceMap.put("commentOffMenu5","-->");
+                replaceMap.put("commentOnAdvSearch", "");
+                replaceMap.put("commentOffAdvSearch", "");
+                replaceMap.put("commentOnSearch", "");
+                replaceMap.put("commentOffSearch", "");
+                break;
+            }
+            default: {
+                replaceMap.put("commentOnMenu1","");
+                replaceMap.put("commentOnMenu2","");
+                replaceMap.put("commentOnMenu3","");
+                replaceMap.put("commentOnMenu4","");
+                replaceMap.put("commentOnMenu5","");
+                replaceMap.put("commentOffMenu1","");
+                replaceMap.put("commentOffMenu2","");
+                replaceMap.put("commentOffMenu3","");
+                replaceMap.put("commentOffMenu4","");
+                replaceMap.put("commentOffMenu5","");
+                replaceMap.put("commentOnAdvSearch", "");
+                replaceMap.put("commentOffAdvSearch", "");
+                replaceMap.put("commentOnSearch", "");
+                replaceMap.put("commentOffSearch", "");
+                break;
+            }
         }
 
         if (pagination) {   // Dont comment part of HTML code for pagination
@@ -107,12 +185,14 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         }
 
         replaceMap.put("filterList", filterList);
+        replaceMap.put("supplierList", supplierList);
         replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active" : "");
         replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active" : "");
         replaceMap.put("menu3", (menuButtonActive == 3) ? " IM-menu-active" : "");
         replaceMap.put("menu4", (menuButtonActive == 4) ? " IM-menu-active" : "");
         replaceMap.put("menu5", (menuButtonActive == 5) ? " IM-menu-active" : "");
         replaceMap.put("viewTitle", this.viewTitle);
+        replaceMap.put("records", this.nrOfRecords);
         replaceMap.put("rout", this.rout);
         replaceMap.put("previous", (this.pageNr < 1) ? "1" : Integer.toString(this.pageNr - 1).replace(",", ""));
         if (this.totalPages != 0) {
@@ -124,6 +204,15 @@ public class Header extends FreeMarkerTemplate implements Renderer {
         replaceMap.put("tableHeader", (tabHeader) ? tableHeader : "");
 
         return process(template);
+    }
+
+    private String getSupplierList() {
+        String retVal = "";
+        for (String[] s: suppliers.getSupplierList()
+             ) {
+            retVal += "                      <option value=\"" + s[0] + "\">\n";
+        }
+        return retVal;
     }
 
     private String getFilterList() throws IOException, ClassNotFoundException, TemplateException {

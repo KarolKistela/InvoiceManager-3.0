@@ -54,8 +54,29 @@ public class InvoiceManagerCFG {
         this.loadData();
     }
 
+    public void clearData(){
+        this.imExternalFolderPath = new String();
+        this.imDBPath = new String();
+        this.rowsPerPage = new Integer(0);
+        this.backgroundColor = new String();
+        this.tableWidth = new Double(0.00);
+        this.totalNrOfPages = new Integer(0);
+        this.filters = new LinkedList<>();
+        this.orderByClause = new String();
+        this.checkForInvDuplicates = new Boolean(true);
+        this.userNetID = new String();
+        this.userEmail = new String();
+        this.userColor = new String();
+        this.invoicesMetaData = new LinkedList<>();
+        this.statusMetaData = new LinkedList<>();
+        this.curencies = new LinkedList<>();
+        this.rowColor = new LinkedList<>();
+        this.processStatus = new LinkedList<>();
+    }
+
     /* Connetct to db cfg file at src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg and load data from this file. Basically serialization for this class */
     public void loadData() throws ClassNotFoundException {
+        this.clearData();
         // load the sqlite-JDBC driver using the current class loader
         Class.forName("org.sqlite.JDBC");
 

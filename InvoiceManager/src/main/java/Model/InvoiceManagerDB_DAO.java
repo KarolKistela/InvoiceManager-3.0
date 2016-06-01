@@ -415,11 +415,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             prepStmt.setString(19, request.queryParams("UserComments"));
             prepStmt.setString(20, request.queryParams("Status"));
             prepStmt.setString(21, request.queryParams("User"));
-            if (request.queryParams("RowColor").equals("")) {
-                prepStmt.setString(22, "white");
-            } else {
-                prepStmt.setString(22, request.queryParams("RowColor") + " lighten-4");
-            }
+            prepStmt.setString(22, request.queryParams("RowColor"));
             prepStmt.setString(23, request.queryParams("ProcessStatus"));
             prepStmt.setString(24, request.queryParams("ProcessStage"));
             prepStmt.setString(25, request.params("ID"));

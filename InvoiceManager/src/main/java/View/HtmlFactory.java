@@ -26,6 +26,14 @@ public class HtmlFactory {
     public static Renderer getQueryView(Request request, Integer filterNR) throws ClassNotFoundException {
         return new QueryView(request, filterNR);
     }
+
+    public static Renderer getQueryView(Request request, boolean advSearch) throws ClassNotFoundException {
+        return new QueryView(request, advSearch);
+    }
+
+    public static Renderer getSaveView(Request request) throws ClassNotFoundException {
+        return new SaveView(request);
+    }
 }
 
 //    public Renderer getDataBaseView(Request request) throws ClassNotFoundException {

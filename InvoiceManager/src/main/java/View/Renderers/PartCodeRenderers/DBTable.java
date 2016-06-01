@@ -84,6 +84,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
         System.err.println("check for duplicates = " + ImCFG.isCheckForInvDuplicates() );
         for (String[] record:rs) {
             String scanPath = pathToExternalFolder + record[6];
+            String emailAuthPath = pathToExternalFolder + record[15];
 
             // remove null from row: is it necessary?
 //            for (String s:record
@@ -121,15 +122,16 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("invoiceNR", truncuate(record[5],18));
             replaceMap.put("PO", truncuate(record[7],18));
             try {
-                replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8])) + " " + record[9]));
+                replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8]))));
             } catch (Exception e) {
                 replaceMap.put("netPrice", "");
             }
+            replaceMap.put("currency",record[9]);
             replaceMap.put("authorization", truncuate(record[12],18));
 //            replaceMap.put("authorizationLink", "/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;");
             // if there is authorization email then we have full envelop icon and it will open it, else we will open outlook with mailto auth contact
 //            replaceMap.put("emailLink", (fileExists(emailAuthPath)) ? ("href=\"/ID/"+record[0]+"/authEmail\" onClick=\"authEmail"+record[0]+"=window.open('/ID/"+record[0]+"/authEmail','authEmail"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { authEmail"+record[0]+".close();}, 500); return false;"):("href=\"mailto: " + record[12]));
-//            replaceMap.put("email", (fileExists(emailAuthPath)) ? "<i class=\"fa fa-envelope\" aria-hidden=\"true\"></i>":"<i class=\"fa fa-envelope-o\" aria-hidden=\"true\"></i>");
+            replaceMap.put("authEmailExists", (fileExists(emailAuthPath)) ? "":"-o");
             // new option, opens folder with inv scan and msg (if already sent)
 //            replaceMap.put("emailLink", "/ID/"+record[0]+"/Folder\" onClick=\"Folder"+record[0]+"=window.open('/ID/"+record[0]+"/Folder','Folder"+record[0]+"','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width=640,height=480'); setTimeout(function () { Folder"+record[0]+".close();}, 500); return false;");
             replaceMap.put("email", "<i class=\"fa fa-folder-open-o\" aria-hidden=\"true\"></i>");

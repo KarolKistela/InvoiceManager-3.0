@@ -112,12 +112,12 @@ public class IDinputForm extends FreeMarkerTemplate implements Renderer {
         }
         replaceMap.put("UserList", userOption);
 
-        replaceMap.put("RowColor", this.invoice.getRowColor().replace(" lighten-4", ""));
+        replaceMap.put("RowColor", this.invoice.getRowColor());
         if (this.invoice.getRowColor().equals("")) { replaceMap.put("RowColor_activeClass","");} else {replaceMap.put("RowColor_activeClass","active");}
         String rowColorOption = "";
         for (String s: ImCFG.getRowColor()
                 ) {
-            s = s.substring(0,s.indexOf(" ")); // remove lighten-4 from row color picker - it is not needed to be seen by user
+//            s = s.substring(0,s.indexOf(" ")); // remove lighten-4 from row color picker - it is not needed to be seen by user
             rowColorOption = rowColorOption + "<option value=\"" + s + "\">\n";
         }
         replaceMap.put("RowColorList", rowColorOption);

@@ -1,5 +1,6 @@
 package View.Renderers;
 
+import Controller.Controller;
 import Model.InvoiceManagerDB_DAO;
 import View.FreeMarkerTemplate;
 import View.Renderer;
@@ -17,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static Controller.Controller.PORT;
-import static Model.Helpers.sqlQueryConstructor;
-import static Model.Helpers.sqlQueryConstructor2;
-import static Model.Helpers.sqlQueryConstructor3;
+import static Model.Helpers.*;
 
 /**
  * Created by Karol Kistela on 26-May-16.
@@ -52,9 +51,10 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
         }
 
         try {
-            System.out.println("********View.Renderers.SelectWhere ROUT: " + this.rout + this.pageNr + " ********");
+            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
             this.sqlQuery = sqlQueryConstructor2(request);
+            Controller.sqlQuery = this.sqlQuery;
             this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
             this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
             this.usersColors = db.usersColorMap();                              // get colors
@@ -78,7 +78,7 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
         this.rout = request.url().substring(request.url().indexOf(PORT.toString().replace(",",""))+4,request.url().lastIndexOf("/")+1);
         this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
         this.menuButtonActive = 3;
-        this.viewTitle = filters.get(filterNR)[1];
+        this.viewTitle = truncuate(filters.get(filterNR)[1],20);
         if (filters.get(filterNR)[3].equals("1")) {
             this.tabHeaderWithSort = false;
         } else {
@@ -86,9 +86,41 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
         }
 
         try {
-            System.out.println("********View.Renderers.SelectWhere ROUT: " + this.rout + this.pageNr + " ********");
+            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
-            this.sqlQuery = sqlQueryConstructor3(request, filterNR, filters);
+            this.sqlQuery = sqlQueryConstructor3(request, filterNR, filters).replace("NetID",ImCFG.getUserNetID());
+            Controller.sqlQuery = this.sqlQuery;
+            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
+            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+            this.usersColors = db.usersColorMap();                              // get colors
+            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
+                this.invDuplicatesMap = db.findDuplicatedInvNr();
+            } else {
+                this.invDuplicatesMap = new HashMap();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.resultSet = null;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            this.resultSet = null;
+        }
+    }
+
+    public QueryView(Request request, boolean advSearch) throws ClassNotFoundException {
+        super();
+        List<String[]> filters = ImCFG.getFilters();
+        this.rout = request.url().substring(request.url().indexOf(PORT.toString().replace(",",""))+4,request.url().lastIndexOf("/")+1);
+        this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
+        this.menuButtonActive = 3;
+        this.viewTitle = "Adv Search";
+        this.tabHeaderWithSort = true;
+
+        try {
+            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
+            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
+            this.sqlQuery = Controller.advanceSearchSQLquery + " ORDER BY " + request.params("columnName2") + " " + request.params("direction");
+            Controller.sqlQuery = this.sqlQuery;
             this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
             this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
             this.usersColors = db.usersColorMap();                              // get colors

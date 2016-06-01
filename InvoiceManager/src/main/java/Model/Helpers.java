@@ -22,7 +22,7 @@ public class Helpers {
 
     public static void main(String[] args) throws InterruptedException, SQLException, ClassNotFoundException, IOException {
         int i = 49544;
-        runShellCommand2(i);
+        runShellCommand("PATH");
     }
 
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
@@ -30,6 +30,24 @@ public class Helpers {
         System.out.println("========================== shellCmd: " + cmd);
         String[] processCommand = {"cmd", "/c", cmd};
         Process shellProcess = runTime.exec(processCommand);
+
+        BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(shellProcess.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(shellProcess.getErrorStream()));
+
+        // read the output from the command;
+        String s = null;
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
+        }
+
+        // read any errors from the attempted command
+        System.out.println("Standard error of the command (if any):\n");
+        while ((s = stdError.readLine()) != null) {
+            System.out.println(s);
+        }
     }
 
     public static void runShellCommand2(int i) throws IOException, InterruptedException, SQLException, ClassNotFoundException {
@@ -41,6 +59,24 @@ public class Helpers {
         System.out.println("========================== shellCmd: " + cmd);
         String[] processCommand = {"cmd", "/c", cmd};
         Process shellProcess = runTime.exec(processCommand);
+
+        BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(shellProcess.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(shellProcess.getErrorStream()));
+
+        // read the output from the command;
+        String s = null;
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
+        }
+
+        // read any errors from the attempted command
+        System.out.println("Standard error of the command (if any):\n");
+        while ((s = stdError.readLine()) != null) {
+            System.out.println(s);
+        }
     }
     public static int decimal(Double d) {
         return (int) ((d % Math.floor(d))*100);
@@ -123,8 +159,12 @@ public class Helpers {
         String value = null;
         try {
             value = URLDecoder.decode(request.params("value"),"UTF-8");
+            if (value.equals("null")) {
+                value = "";
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            value = "";
         }
 
         String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
@@ -144,6 +184,44 @@ public class Helpers {
 
         System.out.println("sqlQueryConstructor3: " + query);
         return query;
+    }
+
+    public static String advanceSearchSQLqueryConstructor(Request request) {
+        String qCol1 = request.queryParams("search_query_columns");
+        String qVal1;
+        if (request.queryParams("search_query_value").equals("null")) {
+            qVal1 = "''";
+        } else {
+            qVal1 = "'"+request.queryParams("search_query_value")+"'";
+        }
+        String qSig1 = " " + request.queryParams("search_query_sign") + " ";
+        String whereC1 = "WHERE " + qCol1 + qSig1 + qVal1 + " ";
+
+        String qCol2 = request.queryParams("search_query_columns2");
+        String qVal2;
+        if (request.queryParams("search_query_value2").equals("null")) {
+            qVal2 = "''";
+        } else {
+            qVal2 = "'"+request.queryParams("search_query_value2")+"'";
+        }
+        String qSig2 = " " + request.queryParams("search_query_sign2") + " ";
+        String and1 = "AND " + qCol2 + qSig2 + qVal2 + " ";
+        if (qCol2.equals("")) and1 = "";
+
+        String qCol3 = request.queryParams("search_query_columns3");
+        String qVal3;
+        if (request.queryParams("search_query_value3").equals("null")) {
+            qVal3 = "''";
+        } else {
+            qVal3 = "'"+request.queryParams("search_query_value2")+"'";
+        }
+        String qSig3 = " " + request.queryParams("search_query_sign3") + " ";
+        String and2 = "AND " + qCol3 + qSig3 + qVal3 + " ";
+        if (qCol3.equals("")) and2 = "";
+
+        String sqlQ = "SELECT * FROM Invoices " + whereC1 + and1 + and2;
+
+        return sqlQ;
     }
 
     public static String sqlQueryConstructorInvNr(Request request) throws ClassNotFoundException, SQLException, FileNotFoundException {
@@ -176,8 +254,8 @@ public class Helpers {
 
 
     public static String doubleFormat(double d) {
-        DecimalFormat myFormatter = new DecimalFormat("###,##0.00");
-        String s = myFormatter.format(d).replace(","," ");
+        DecimalFormat myFormatter = new DecimalFormat("##0.00");
+        String s = myFormatter.format(d);
         return s;
     }
 

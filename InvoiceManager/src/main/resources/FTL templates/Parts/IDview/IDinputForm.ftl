@@ -64,7 +64,7 @@ ${ProcessStatus-activeClass}
                         <label class="${BC_activeClass}" for="BC">BarCode</label>
                     </div>
 <!-- ============== 1.2 EntryDate ================================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <input value="${EntryDate}" id="EntryDate" name="EntryDate" type="date" class="datepicker">
                         <label class="${EntryDate_activeClass}" for="EntryDate">Entry Date</label>
                     </div>
@@ -74,7 +74,7 @@ ${ProcessStatus-activeClass}
                         <label class="${ContactGenpact_activeClass}" for="ContactGenpact">Contact Genpact</label>
                     </div>
 <!-- ============== 1.4 Supplier =================================================================================== -->
-                    <div class="input-field col s4">
+                    <div class="input-field col s3">
                         <input value="${Supplier}" id="Supplier" name="Supplier" type="text">
                         <label class="${Supplier_activeClass}" for="Supplier">Supplier</label>
                     </div>
@@ -117,22 +117,22 @@ ${ProcessStatus-activeClass}
 <!-- ========== 3rd Row - 4 columns ================================================================================ -->
                 <div class="row" style="margin-top: 15px">
 <!-- ============== 3.1 InvDate ==================================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <input value="${InvDate}" id="InvDate" name="InvDate" type="date" class="datepicker">
                         <label class="${InvDate_activeClass}" for="InvDate">Invoice Date</label>
                     </div>
 <!-- ============== 3.2 EmailSubject =============================================================================== -->
-                    <div class="input-field col s4">
+                    <div class="input-field col s3">
                         <input value="${EmailSubject}" id="EmailSubject" name="EmailSubject" type="text">
                         <label class="${EmailSubject_activeClass}" for="EmailSubject">Email Subject</label>
                     </div>
 <!-- ============== 3.3 AuthContact ================================================================================ -->
-                    <div class="input-field col s4">
+                    <div class="input-field col s3">
                         <input value="${AuthContact}" id="AuthContact" name="AuthContact" type="text">
                         <label class="${AuthContact_activeClass}" for="AuthContact">Authorization Contact</label>
                     </div>
 <!-- ============== 3.4 AuthDate =================================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <input value="${AuthDate}" id="AuthDate" name="AuthDate" type="date" class="datepicker">
                         <label class="${AuthDate_activeClass}" for="AuthDate">Authorization Date</label>
                     </div>
@@ -140,22 +140,22 @@ ${ProcessStatus-activeClass}
 <!-- ========== 4th Row - 4 columns ================================================================================ -->
                 <div class="row" style="margin-top: 15px">
 <!-- ============== 4.1 AuthReplyDate ============================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <input value="${AuthReplyDate}" id="AuthReplyDate" name="AuthReplyDate" type="date" class="datepicker">
                         <label class="${AuthReplyDate_activeClass}" for="AuthReplyDate">Authorization Reply Date</label>
                     </div>
 <!-- ============== 4.2 AuthEmail ================================================================================== -->
-                    <div class="input-field col s4">
+                    <div class="input-field col s3">
                         <input value="${AuthEmail}" id="AuthEmail" name="AuthEmail" type="text">
                         <label class="${AuthEmail_activeClass}" for="AuthEmail">Path to Authorization Email</label>
                     </div>
 <!-- ============== 4.3 EndDate ==================================================================================== -->
-                    <div class="input-field col s1">
+                    <div class="input-field col s3">
                         <input value="${EndDate}" id="EndDate" name="EndDate" type="date" class="datepicker">
                         <label class="${EndDate_activeClass}" for="EndDate">End Date</label>
                     </div>
 <!-- ============== 4.4 GR ========================================================================================= -->
-                    <div class="input-field col s5">
+                    <div class="input-field col s3">
                         <input value="${GR}" id="GR" name="GR" type="text">
                         <label class="${GR_activeClass}" for="GR">Good Recipt</label>
                     </div>
@@ -163,12 +163,12 @@ ${ProcessStatus-activeClass}
 <!-- ========== 5th Row - 3 columns ================================================================================ -->
                 <div class="row" style="margin-top: 15px">
 <!-- ============== 5.1 GenpactLastReply =========================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <input value="${GenpactLastReply}" id="GenpactLastReply" name="GenpactLastReply" type="date" class="datepicker">
                         <label class="${GenpactLastReply_activeClass}" for="GenpactLastReply">Genpact Last Reply</label>
                     </div>
 <!-- ============== 5.2 UserComments =============================================================================== -->
-                    <div class="input-field col s7">
+                    <div class="input-field col s6">
                         <input value="${UserComments}" id="UserComments" name="UserComments" type="text">
                         <label class="${UserComments_activeClass}" for="UserComments">User Comments</label>
                     </div>
@@ -184,7 +184,7 @@ ${ProcessStatus-activeClass}
 <!-- ========== 6th Row - 3 columns ================================================================================ -->
                 <div class="row" style="margin-top: 15px">
 <!-- ============== 6.1 User ======================================================================================= -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <#--<input value="${User}" id="User" name="User" type="text">-->
                         <#--<label class="${User_activeClass}" for="User">User</label>-->
                         <input value="${User}" list="User" name="User" >
@@ -194,7 +194,7 @@ ${ProcessStatus-activeClass}
                         </datalist>
                     </div>
 <!-- ============== 6.2 RowColor =================================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <#--<input value="${RowColor}" id="RowColor" name="RowColor" type="text">-->
                         <#--<label class="${RowColor_activeClass}" for="RowColor">Mark Invoice with color</label>-->
                         <input value="${RowColor}" list="RowColor" name="RowColor" >
@@ -204,7 +204,7 @@ ${ProcessStatus-activeClass}
                         </datalist>
                     </div>
 <!-- ============== 6.3 ProcessStatus ============================================================================== -->
-                    <div class="input-field col s2">
+                    <div class="input-field col s3">
                         <#--<input value="${ProcessStatus}" id="ProcessStatus" name="ProcessStatus" type="number">-->
                         <#--<label class="${ProcessStatus_activeClass}" for="ProcessStatus">Process Status</label>-->
                         <input value="${ProcessStatus}" list="ProcessStatus" name="ProcessStatus" >
@@ -214,7 +214,7 @@ ${ProcessStatus-activeClass}
                         </datalist>
                     </div>
 <!-- ============== ProcessStage =================================================================================== -->
-                    <div class="input-field col s6">
+                    <div class="input-field col s3">
                         <p class="range-field">
                             <input value="${ProcessStage}" id="ProcessStage" name="ProcessStage" type="range" min="0" max="100">
                         </p>

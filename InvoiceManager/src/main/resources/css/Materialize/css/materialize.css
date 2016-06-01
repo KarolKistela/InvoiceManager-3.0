@@ -8333,24 +8333,125 @@ header nav:nth-child(1) ul:nth-child(1) li a {
 #search_query {
     margin-bottom: 0px;
 }
-#searchHelp {
+#advSearch {
     background-color: #fff;
     color: #000;
     margin-top: 5%;
     padding: 0px;
 }
-#searchHelp .modal-content {
+#advSearch .modal-content {
     text-align: left;
     padding: 10px;
     background-color: #29b6f6;
 }
-#searchHelp .modal-fixed-footer {
+#advSearch .modal-fixed-footer {
     /*line-height: 0px;*/
     text-align: center;
     color: #000;
 }
 
-#searchHelp a {
+#advSearch a {
+    color: inherit;
+}
+
+#advSearchByColor {
+    background-color: #fff;
+    color: #000;
+    margin-top: 5%;
+    padding: 0px;
+}
+#advSearchByColor .modal-content {
+    text-align: left;
+    padding: 10px;
+    background-color: #29b6f6;
+}
+#advSearchByColor .modal-fixed-footer {
+    /*line-height: 0px;*/
+    text-align: center;
+    color: #000;
+}
+#advSearchByColor a {
+    color: inherit;
+}
+
+
+#advSearch7 {
+    background-color: #fff;
+    color: #000;
+    margin-top: 5%;
+    padding: 0px;
+}
+#advSearch7 .modal-content {
+    text-align: left;
+    padding: 10px;
+    background-color: #29b6f6;
+}
+#advSearch7 .modal-fixed-footer {
+    /*line-height: 0px;*/
+    text-align: center;
+    color: #000;
+}
+#advSearch7 a {
+    color: inherit;
+}
+
+#advSearch8 {
+    background-color: #fff;
+    color: #000;
+    margin-top: 5%;
+    padding: 0px;
+}
+#advSearch8 .modal-content {
+    text-align: left;
+    padding: 10px;
+    background-color: #29b6f6;
+}
+#advSearch8 .modal-fixed-footer {
+    /*line-height: 0px;*/
+    text-align: center;
+    color: #000;
+}
+#advSearch8 a {
+    color: inherit;
+}
+
+#advSearch9 {
+    background-color: #fff;
+    color: #000;
+    margin-top: 5%;
+    padding: 0px;
+}
+#advSearch9 .modal-content {
+    text-align: left;
+    padding: 10px;
+    background-color: #29b6f6;
+}
+#advSearch9 .modal-fixed-footer {
+    /*line-height: 0px;*/
+    text-align: center;
+    color: #000;
+}
+#advSearch9 a {
+    color: inherit;
+}
+
+#Save {
+    background-color: #fff;
+    color: #000;
+    margin-top: 5%;
+    padding: 0px;
+}
+#Save .modal-content {
+    text-align: left;
+    padding: 10px;
+    background-color: #29b6f6;
+}
+#Save .modal-fixed-footer {
+    /*line-height: 0px;*/
+    text-align: center;
+    color: #000;
+}
+#Save a {
     color: inherit;
 }
 

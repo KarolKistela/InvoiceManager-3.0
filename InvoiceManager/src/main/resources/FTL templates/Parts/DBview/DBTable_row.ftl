@@ -9,9 +9,11 @@
         ${supplier}
         ${invNrLink} - if inv nr repeats in DB then do link to this repetitions
         ${invoiceNR}
+        ${invDate}
         ${invNrLink_a}
         ${PO}
         ${netPrice}
+        ${currency}
         ${authorization}
         ${email}
         ${GR}
@@ -34,7 +36,7 @@
 -->
 ${rowComment}
     <article class="hoverable">
-        <table class="${rowColor}" style="border-left: 6px solid ${userColor}"> <#--;border-right: 4px solid ${userColor}">-->
+        <table class="${rowColor} lighten-3" style="border-left: 6px solid ${userColor}"> <#--;border-right: 4px solid ${userColor}">-->
             <tbody>
             <tr>
                 <td class="IM-ID"><a href="/ID/${ID}">${ID}</a></td>
@@ -52,8 +54,10 @@ ${rowComment}
                     </a>
                 </td>
                 <td class="IM-InvoiceNR">${invNrLink}${invoiceNR}${invNrLink_a}</td>
+                <td class="IM-InvDate">${invDate}</td>
                 <td class="IM-PO">${PO}</td>
-                <td class="IM-NetPrice">${netPrice}</td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">${netPrice}</td>
+                <td class="IM-Currency">${currency}</td>
                 <td class="IM-AuthContact" >
                     <a href="/ID/${ID}/authEmail" onClick="authEmail${ID}=window.open('/ID/${ID}/authEmail','authEmail${ID}','width=640,height=480');
                             setTimeout(function () { authEmail${ID}.close();}, 500);
@@ -65,7 +69,7 @@ ${rowComment}
                     <a href="/ID/${ID}/Folder" onClick="Folder${ID}=window.open('/ID/${ID}/Folder','Folder${ID}','width=640,height=480');
                             setTimeout(function () { Folder${ID}.close();}, 500);
                             return false;">
-                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                        <i class="fa fa-folder-open${authEmailExists}" aria-hidden="true"></i>
                     </a>
                 </td>
                 <td class="IM-GR">${GR}</td>
