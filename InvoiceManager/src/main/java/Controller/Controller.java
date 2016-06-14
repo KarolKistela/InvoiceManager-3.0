@@ -55,6 +55,7 @@ public class Controller {
         ImCFG = new InvoiceManagerCFG();
         htmlFactory = new HtmlFactory();
         suppliers = new Suppliers();
+        suppliers.toString();
 
         if (fileExists(ImCFG.getImDBPath())) {
             isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
@@ -211,11 +212,28 @@ public class Controller {
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 response.redirect("/View/" + request.params("columnName") + "/"
                         + request.params("sign") + "/" + request.params("value")
-                        + "/OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
-                //TODO: make new method in InvoicemanagerCFG class getOrderByClauseURL returns ID/DESC
+                        + "/OrderBy/" + ImCFG.getOrderByClauseURL());
             }
         });
         post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                this.searchRespons(request, response);
+            }
+        });
+// ================================= Main view for displaying queries with AND clause =======================================================
+        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr") {
+            @Override
+            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+                if (redirectToSettings()) {
+                    response.redirect("/Settings");
+                } else {
+                    Renderer queryView = htmlFactory.getQueryView(request, request.params("columnName3"), request.params("value3"));
+                    webPage.write(queryView.render());
+                }
+            }
+        });
+        post(new FreemarkerBasedRoute("\"/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr\"") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
@@ -261,8 +279,7 @@ public class Controller {
         get(new FreemarkerBasedRoute("/advSearchQuery/OrderBy") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                response.redirect("/advSearchQuery/OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
-                //TODO: make new method in InvoicemanagerCFG class getOrderByClauseURL returns ID/DESC
+                response.redirect("/advSearchQuery/OrderBy/" + ImCFG.getOrderByClauseURL());
             }
         });
         post(new FreemarkerBasedRoute("/advSearchQuery/OrderBy/:columnName2/:direction/:pageNr") {

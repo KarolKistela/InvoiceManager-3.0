@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class Suppliers {
     private List<String[]> supplierList = new LinkedList<>();
+    private String[] noDBconnection = new String[1];
 
     public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
         Suppliers suppliers = new Suppliers();
@@ -25,11 +26,12 @@ public class Suppliers {
             this.supplierList = new InvoiceManagerDB_DAO().sqlSELECT("SELECT Supplier FROM Invoices GROUP BY Supplier",1,false,false);
         } catch (Exception e) {
             e.printStackTrace();
-            String[] noDBconnection = new String[1];
-            noDBconnection[0] = "No DB connection";
+            this.noDBconnection[0] = "No DB connection";
             this.supplierList.add(noDBconnection);
         }
-        this.supplierList.get(0)[0] = "null";   // first empty record will be convertet to null value - it is needed when you want to search empty values in DB
+        if (this.supplierList.get(0)[0].equals("")) {
+            this.supplierList.get(0)[0] = "null";
+        }
     }
 
     public List<String[]> getSupplierList() {

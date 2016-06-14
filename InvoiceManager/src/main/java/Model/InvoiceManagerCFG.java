@@ -245,6 +245,10 @@ public class InvoiceManagerCFG {
         return true;
     }
 
+    public String getOrderByClauseURL(){
+        return this.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1";
+    }
+
     public String getUserNetID() {
         return userNetID;
     }

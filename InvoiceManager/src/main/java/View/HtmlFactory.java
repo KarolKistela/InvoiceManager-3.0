@@ -23,6 +23,10 @@ public class HtmlFactory {
         return new QueryView(request);
     }
 
+    public static Renderer getQueryView(Request request, String columnName3, String value3) throws ClassNotFoundException {
+        return new QueryView(request, columnName3, value3);
+    }
+
     public static Renderer getQueryView(Request request, Integer filterNR) throws ClassNotFoundException {
         return new QueryView(request, filterNR);
     }

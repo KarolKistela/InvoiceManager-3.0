@@ -1,5 +1,6 @@
 package View.Renderers;
 
+import Controller.Controller;
 import Model.Invoice;
 import Model.InvoiceManagerDB_DAO;
 import View.FreeMarkerTemplate;
@@ -57,6 +58,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
             System.out.println("********View.Renderers.IDView.IDView(Request request)********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
             this.invoice = db.sqlSELECTid(pageNr);                  // get Invoice
+            Controller.sqlQuery = "SELECT * FROM Invoices WHERE ID=" + pageNr;
             this.usersColors = db.usersColorMap();                  // get colors
             if (ImCFG.isCheckForInvDuplicates()) {                  // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();
@@ -82,6 +84,7 @@ public class IDView extends FreeMarkerTemplate implements Renderer {
             System.out.println("********View.Renderers.IDView ROUT: " + this.rout + this.pageNr + " ********");
             InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
             this.invoice = db.sqlSELECTid(pageNr);                  // get Invoice
+            Controller.sqlQuery = "SELECT * FROM Invoices WHERE ID=" + pageNr;
             this.usersColors = db.usersColorMap();                  // get colors
             if (ImCFG.isCheckForInvDuplicates()) {                  // if true check for duplicates in invoice nrs
                 this.invDuplicatesMap = db.findDuplicatedInvNr();

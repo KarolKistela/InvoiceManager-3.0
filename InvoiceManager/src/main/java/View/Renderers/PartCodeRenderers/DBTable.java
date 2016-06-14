@@ -120,6 +120,7 @@ public class DBTable extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("supplier", truncuate(record[4],18));
             replaceMap.put("supplierLink", URLEncoder.encode(record[4],"UTF-8"));
             replaceMap.put("invoiceNR", truncuate(record[5],18));
+            replaceMap.put("POlink","PO/" + URLDecoder.decode(record[7],"UTF-8") + "/1");
             replaceMap.put("PO", truncuate(record[7],18));
             try {
                 replaceMap.put("netPrice", (doubleFormat(Double.parseDouble(record[8]))));

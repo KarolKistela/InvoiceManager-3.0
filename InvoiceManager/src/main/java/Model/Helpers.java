@@ -174,6 +174,54 @@ public class Helpers {
         return ("SELECT * FROM Invoices " + whereClause + orderByClause);
     }
 
+    public static String sqlQueryConstructor2(Request request, String columnName3, String value3 ) {
+        String columnName = request.params("columnName");
+        String columnName2 = request.params("columnName2");
+        String direction = request.params("direction");
+        String sign;
+        switch (request.params("sign")){
+            case "eq":  sign = "=";     break;
+            case "neq": sign = "!=";    break;
+            case "gt":  sign = ">";     break;
+            case "gte": sign = ">=";    break;
+            case "lt":  sign = "<";     break;
+            case "lte": sign = "<=";    break;
+            case "LIKE": sign = " LIKE "; break;
+            case "NOT%20LIKE": sign = " NOT LIKE "; break;
+            default: sign = "="; break;
+        }
+        String value = null;
+        try {
+            value = URLDecoder.decode(request.params("value"),"UTF-8");
+            if (value.equals("null")) {
+                value = "";
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            value = "";
+        }
+
+        String colName3 = columnName3;
+        String val3 = null;
+        try {
+            val3 = URLDecoder.decode(request.params("value3"),"UTF-8");
+            if (value.equals("null")) {
+                value = "";
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            value = "";
+        }
+
+
+        String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
+        String whereClause2 = " AND " + colName3 + "=" + "'" + val3 + "'"+ " ";
+        String orderByClause = "ORDER BY " + columnName2 + " " + direction;
+
+        System.out.println("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + whereClause2 + orderByClause);
+        return ("SELECT * FROM Invoices " + whereClause + whereClause2 + orderByClause);
+    }
+
     public static String sqlQueryConstructor3(Request request, Integer filterNR, List<String[]> filters) {
         String query;
         if (filters.get(filterNR)[3].equals("1")) {
@@ -213,7 +261,7 @@ public class Helpers {
         if (request.queryParams("search_query_value3").equals("null")) {
             qVal3 = "''";
         } else {
-            qVal3 = "'"+request.queryParams("search_query_value2")+"'";
+            qVal3 = "'"+request.queryParams("search_query_value3")+"'";
         }
         String qSig3 = " " + request.queryParams("search_query_sign3") + " ";
         String and2 = "AND " + qCol3 + qSig3 + qVal3 + " ";

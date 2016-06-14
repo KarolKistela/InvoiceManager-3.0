@@ -1,6 +1,7 @@
 package View.Renderers;
 
 import Controller.Controller;
+import Model.DAOs.DAO_queryView;
 import Model.InvoiceManagerDB_DAO;
 import View.FreeMarkerTemplate;
 import View.Renderer;
@@ -49,26 +50,81 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
             this.menuButtonActive = 3;
             this.viewTitle = "Filter view";
         }
+        this.sqlQuery = sqlQueryConstructor2(request);
 
+//
+//        try {
+//            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
+//            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
+//            this.sqlQuery = sqlQueryConstructor2(request);
+//            Controller.sqlQuery = this.sqlQuery;
+//            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
+//            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+//            this.usersColors = db.usersColorMap();                              // get colors
+//            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
+//                this.invDuplicatesMap = db.findDuplicatedInvNr();
+//            } else {
+//                this.invDuplicatesMap = new HashMap();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        }
         try {
-            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
-            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
-            this.sqlQuery = sqlQueryConstructor2(request);
-            Controller.sqlQuery = this.sqlQuery;
-            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
-            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
-            this.usersColors = db.usersColorMap();                              // get colors
-            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
-                this.invDuplicatesMap = db.findDuplicatedInvNr();
-            } else {
-                this.invDuplicatesMap = new HashMap();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            this.resultSet = null;
+            DAO_queryView viewData = new DAO_queryView(request,this.sqlQuery);
+            this.records = viewData.getRecords();
+            this.resultSet = viewData.getResultSet();
+            this.usersColors = viewData.getUsersColors();
+            this.invDuplicatesMap = viewData.getInvDuplicatesMap();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            this.resultSet = null;
+        }
+    }
+
+    public QueryView(Request request, String columnName3, String value3) throws ClassNotFoundException {
+        super();
+        this.rout = request.url().substring(request.url().indexOf(PORT.toString().replace(",",""))+4,request.url().lastIndexOf("/")+1);
+        this.pageNr = Integer.parseInt(request.params("pageNr").replace(",",""));
+        if (request.params("columnName").equals("ID") & request.params("sign").equals("gte") & request.params("value").equals("0")) {
+            this.menuButtonActive = 1;
+            this.viewTitle = "Main view";
+        } else {
+            this.menuButtonActive = 3;
+            this.viewTitle = "Filter view";
+        }
+        this.sqlQuery = sqlQueryConstructor2(request,columnName3,value3);
+
+//        try {
+//            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
+//            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
+//            this.sqlQuery = sqlQueryConstructor2(request,columnName3,value3);
+//            Controller.sqlQuery = this.sqlQuery;
+//            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
+//            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+//            this.usersColors = db.usersColorMap();                              // get colors
+//            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
+//                this.invDuplicatesMap = db.findDuplicatedInvNr();
+//            } else {
+//                this.invDuplicatesMap = new HashMap();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        }
+        try {
+            DAO_queryView viewData = new DAO_queryView(request,this.sqlQuery);
+            this.records = viewData.getRecords();
+            this.resultSet = viewData.getResultSet();
+            this.usersColors = viewData.getUsersColors();
+            this.invDuplicatesMap = viewData.getInvDuplicatesMap();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -84,26 +140,36 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
         } else {
             this.tabHeaderWithSort = true;
         }
+        this.sqlQuery = sqlQueryConstructor3(request, filterNR, filters).replace("NetID",ImCFG.getUserNetID());
 
+//        try {
+//            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
+//            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
+//            this.sqlQuery = sqlQueryConstructor3(request, filterNR, filters).replace("NetID",ImCFG.getUserNetID());
+//            Controller.sqlQuery = this.sqlQuery;
+//            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
+//            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+//            this.usersColors = db.usersColorMap();                              // get colors
+//            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
+//                this.invDuplicatesMap = db.findDuplicatedInvNr();
+//            } else {
+//                this.invDuplicatesMap = new HashMap();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        }
         try {
-            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
-            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
-            this.sqlQuery = sqlQueryConstructor3(request, filterNR, filters).replace("NetID",ImCFG.getUserNetID());
-            Controller.sqlQuery = this.sqlQuery;
-            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
-            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
-            this.usersColors = db.usersColorMap();                              // get colors
-            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
-                this.invDuplicatesMap = db.findDuplicatedInvNr();
-            } else {
-                this.invDuplicatesMap = new HashMap();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            this.resultSet = null;
+            DAO_queryView viewData = new DAO_queryView(request,this.sqlQuery);
+            this.records = viewData.getRecords();
+            this.resultSet = viewData.getResultSet();
+            this.usersColors = viewData.getUsersColors();
+            this.invDuplicatesMap = viewData.getInvDuplicatesMap();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            this.resultSet = null;
         }
     }
 
@@ -115,26 +181,36 @@ public class QueryView extends FreeMarkerTemplate implements Renderer {
         this.menuButtonActive = 3;
         this.viewTitle = "Adv Search";
         this.tabHeaderWithSort = true;
+        this.sqlQuery = Controller.advanceSearchSQLquery + " ORDER BY " + request.params("columnName2") + " " + request.params("direction");
 
+//        try {
+//            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
+//            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
+//            this.sqlQuery = Controller.advanceSearchSQLquery + " ORDER BY " + request.params("columnName2") + " " + request.params("direction");
+//            Controller.sqlQuery = this.sqlQuery;
+//            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
+//            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
+//            this.usersColors = db.usersColorMap();                              // get colors
+//            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
+//                this.invDuplicatesMap = db.findDuplicatedInvNr();
+//            } else {
+//                this.invDuplicatesMap = new HashMap();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            this.resultSet = null;
+//        }
         try {
-            System.out.println("********View.Renderers.QueryView ROUT: " + this.rout + this.pageNr + " ********");
-            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO(ImCFG.getImDBPath());
-            this.sqlQuery = Controller.advanceSearchSQLquery + " ORDER BY " + request.params("columnName2") + " " + request.params("direction");
-            Controller.sqlQuery = this.sqlQuery;
-            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));
-            this.resultSet = db.sqlSELECT2(sqlQuery, pageNr, false, true, this.records);       // get resultSet of query
-            this.usersColors = db.usersColorMap();                              // get colors
-            if (ImCFG.isCheckForInvDuplicates()) {                              // if true check for duplicates in invoice nrs
-                this.invDuplicatesMap = db.findDuplicatedInvNr();
-            } else {
-                this.invDuplicatesMap = new HashMap();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            this.resultSet = null;
+            DAO_queryView viewData = new DAO_queryView(request,this.sqlQuery);
+            this.records = viewData.getRecords();
+            this.resultSet = viewData.getResultSet();
+            this.usersColors = viewData.getUsersColors();
+            this.invDuplicatesMap = viewData.getInvDuplicatesMap();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            this.resultSet = null;
         }
     }
     @Override

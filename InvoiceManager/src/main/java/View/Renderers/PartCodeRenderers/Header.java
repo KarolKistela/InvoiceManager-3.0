@@ -120,23 +120,23 @@ public class Header extends FreeMarkerTemplate implements Renderer {
                 replaceMap.put("commentOffSearch", "-->");
                 break;
             }
-            case 0: {
-                replaceMap.put("commentOnMenu1","");
-                replaceMap.put("commentOnMenu2","");
-                replaceMap.put("commentOnMenu3","");
-                replaceMap.put("commentOnMenu4","");
-                replaceMap.put("commentOnMenu5","<!--");
-                replaceMap.put("commentOffMenu1","");
-                replaceMap.put("commentOffMenu2","");
-                replaceMap.put("commentOffMenu3","");
-                replaceMap.put("commentOffMenu4","");
-                replaceMap.put("commentOffMenu5","-->");
-                replaceMap.put("commentOnAdvSearch", "");
-                replaceMap.put("commentOffAdvSearch", "");
-                replaceMap.put("commentOnSearch", "");
-                replaceMap.put("commentOffSearch", "");
-                break;
-            }
+//            case 0: {
+//                replaceMap.put("commentOnMenu1","");
+//                replaceMap.put("commentOnMenu2","");
+//                replaceMap.put("commentOnMenu3","");
+//                replaceMap.put("commentOnMenu4","");
+//                replaceMap.put("commentOnMenu5","<!--");
+//                replaceMap.put("commentOffMenu1","");
+//                replaceMap.put("commentOffMenu2","");
+//                replaceMap.put("commentOffMenu3","");
+//                replaceMap.put("commentOffMenu4","");
+//                replaceMap.put("commentOffMenu5","-->");
+//                replaceMap.put("commentOnAdvSearch", "");
+//                replaceMap.put("commentOffAdvSearch", "");
+//                replaceMap.put("commentOnSearch", "");
+//                replaceMap.put("commentOffSearch", "");
+//                break;
+//            }
             default: {
                 replaceMap.put("commentOnMenu1","");
                 replaceMap.put("commentOnMenu2","");

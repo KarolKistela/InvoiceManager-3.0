@@ -11,6 +11,7 @@
         ${invoiceNR}
         ${invDate}
         ${invNrLink_a}
+        &{POlink}
         ${PO}
         ${netPrice}
         ${currency}
@@ -55,7 +56,7 @@ ${rowComment}
                 </td>
                 <td class="IM-InvoiceNR">${invNrLink}${invoiceNR}${invNrLink_a}</td>
                 <td class="IM-InvDate">${invDate}</td>
-                <td class="IM-PO">${PO}</td>
+                <td class="IM-PO"><a href="${POlink}">${PO}</td>
                 <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">${netPrice}</td>
                 <td class="IM-Currency">${currency}</td>
                 <td class="IM-AuthContact" >

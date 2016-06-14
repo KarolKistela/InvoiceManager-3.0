@@ -54,12 +54,12 @@ ${filterList}       <li><a onclick="openModal('advSearchByColor'); w3_close()">6
             ${commentOnMenu4}<li><a href="/Reports"><i class="fa fa-bar-chart${menu4}"></i></a></li>${commentOffMenu4}
             ${commentOnMenu5}<li><a onclick="openModal('Save');"><i class="fa fa-floppy-o${menu5}"></i></a></li>${commentOffMenu5}
         </ul>
-        <div id="Save" class="modal" style="border-top: 1px solid #bbb">
-            <div class="modal-content white" style="height: auto">
+        <div id="Save" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content" style="height: auto; color: white;">
                 <h5 style="text-align: center">Do you want to export ${records} records to CSV file?</h5>
                 <div class="row center">
-                    <a href="/Save" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px">Export</a>
-                    <a onclick="closeModal('Save');" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px">Cancel</a>
+                    <a href="/Save" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px; color: black;">Export</a>
+                    <a onclick="closeModal('Save');" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px; color: black;">Cancel</a>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@ ${filterList}       <li><a onclick="openModal('advSearchByColor'); w3_close()">6
             ${commentOnAdvSearch}<li><a onclick="openModal('advSearch');"><i class="fa fa-search-plus"></i></a></li>${commentOffAdvSearch}
         </ul>
 <!-- ============================ Modal Structure for advSearch ==================================================== -->
-        <div id="advSearch" class="modal" style="border-top: 1px solid #bbb">
+        <div id="advSearch" class="modal" style="border: 1px solid #bbb">
             <div class="modal-content white" style="height: auto">
                 <h5 style="text-align: center">Advance Search</h5>
                 <form method="post">
@@ -193,7 +193,7 @@ ${supplierList}
             </div>
         </div>
 <!-- ============================ Modal Structure for advSearchByColor ============================================= -->
-        <div id="advSearchByColor" class="modal" style="border-top: 1px solid #bbb">
+        <div id="advSearchByColor" class="modal" style="border: 1px solid #bbb">
             <div class="modal-content white" style="height: auto">
                 <h5 style="text-align: center">Advance Search By color</h5>
                 <form method="post">
@@ -248,7 +248,7 @@ ${supplierList}
             </div>
         </div>
 <!-- ============================ Modal Structure for advSearchBySupplierPO ======================================== -->
-        <div id="advSearch7" class="modal" style="border-top: 1px solid #bbb">
+        <div id="advSearch7" class="modal" style="border: 1px solid #bbb">
             <div class="modal-content white" style="height: auto">
                 <h5 style="text-align: center">Advance Search Supplier & PO</h5>
                 <form method="post">
@@ -303,7 +303,7 @@ ${supplierList}
             </div>
         </div>
 <!-- ============================ Modal Structure for advSearchBySupplierPOAuthEmail =============================== -->
-        <div id="advSearch8" class="modal" style="border-top: 1px solid #bbb">
+        <div id="advSearch8" class="modal" style="border: 1px solid #bbb">
             <div class="modal-content white" style="height: auto">
                 <h5 style="text-align: center">Advance Search Supplier + PO + AuthEmail not Blank</h5>
                 <form method="post">
@@ -358,7 +358,7 @@ ${supplierList}
             </div>
         </div>
 <!-- ================================ Modal Structure for Advance Search Supplier + Status not blank =============== -->
-        <div id="advSearch9" class="modal" style="border-top: 1px solid #bbb">
+        <div id="advSearch9" class="modal" style="border: 1px solid #bbb">
             <div class="modal-content white" style="height: auto">
                 <h5 style="text-align: center">Advance Search Supplier + Status not blank</h5>
                 <form method="post">

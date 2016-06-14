@@ -36,40 +36,40 @@ public class CSVFile {
     private void generateCSV() throws IOException {
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(csvFilePath.toString()), "Cp1252"));
 
-//        writer.append("ID,");
-//        writer.append("BC,");
-//        writer.append("EntryDate,");
-//        writer.append("ContactGenpact,");
-//        writer.append("Supplier,");
-//        writer.append("InvoiceNR,");
-//        writer.append("InvScanPath,");
-//        writer.append("PO,");
-//        writer.append("NetPrice,");
-//        writer.append("Currency,");
-//        writer.append("InvDate,");
-//        writer.append("EmailSubject,");
-//        writer.append("AuthContact,");
-//        writer.append("AuthDate,");
-//        writer.append("AuthReplyDate,");
-//        writer.append("AuthEmail,");
-//        writer.append("EndDate,");
-//        writer.append("GR,");
-//        writer.append("GenpactLastReply,");
-//        writer.append("UserComments,");
-//        writer.append("Status,");
-//        writer.append("User,");
-//        writer.append("RowColor,");
-//        writer.append("ProcessStatus,");
-//        writer.append("ProcessStage,");
-//        writer.append("\n");
-
+        writer.append("sep=" + "" + '\t');
+        writer.append('\n');
+        writer.append("ID" + '\t');
+        writer.append("BC" + '\t');
+        writer.append("EntryDate" + '\t');
+        writer.append("ContactGenpact" + '\t');
+        writer.append("Supplier" + '\t');
+        writer.append("InvoiceNR" + '\t');
+        writer.append("InvScanPath" + '\t');
+        writer.append("PO" + '\t');
+        writer.append("NetPrice" + '\t');
+        writer.append("Currency" + '\t');
+        writer.append("InvDate" + '\t');
+        writer.append("EmailSubject" + '\t');
+        writer.append("AuthContact" + '\t');
+        writer.append("AuthDate" + '\t');
+        writer.append("AuthReplyDate" + '\t');
+        writer.append("AuthEmail" + '\t');
+        writer.append("EndDate" + '\t');
+        writer.append("GR" + '\t');
+        writer.append("GenpactLastReply" + '\t');
+        writer.append("UserComments" + '\t');
+        writer.append("Status" + '\t');
+        writer.append("User" + '\t');
+        writer.append("RowColor" + '\t');
+        writer.append("ProcessStatus" + '\t');
+        writer.append("ProcessStage" + '\n');
 
         for (String[] r: this.rs) {
             int i;
             for (i = 0; i<r.length; i++) {
                 if (i!=r.length-1) {
                     writer.append(r[i].replace(",",""));
-                    writer.append(',');
+                    writer.append('\t');
                 } else {
                     writer.append(r[i].replace(",",""));
                     writer.append('\n');
