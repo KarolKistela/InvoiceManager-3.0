@@ -1,4 +1,6 @@
-import Model.InvoiceManagerCFG;
+import Model.DAO.InvoiceManagerCFG;
+
+import static Controller.Controller.CFG_PATH;
 
 /**
  * Created by mzjdx6 on 07-Apr-16.
@@ -7,7 +9,7 @@ public class InvoiceManagerCFG_test {
     public static void main(String[] args) {
         InvoiceManagerCFG ImCFG = null;
         try {
-            ImCFG = new InvoiceManagerCFG();
+            ImCFG = new InvoiceManagerCFG(CFG_PATH);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

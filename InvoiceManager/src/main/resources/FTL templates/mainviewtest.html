@@ -1,0 +1,3023 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoices Manager Beta</title>
+    <link type="text/css" rel="stylesheet" href="../css/Materialize/css/materialize.css" media="screen,projection"/>
+    <link rel="stylesheet" href="../css/Materialize/font-awesome-4.5.0/css/font-awesome.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="../css/jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="../css/Materialize/js/materialize.js"></script>
+
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            font-size: 15px;
+            background-color: #eee; /* Background color of body */
+        }
+        header, header nav ul li a {
+            background-color: #fff; /*background color of header */
+            color: #aaa;
+        }
+        header nav:nth-child(1) ul:nth-child(1) li a {
+            background-color: #777;
+            color: #fff;
+        }
+        aside, header form input {
+            color: #000;
+        }
+        .IM-ID {
+            width: 4%; padding-left: 3px;
+        }
+        .IM-BC {
+            width: 7%
+        }
+        .IM-EntryDate {
+            width: 7%
+        }
+        .IM-Supplier {
+            width: 12%
+        }
+        .IM-InvoiceNR {
+            width: 14%
+        }
+        .IM-InvDate {
+            width: 7%
+        }
+        .IM-PO {
+            width: 12%
+        }
+        .IM-NetPrice {
+            width: 6%
+        }
+        .IM-Currency {
+            width: 4%
+        }
+        .IM-AuthContact {
+            width: 11%
+        }
+        .IM-AuthEmail {
+            width: 2%
+        }
+        .IM-GR {
+            width: 13%
+        }
+        .IM-details{
+            width: 2%;
+            text-align: center
+        }
+    </style>
+</head>
+<body>
+<!-- ============================ TopBar       ===================================================================== -->
+<header class="row">
+    <nav class="col s3">
+        <!-- ============================ SideNav ========================================================================== -->
+        <ul class="IM-sidenav">
+            <li><a href="javascript:void(0)" onclick="w3_close()">Close &times;</a></li>
+            <li><a href="/IFV/User/eq/MZS4NY/GR/eq/null/ID/DESC/1">NetID + GR blank</a></li>
+            <li><a href="/IFV/User/eq/MZS4NY/Status/neq/null/ID/DESC/1">NetID + Status NOT blank</a></li>
+            <li><a href="/IFV/User/eq/MZS4NY/AuthEmail/eq/null/GR/eq/null/ID/DESC/1">NetID + AuthEmail blank + GR blank</a></li>
+            <li><a href="/IFV/User/eq/MZS4NY/GR/eq/null/AuthContact/eq/null/ID/DESC/1">NetID + AuthEmail blank + GR blank + AuthContact blank</a></li>
+            <li><a href="/IFV/User/eq/MZS4NY/PO/neq/null/AuthEmail/eq/null/ID/DESC/1">NetID + PO nr only + AuthEmail blank</a></li>
+            <li><a onclick="openModal('advSearchByColor'); w3_close()">By color</a></li>
+            <li><a onclick="openModal('advSearch7'); w3_close()">Supplier + PO</a></li>
+            <li><a onclick="openModal('advSearch8'); w3_close()">Supplier + PO + AuthContact</a></li>
+            <li><a onclick="openModal('advSearch9'); w3_close()">Supplier + Status not blank</a></li>
+        </ul>
+        <!-- ============================ MainManu ========================================================================= -->
+        <ul>
+            <li><a href="/IFV/ID/gte/0/ID/DESC/1"><i class="fa fa-home IM-menu-active"></i></a></li>
+            <li><a href="/Settings"><i class="fa fa-cog"></i></a></li>
+            <li onclick="w3_open()"><a href="#"><i class="fa fa-filter"></i></a></li>
+            <li><a href="/Reports"><i class="fa fa-bar-chart"></i></a></li>
+            <li><a onclick="openModal('Save');"><i class="fa fa-floppy-o"></i></a></li>
+        </ul>
+        <div id="Save" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content" style="height: auto; color: white;">
+                <h5 style="text-align: center">Do you want to export 23,101 records to CSV file?</h5>
+                <div class="row center">
+                    <a href="/Save" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px; color: black;">Export</a>
+                    <a onclick="closeModal('Save');" class="waves-effect waves-light btn" style="width: 100px; margin: 20px 20px; color: black;">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- ============================ View Title ======================================================================= -->
+    <div class="col s2 center">
+        <a href="#"><strong class="waves-effect">Main view 23101 records</strong></a>
+    </div>
+    <!-- ============================ Pagination ======================================================================= -->
+    <nav class="col s2">
+        <ul id="topPagination">
+            <li class="waves-effect"><!--<a href="/IFV/ID/gte/0/ID/DESC/0">--><i class="fa fa-angle-double-left"></i><!--</a>--></li>
+            <li class="waves-effect"><a>1/4621</a></li>
+            <li class="waves-effect"><a href="/IFV/ID/gte/0/ID/DESC/2"><i class="fa fa-angle-double-right"></i></a></li>
+        </ul>
+    </nav>
+    <!-- ============================ Advanced Search ================================================================== -->
+    <nav class="col s3">
+        <!-- Modal Trigger   -->
+        <ul style="float: right">
+            <li><a onclick="openModal('advSearch');"><i class="fa fa-search-plus"></i></a></li>
+        </ul>
+        <!-- ============================ Modal Structure for advSearch ==================================================== -->
+        <div id="advSearch" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
+                <h5 style="text-align: center">Advance Search</h5>
+                <form method="post">
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column" id="search_query_columns" list="columns" name="search_query_columns" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="search value" id="search_query_value" name="search_query_value" type="text">
+                        </div>
+                        <div class="col s3">
+                            <input type="submit" class="btn" style="padding: 0 30px">
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column2" id="search_query_columns2" list="columns" name="search_query_columns2" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign2" list="signs" name="search_query_sign2" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="search value2" id="search_query_value2" name="search_query_value2" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column3" id="search_query_columns3" list="columns" name="search_query_columns3" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign3" list="signs" name="search_query_sign3" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="search value3" id="search_query_value3" name="search_query_value3" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <datalist id="columns">
+                        <option value="BC">
+                        <option value="EntryDate">
+                        <option value="ContactGenpact">
+                        <option value="Supplier">
+                        <option value="InvoiceNR">
+                        <option value="InvScanPath">
+                        <option value="PO">
+                        <option value="NetPrice">
+                        <option value="Currency">
+                        <option value="InvDate">
+                        <option value="EmailSubject">
+                        <option value="AuthContact">
+                        <option value="AuthDate">
+                        <option value="AuthReplyDate">
+                        <option value="AuthEmail">
+                        <option value="EndDate">
+                        <option value="GR">
+                        <option value="GenpactLastReply">
+                        <option value="UserComments">
+                        <option value="Status">
+                        <option value="User">
+                        <option value="RowColor">
+                        <option value="ProcessStatus">
+                        <option value="FinanceComments">
+                    </datalist>
+                    <datalist id="signs">
+                        <option value="=">
+                        <option value="!=">
+                        <option value=">">
+                        <option value=">=">
+                        <option value="<">
+                        <option value="<=">
+                        <option value="LIKE">
+                        <option value="NOT LIKE">
+                    </datalist>
+                    <datalist id="colors">
+                        <option style="color: cyan" value="cyan">
+                        <option style="color: pink" value="pink">
+                        <option style="color: purple" value="purple">
+                        <option style="color: indigo" value="indigo">
+                        <option style="color: teal" value="teal">
+                        <option style="color: red" value="red">
+                        <option style="color: green" value="green">
+                        <option style="color: lime" value="lime">
+                        <option style="color: #ffc107" value="amber">
+                        <option style="color: orange" value="orange">
+                        <option style="color: #ff5722" value="deep-orange">
+                        <option style="color: #607d8b" value="blue-grey">
+                        <option style="color: grey" value="grey">
+                        <option style="color: yellow" value="yellow">
+                    </datalist>
+                    <datalist id="suppliers">
+                        <option value="null">
+                        <option value="0">
+                        <option value="100%Kratka">
+                        <option value="3D Lab">
+                        <option value="3D Print">
+                        <option value="3D System">
+                        <option value="3D Systems">
+                        <option value="3D Team">
+                        <option value="3DKreator">
+                        <option value="3DTeam">
+                        <option value="3Line.pl">
+                        <option value="3line">
+                        <option value="3line.pl">
+                        <option value="4A Engineering">
+                        <option value="4activeSystems">
+                        <option value="A&D Serwis">
+                        <option value="ABB">
+                        <option value="ADP">
+                        <option value="AGED">
+                        <option value="AGH">
+                        <option value="AGZBI Zbigniew Łukasiewicz">
+                        <option value="AHU Pawlik">
+                        <option value="AHU Pawlik Bogumiła">
+                        <option value="AICOM">
+                        <option value="AIR-COM">
+                        <option value="AJ Produkty">
+                        <option value="AJM">
+                        <option value="AJM Electronics">
+                        <option value="ALD">
+                        <option value="ALPS">
+                        <option value="AM Technlogies">
+                        <option value="AM Technologies">
+                        <option value="AM Technologies Polska">
+                        <option value="AMS">
+                        <option value="AP Automatyka">
+                        <option value="APEX24">
+                        <option value="API">
+                        <option value="ARM">
+                        <option value="ARRK">
+                        <option value="ARRK/LCO">
+                        <option value="ARaymond">
+                        <option value="AT&S Austria">
+                        <option value="AW-Tronics">
+                        <option value="AXON">
+                        <option value="Abatek">
+                        <option value="Abetek">
+                        <option value="Abis">
+                        <option value="Abiza">
+                        <option value="Abora">
+                        <option value="Abra">
+                        <option value="Abslnt">
+                        <option value="Absolvent.pl">
+                        <option value="Abus">
+                        <option value="Academica">
+                        <option value="Acal">
+                        <option value="Accent">
+                        <option value="ActiveState">
+                        <option value="Acumen Learing">
+                        <option value="Adecco">
+                        <option value="Advanced">
+                        <option value="Aeroklub Krakowski">
+                        <option value="Afor">
+                        <option value="Agasystem">
+                        <option value="Agencja Rezerw Materiałowych">
+                        <option value="Agencja Rezerw Materiłaowych Składnica">
+                        <option value="Agilent">
+                        <option value="Agilent Technologies">
+                        <option value="Agility">
+                        <option value="Agora">
+                        <option value="Agora SA">
+                        <option value="Agosense">
+                        <option value="Agrati">
+                        <option value="Agrobakal A.Curyło">
+                        <option value="Ahu Pawlik Bogumiła">
+                        <option value="Aicom">
+                        <option value="Aicom 2">
+                        <option value="Aiesec">
+                        <option value="Aiesec Polska">
+                        <option value="AimTec">
+                        <option value="Aimtec">
+                        <option value="Air Comp">
+                        <option value="Air Liquide">
+                        <option value="Air Liquide Polska">
+                        <option value="Air Products">
+                        <option value="Akademia Górniczo-Hutnicza">
+                        <option value="Akccept">
+                        <option value="Akccept P. Jusiński, M. Pyzel">
+                        <option value="Alarm">
+                        <option value="Alaska">
+                        <option value="Alaska - korekta na plus do 1022">
+                        <option value="Alcargo">
+                        <option value="Alchem">
+                        <option value="Alfa-Elektro">
+                        <option value="Alfabro">
+                        <option value="Alfarabo">
+                        <option value="Alfine-Tim">
+                        <option value="Alfrabo">
+                        <option value="Alice">
+                        <option value="Alice SysTec">
+                        <option value="Alika">
+                        <option value="Alina Kliś MakGajwer">
+                        <option value="Alitech">
+                        <option value="Alitech Automatyka">
+                        <option value="Allice">
+                        <option value="Allice SysTec">
+                        <option value="Almar Sport">
+                        <option value="Alpine">
+                        <option value="Alpine Electronicss">
+                        <option value="Altkom">
+                        <option value="Aludec">
+                        <option value="American Expesss (Packard)">
+                        <option value="American Express">
+                        <option value="American Express (E&S)">
+                        <option value="American Express (PACKARD)">
+                        <option value="American Express (Packard)">
+                        <option value="American Express (Powertrain)">
+                        <option value="American Express E&S">
+                        <option value="American Express pAC">
+                        <option value="American Express(E&S)">
+                        <option value="American Exress">
+                        <option value="Americna Express">
+                        <option value="Ametek">
+                        <option value="Amicus-AMO">
+                        <option value="Amir">
+                        <option value="Amir-Feder">
+                        <option value="Amphenol">
+                        <option value="Ams">
+                        <option value="Amtek">
+                        <option value="Analytik">
+                        <option value="Andra">
+                        <option value="Andrea Boggero">
+                        <option value="Andrzejewski">
+                        <option value="Anglosas">
+                        <option value="Angos">
+                        <option value="Antoni Łyko">
+                        <option value="Ap Automatyka">
+                        <option value="Apator">
+                        <option value="Apex24">
+                        <option value="Applus Idiada">
+                        <option value="Apvacuum">
+                        <option value="Arburg">
+                        <option value="Archakustik">
+                        <option value="Ardomet">
+                        <option value="Arien">
+                        <option value="Arno Fuchs">
+                        <option value="Arrk">
+                        <option value="Arrow Power&Signal">
+                        <option value="Artronic">
+                        <option value="Arvato">
+                        <option value="Arvato Dostribution">
+                        <option value="Arvena">
+                        <option value="Asahi Diamond Industrial Europe">
+                        <option value="Aspekt">
+                        <option value="Assel">
+                        <option value="Asset">
+                        <option value="Astat">
+                        <option value="Astrum">
+                        <option value="Atel">
+                        <option value="Atel Electronics">
+                        <option value="Ateq">
+                        <option value="Atlas">
+                        <option value="Atut PL">
+                        <option value="Auto Części">
+                        <option value="Auto Lampy">
+                        <option value="Auto Land">
+                        <option value="Auto Land Polska Spółka Akcyjna">
+                        <option value="Auto Partner">
+                        <option value="Auto Special">
+                        <option value="Auto Specjal">
+                        <option value="Auto części">
+                        <option value="Auto-Bast">
+                        <option value="Auto-Części">
+                        <option value="Auto-Kabel">
+                        <option value="Auto-Moto-Valdi">
+                        <option value="Auto-Myjnia">
+                        <option value="Auto-Szkoła">
+                        <option value="Autobast">
+                        <option value="Automation Engineering">
+                        <option value="Automations Technik">
+                        <option value="Automationstechnik">
+                        <option value="Automotive Logistics Polska">
+                        <option value="Avallo">
+                        <option value="Avaya">
+                        <option value="Avaya Poland">
+                        <option value="Averna">
+                        <option value="Avestus">
+                        <option value="Avis">
+                        <option value="Avis Budget">
+                        <option value="Avis Jupol">
+                        <option value="Avis budget">
+                        <option value="Avnet">
+                        <option value="Azymut">
+                        <option value="BCS">
+                        <option value="BCS Polska">
+                        <option value="BDI">
+                        <option value="BDO">
+                        <option value="BFFT">
+                        <option value="BFFT Gesellschaft">
+                        <option value="BHMD">
+                        <option value="BHP Center Szkolenia">
+                        <option value="BNS">
+                        <option value="BP">
+                        <option value="BP Europa">
+                        <option value="BP Europe">
+                        <option value="BPP">
+                        <option value="BPP Professional">
+                        <option value="BPP Professional Education">
+                        <option value="BT Conferencing">
+                        <option value="BTC">
+                        <option value="BTW Biuro Techniczne">
+                        <option value="BTW Biuro Techniczne Walusiak">
+                        <option value="BTW Walusiak">
+                        <option value="BWI">
+                        <option value="Ball Systems">
+                        <option value="Ball systems">
+                        <option value="Bals-Polska">
+                        <option value="Balta">
+                        <option value="Bamet">
+                        <option value="Basak">
+                        <option value="Basf">
+                        <option value="Baumann">
+                        <option value="Bayer">
+                        <option value="Beataronic">
+                        <option value="Bechem">
+                        <option value="Beck">
+                        <option value="Beckhoff">
+                        <option value="Beierhaascht">
+                        <option value="Belet">
+                        <option value="Ben">
+                        <option value="Benefit">
+                        <option value="Benefit System">
+                        <option value="Benseler">
+                        <option value="Berendsen">
+                        <option value="Berensden">
+                        <option value="Bertrand">
+                        <option value="Bertrandt">
+                        <option value="Beuth Verlag">
+                        <option value="Beyonics">
+                        <option value="Bełtowski Spółka">
+                        <option value="Biall">
+                        <option value="Bibus Menos">
+                        <option value="Biesse">
+                        <option value="Biesse Restauracja">
+                        <option value="BilFinger">
+                        <option value="Bilfinger">
+                        <option value="Bim Point">
+                        <option value="Bisnode">
+                        <option value="Bison">
+                        <option value="Biuro Handlowe">
+                        <option value="Biuro Handlowe JANINA">
+                        <option value="Biuro Handlowe Janina">
+                        <option value="Biuro Handlowe Karcz">
+                        <option value="Biuro Serwis">
+                        <option value="Biuro Techniczno-Handlowe">
+                        <option value="Biuro Turystyki">
+                        <option value="Biuro Tłumaczeń">
+                        <option value="Biuro Tłumaczeń Languaga Partner">
+                        <option value="Biuro Tłumaczeń Language">
+                        <option value="Biuro Tłumaczeń Language Partner">
+                        <option value="Biuro Tłumaczeń Linguage">
+                        <option value="Biuro handlowe">
+                        <option value="Biuro serwis">
+                        <option value="Bo-La">
+                        <option value="Boch rexroth">
+                        <option value="Bodycote">
+                        <option value="Boryszew">
+                        <option value="Bosch">
+                        <option value="Bosch Rexroth">
+                        <option value="Bosmal">
+                        <option value="Bourbon">
+                        <option value="Brammer">
+                        <option value="Brasserie Meyer">
+                        <option value="British Council">
+                        <option value="Broadcom">
+                        <option value="Bruel&Kjaer">
+                        <option value="Brunel">
+                        <option value="Bud-Best">
+                        <option value="Bureau Veritas">
+                        <option value="Burger & Keller">
+                        <option value="Bury">
+                        <option value="Business Center Solutions">
+                        <option value="Business Lease">
+                        <option value="Business Travel">
+                        <option value="Bussines Center Solution">
+                        <option value="C-Tec">
+                        <option value="CAD-Technik">
+                        <option value="CADM Automotive">
+                        <option value="CECE Polska">
+                        <option value="CJK Manufacturing">
+                        <option value="CJK Thermoforming">
+                        <option value="CJSC "PES/SCC"">
+                        <option value="CKiR">
+                        <option value="CMI">
+                        <option value="CMR">
+                        <option value="CNC Land">
+                        <option value="CP Centrum Prototypenbau">
+                        <option value="CP Prototypenbau">
+                        <option value="CP Trade Katowice">
+                        <option value="CSA Group">
+                        <option value="CSI">
+                        <option value="CSPI">
+                        <option value="CSS">
+                        <option value="CSS Beskidy">
+                        <option value="CadSoft">
+                        <option value="Cafe+co Delikomat">
+                        <option value="Calibration">
+                        <option value="Calibration CMR">
+                        <option value="Calibration Maintenance">
+                        <option value="Callan">
+                        <option value="Calleo.School of Polish">
+                        <option value="Canon">
+                        <option value="Capitale Social Euro">
+                        <option value="Carbody">
+                        <option value="Career EXPO">
+                        <option value="Carl Valentin">
+                        <option value="Carl Zeiss">
+                        <option value="Cast'Al">
+                        <option value="Ceeta">
+                        <option value="Centro">
+                        <option value="Centrum Kongresowe PLUS">
+                        <option value="Centrum Prototypenbau">
+                        <option value="Centrum Szkoleń BHP">
+                        <option value="Certoplast">
+                        <option value="Certus">
+                        <option value="Cesky Metrologicky Institut">
+                        <option value="Ceva">
+                        <option value="Cezas">
+                        <option value="Chemetall">
+                        <option value="Chemitech">
+                        <option value="Chep Deutschland">
+                        <option value="Chesterton">
+                        <option value="Chi Wo">
+                        <option value="Chin-Poon">
+                        <option value="Chiorino">
+                        <option value="Chunghwa">
+                        <option value="Chungwa Picture">
+                        <option value="Circle">
+                        <option value="Cisco">
+                        <option value="Citibank">
+                        <option value="Citigroup">
+                        <option value="Clamason">
+                        <option value="Clar Serwis">
+                        <option value="Climats">
+                        <option value="Cloos">
+                        <option value="Code Sprinters">
+                        <option value="CodeSprinters">
+                        <option value="Cognex">
+                        <option value="Comarch">
+                        <option value="Computer Service Support">
+                        <option value="Computer Service Support Beskidy">
+                        <option value="Computer Solutions">
+                        <option value="Conbest">
+                        <option value="Connecting">
+                        <option value="Conrad">
+                        <option value="Control + Rework Service">
+                        <option value="Control Proces Katowice">
+                        <option value="Control Process">
+                        <option value="Control+Rework">
+                        <option value="Cooper Standard">
+                        <option value="Copefi">
+                        <option value="Copefi Components">
+                        <option value="Cortland">
+                        <option value="Cracowtaxi">
+                        <option value="Cracowtaxi taksówka osobowa">
+                        <option value="Crane">
+                        <option value="Creative Techniques">
+                        <option value="Crosspolimeri">
+                        <option value="Cukiernia">
+                        <option value="Cuming Microwave">
+                        <option value="Cutting-Edge">
+                        <option value="Cyclad">
+                        <option value="Cyfronika">
+                        <option value="Czarny Groń">
+                        <option value="DACPOL">
+                        <option value="DAN-ROB">
+                        <option value="DD Tech">
+                        <option value="DElphi Błonie">
+                        <option value="DG Technologies">
+                        <option value="DHL">
+                        <option value="DHl">
+                        <option value="DLG Konrad Rosiński">
+                        <option value="DS Smith">
+                        <option value="DSC France">
+                        <option value="DSG-Canusa">
+                        <option value="DTA">
+                        <option value="Dacpol">
+                        <option value="Dalektron">
+                        <option value="Dalpo">
+                        <option value="Dalpo Spolka">
+                        <option value="Daltys">
+                        <option value="Dan-Rob">
+                        <option value="Data Elektronik">
+                        <option value="Dearborn Group">
+                        <option value="Decon">
+                        <option value="Delikomat">
+                        <option value="Dell">
+                        <option value="Deloitte">
+                        <option value="Delpgi Błonie">
+                        <option value="Delphi">
+                        <option value="Delphi  Otomotive">
+                        <option value="Delphi Architecture">
+                        <option value="Delphi Atomotive Braga">
+                        <option value="Delphi Auburn">
+                        <option value="Delphi Austria">
+                        <option value="Delphi Automative Braga">
+                        <option value="Delphi Automotive">
+                        <option value="Delphi Automotive Braga">
+                        <option value="Delphi Automotive System">
+                        <option value="Delphi Automotive Systems">
+                        <option value="Delphi Automotive Systems Bursa">
+                        <option value="Delphi Automotive Systems Sirketi">
+                        <option value="Delphi Automotive Systems. LLC">
+                        <option value="Delphi Automotive system">
+                        <option value="Delphi Braga">
+                        <option value="Delphi Błonie">
+                        <option value="Delphi CSE Test Center">
+                        <option value="Delphi Castelo Branco">
+                        <option value="Delphi Conection Systems">
+                        <option value="Delphi Connection Systems">
+                        <option value="Delphi Connection Systems Hungary">
+                        <option value="Delphi Corporation">
+                        <option value="Delphi Delco">
+                        <option value="Delphi Delco Electronics">
+                        <option value="Delphi Deutschland">
+                        <option value="Delphi Diesel Systems">
+                        <option value="Delphi E&C Engineering">
+                        <option value="Delphi El Paso">
+                        <option value="Delphi Electrical">
+                        <option value="Delphi Electrical Centers">
+                        <option value="Delphi Electronics">
+                        <option value="Delphi Electronics Kokomo">
+                        <option value="Delphi Engelskirchen">
+                        <option value="Delphi France">
+                        <option value="Delphi Gadńsk">
+                        <option value="Delphi Gdansk">
+                        <option value="Delphi Gdańsk">
+                        <option value="Delphi Gdańśk">
+                        <option value="Delphi Hungary">
+                        <option value="Delphi International">
+                        <option value="Delphi International Luxembourg">
+                        <option value="Delphi Italia">
+                        <option value="Delphi Jaleśnia">
+                        <option value="Delphi Jelesnia">
+                        <option value="Delphi Jeleśnia">
+                        <option value="Delphi Kenitra">
+                        <option value="Delphi Kerala">
+                        <option value="Delphi Kokomo">
+                        <option value="Delphi Luxembourg">
+                        <option value="Delphi Maroco">
+                        <option value="Delphi Mechatronic">
+                        <option value="Delphi Mechatronic System">
+                        <option value="Delphi Mechatronics">
+                        <option value="Delphi Mexico">
+                        <option value="Delphi Otomotiv">
+                        <option value="Delphi Otomotiv Sistemleri">
+                        <option value="Delphi Otomotive">
+                        <option value="Delphi Otomotive Sistemleri">
+                        <option value="Delphi PAckard Romania">
+                        <option value="Delphi Packard">
+                        <option value="Delphi Packard Austria">
+                        <option value="Delphi Packard Electric">
+                        <option value="Delphi Packard Electric Systems">
+                        <option value="Delphi Packard Electrical">
+                        <option value="Delphi Packard Electronic">
+                        <option value="Delphi Packard Electronic Shanghai">
+                        <option value="Delphi Packard Kenitra">
+                        <option value="Delphi Packard Moldova">
+                        <option value="Delphi Packard Romania">
+                        <option value="Delphi Poland">
+                        <option value="Delphi Portugal">
+                        <option value="Delphi Romania">
+                        <option value="Delphi Shanghai">
+                        <option value="Delphi Sirketi">
+                        <option value="Delphi Szombathely">
+                        <option value="Delphi Tanger">
+                        <option value="Delphi Warren">
+                        <option value="Delphi West Henrietta">
+                        <option value="Delphi Wuppertal">
+                        <option value="Delphi wuppertal">
+                        <option value="Delta">
+                        <option value="Delta Power">
+                        <option value="Dephi Gdańsk">
+                        <option value="Des Firma">
+                        <option value="Despol Techniki Montażowe">
+                        <option value="DeutschMann">
+                        <option value="Deutsche Lufthansa">
+                        <option value="Diamond Engineering">
+                        <option value="Die Tech">
+                        <option value="Digi-Key">
+                        <option value="Digikey">
+                        <option value="Dimension">
+                        <option value="Dimension Data">
+                        <option value="Dimeso">
+                        <option value="Dixon">
+                        <option value="DjaF">
+                        <option value="Djaf">
+                        <option value="Docent">
+                        <option value="Dom Techniczny">
+                        <option value="Domella">
+                        <option value="Domena">
+                        <option value="Dr. Collin GmbH">
+                        <option value="Dspace">
+                        <option value="Dunst">
+                        <option value="Dynamic Electronics">
+                        <option value="E. Wehrle GMBH">
+                        <option value="EA Kraków">
+                        <option value="EAE">
+                        <option value="EAE Elektronik">
+                        <option value="EAE Elektronik Spółka">
+                        <option value="EC Test Systems">
+                        <option value="EKK">
+                        <option value="EL-KAG">
+                        <option value="ELKAG">
+                        <option value="EM Test">
+                        <option value="EMC Test">
+                        <option value="ESSEC">
+                        <option value="ETAS">
+                        <option value="ETC">
+                        <option value="ETS">
+                        <option value="ETS Precision">
+                        <option value="Ea Kraków">
+                        <option value="Eagle">
+                        <option value="Eastern Europe">
+                        <option value="Easy Link">
+                        <option value="EasyLink">
+                        <option value="Easylink">
+                        <option value="Ebmia">
+                        <option value="EcoMS">
+                        <option value="EcoMS Consulting">
+                        <option value="Econ Nesper">
+                        <option value="Edag">
+                        <option value="Eden">
+                        <option value="Edscha">
+                        <option value="Egon Nesper">
+                        <option value="Eisele">
+                        <option value="Ejot">
+                        <option value="Eko-Test">
+                        <option value="Ekoprojekt">
+                        <option value="Ekspert Handlowy">
+                        <option value="El-kag">
+                        <option value="Elamrk">
+                        <option value="Elautec">
+                        <option value="Elbi">
+                        <option value="Elbi Wrocław">
+                        <option value="Elbi-Wrocław">
+                        <option value="Electro Magnetic Compatibility">
+                        <option value="ElectroFin">
+                        <option value="Electronics">
+                        <option value="Elektobit">
+                        <option value="Elektorbit">
+                        <option value="Elektorobit">
+                        <option value="Elektrobit">
+                        <option value="Elektrobit France">
+                        <option value="Elektrokoppar">
+                        <option value="Elektronische Last">
+                        <option value="Element">
+                        <option value="Elesa+Ganter">
+                        <option value="Elfa">
+                        <option value="Elfa Distrelec">
+                        <option value="Elfra">
+                        <option value="Elmark">
+                        <option value="Elmark Automatyka">
+                        <option value="Elmer">
+                        <option value="Elproma">
+                        <option value="Elsa">
+                        <option value="Eltek">
+                        <option value="Eltron">
+                        <option value="Eltron Frank">
+                        <option value="Em Test">
+                        <option value="Emdep">
+                        <option value="Emerson & Renwick">
+                        <option value="Emporo">
+                        <option value="Empro">
+                        <option value="Endress+Hauser">
+                        <option value="Enea">
+                        <option value="Energa">
+                        <option value="Energa-Obrót">
+                        <option value="Energopomiar">
+                        <option value="Energy">
+                        <option value="Engel">
+                        <option value="Engram">
+                        <option value="Eniro">
+                        <option value="Enterprise 1">
+                        <option value="Enterprise Adaptee">
+                        <option value="Enterprise1">
+                        <option value="Envibra">
+                        <option value="Envitest">
+                        <option value="Epiphan">
+                        <option value="Equip-Test">
+                        <option value="Equipo">
+                        <option value="Erni">
+                        <option value="Ernst&Young">
+                        <option value="Escid gruposifu">
+                        <option value="Espresso">
+                        <option value="Essentra">
+                        <option value="Esz AG">
+                        <option value="Etas">
+                        <option value="Etisoft">
+                        <option value="Eurest">
+                        <option value="Euro-Locks">
+                        <option value="Eurobac">
+                        <option value="Eurocem">
+                        <option value="Eurocook">
+                        <option value="Eurofoam">
+                        <option value="Euromax">
+                        <option value="Europcar">
+                        <option value="Eurosoft">
+                        <option value="Everest">
+                        <option value="Everett Charles Technologies">
+                        <option value="Evoltec">
+                        <option value="Evolution">
+                        <option value="Exact">
+                        <option value="Exalt">
+                        <option value="Exclusive Wordl">
+                        <option value="Expert Handlowy">
+                        <option value="Extend vision">
+                        <option value="FA Krosno">
+                        <option value="FAMAR">
+                        <option value="FCA Italy">
+                        <option value="FCA Poland">
+                        <option value="FCI Deutschland">
+                        <option value="Fabory">
+                        <option value="Famar">
+                        <option value="Famed">
+                        <option value="Fami">
+                        <option value="Famikon">
+                        <option value="Famikron">
+                        <option value="Farnell">
+                        <option value="Feasa">
+                        <option value="FedEX">
+                        <option value="FedEx">
+                        <option value="Feinmetall">
+                        <option value="Ferrari">
+                        <option value="Fert">
+                        <option value="Fiat Auto Poland">
+                        <option value="Fibrax Limited">
+                        <option value="Filtres">
+                        <option value="Firma Klimatest">
+                        <option value="Firma Transportowa Rządzik Kazimierz">
+                        <option value="First Sensor">
+                        <option value="Flexima">
+                        <option value="FlorGard-Projekt">
+                        <option value="Food Solutions Barman">
+                        <option value="ForGusto">
+                        <option value="ForProgress">
+                        <option value="Format">
+                        <option value="Formel">
+                        <option value="Forum Media">
+                        <option value="Forum Media Polska">
+                        <option value="Foto I Video">
+                        <option value="Francaise de Mecanique">
+                        <option value="Francisco Albero">
+                        <option value="Frankische Industrial">
+                        <option value="Freescale">
+                        <option value="Frezwid">
+                        <option value="Fuchs Oil Corporation">
+                        <option value="Fundacja Rozwoju i Promocji Nauki">
+                        <option value="Fundacja Rozwój">
+                        <option value="Fundacja Studentów i Absolwentów">
+                        <option value="G&G Sport">
+                        <option value="G.B. Garaże">
+                        <option value="G3">
+                        <option value="GB Garaże">
+                        <option value="GTS">
+                        <option value="GWI">
+                        <option value="Gambit">
+                        <option value="Garaże">
+                        <option value="Garmond">
+                        <option value="Garmond Press">
+                        <option value="Gazeta Ostrowska">
+                        <option value="Gebruder">
+                        <option value="Gefco">
+                        <option value="General Logistic System">
+                        <option value="General Logistics System">
+                        <option value="General Silicones">
+                        <option value="Genpact">
+                        <option value="Genpact Poland">
+                        <option value="Geosfera">
+                        <option value="Gizo">
+                        <option value="Gizo Rental">
+                        <option value="Global Brands Manufacture">
+                        <option value="Glory Faith">
+                        <option value="Gmina Skawina">
+                        <option value="Go2Krakow">
+                        <option value="GoldenLine">
+                        <option value="Goldmann">
+                        <option value="Gopel">
+                        <option value="Gopel Electronic">
+                        <option value="Gopress">
+                        <option value="Gordon">
+                        <option value="Gothaer">
+                        <option value="Graffidea">
+                        <option value="Grain d'Or">
+                        <option value="Grand Gastro">
+                        <option value="Green Hills">
+                        <option value="Gripper-pol">
+                        <option value="Growinar">
+                        <option value="Grupa Azoty">
+                        <option value="Grupa CBP">
+                        <option value="Grupa Doradztwa Kreatywnego PRONOST">
+                        <option value="Grupa Ekoprojekt">
+                        <option value="Grupa Koncept">
+                        <option value="Grupa Pracuj">
+                        <option value="Grupa Żywiec">
+                        <option value="Grzegorz Wesołowski">
+                        <option value="Guenther">
+                        <option value="Górnoślaskie Towarzystwo Lotnicze">
+                        <option value="Górnośląskie Towarzystwi Lotnicze">
+                        <option value="Główny Instytut Górnictwa">
+                        <option value="Główny Urząd Miar">
+                        <option value="HBPO">
+                        <option value="HMB Dynamic">
+                        <option value="HT Centrum">
+                        <option value="HT-Centrum">
+                        <option value="Haberkorn">
+                        <option value="Hahn+Kolb">
+                        <option value="Haltermann Carless">
+                        <option value="Hansa">
+                        <option value="Happy End">
+                        <option value="Hart">
+                        <option value="Harting">
+                        <option value="Hatron">
+                        <option value="Hawełka">
+                        <option value="HayGroup">
+                        <option value="Head Acoustics">
+                        <option value="Heinrich Kipp">
+                        <option value="Hella">
+                        <option value="Henkel">
+                        <option value="Herrmann">
+                        <option value="Hertz">
+                        <option value="Hesanta">
+                        <option value="Hewlett Packard">
+                        <option value="Hewlett-Packard">
+                        <option value="Hexagon">
+                        <option value="HiQ">
+                        <option value="Hochtief">
+                        <option value="Hoffmann Group Perschmann">
+                        <option value="Hoffmann Perschmann">
+                        <option value="Hongfa">
+                        <option value="Hornik">
+                        <option value="Hotel Arthur">
+                        <option value="Hotel Astro">
+                        <option value="Hotel G.E. Towarowa Warszawa">
+                        <option value="Hotel Parc">
+                        <option value="Hotel Wilga">
+                        <option value="Hotele">
+                        <option value="Hotele De Silva">
+                        <option value="Human Solution">
+                        <option value="Human Solutions">
+                        <option value="Human Solutions for Busines">
+                        <option value="Hurtownia motoryzacyjna Gordon">
+                        <option value="Hydraquip">
+                        <option value="Hydro">
+                        <option value="I.K.A">
+                        <option value="I.K.A.">
+                        <option value="IAESTE">
+                        <option value="IAR System">
+                        <option value="IBCS">
+                        <option value="IBCS Poland">
+                        <option value="IBR">
+                        <option value="IBR Laboratiories">
+                        <option value="IFM">
+                        <option value="IFM Electronics">
+                        <option value="IHS">
+                        <option value="IHS Global Limited">
+                        <option value="IKA">
+                        <option value="IM Kraków">
+                        <option value="IMACO">
+                        <option value="ISS Logistique">
+                        <option value="ISS Logistique & Production">
+                        <option value="IT Support">
+                        <option value="ITA">
+                        <option value="ITA Spółka">
+                        <option value="ITS Education">
+                        <option value="ITT Cannon">
+                        <option value="ITW">
+                        <option value="ITW LYS">
+                        <option value="ITW Lys Fusion">
+                        <option value="IZT">
+                        <option value="Iaeste">
+                        <option value="Ican Spółka">
+                        <option value="Idiada">
+                        <option value="Idiada Automotive">
+                        <option value="Im Kraków">
+                        <option value="Imaco">
+                        <option value="Image">
+                        <option value="Imat-Uve">
+                        <option value="Imponar">
+                        <option value="In-Spec Quality">
+                        <option value="Industria">
+                        <option value="Industria Project">
+                        <option value="Industria Projekt">
+                        <option value="Industrie Generali Spa">
+                        <option value="Industrie Generali spa">
+                        <option value="Induustria">
+                        <option value="Inergy">
+                        <option value="Inexim">
+                        <option value="Info-Media Jacek Ambrozik">
+                        <option value="Infor">
+                        <option value="Infox">
+                        <option value="Ingevity">
+                        <option value="Inhol">
+                        <option value="Innolux">
+                        <option value="Innolux Corporation">
+                        <option value="Innovaionszentrum">
+                        <option value="Innovationszentrum">
+                        <option value="Innovative Klebtechnik Zimmermann">
+                        <option value="Inolux">
+                        <option value="Insight">
+                        <option value="Instrument Systems">
+                        <option value="Instytut Inżynierii Materiałów">
+                        <option value="Instytut MEtali Niezależnych w Gliwicach">
+                        <option value="Instytut Mechanizacji I Budownictwa">
+                        <option value="Instytut Medycyny Innowacyjnej">
+                        <option value="Instytut Metali Nieżelaznych">
+                        <option value="Instytut Techniki Precyzyjnej">
+                        <option value="Instytut Tele i Radioteczniczny">
+                        <option value="Instytut Tele-i Radiotechniczny">
+                        <option value="Instytut Łaczności">
+                        <option value="Instytut Łączności">
+                        <option value="Integral">
+                        <option value="Integrated System Scandynavia">
+                        <option value="Integrated Systems Scandinavia">
+                        <option value="Integration">
+                        <option value="Inter Cars">
+                        <option value="Inter cars">
+                        <option value="Inter-Cars">
+                        <option value="InterCall">
+                        <option value="Intercall">
+                        <option value="Interflux">
+                        <option value="Interform">
+                        <option value="International School of krakow">
+                        <option value="International school of Krakow">
+                        <option value="Intertek">
+                        <option value="Iriso">
+                        <option value="Iron Mountain">
+                        <option value="Isit France">
+                        <option value="Iskra">
+                        <option value="Isystem">
+                        <option value="Ita">
+                        <option value="Itekna">
+                        <option value="Item">
+                        <option value="Iturri">
+                        <option value="Itv Lys Fusion">
+                        <option value="Izba Celna">
+                        <option value="JAS-FBG">
+                        <option value="JP Morgan">
+                        <option value="JP Morgan Chase">
+                        <option value="JRJ Consulting">
+                        <option value="JS Project">
+                        <option value="JSD">
+                        <option value="JSD Polska">
+                        <option value="JTES">
+                        <option value="Jaka">
+                        <option value="Jakob Keck Chemie">
+                        <option value="Janina">
+                        <option value="Jantar">
+                        <option value="Jarko">
+                        <option value="Jawo">
+                        <option value="John Guest Automotive">
+                        <option value="Joints Fournel">
+                        <option value="Jungheimrich">
+                        <option value="Jungheinrich">
+                        <option value="Junghheinrich">
+                        <option value="Jupol-Car">
+                        <option value="Jupol-car">
+                        <option value="Jupol-car Avis">
+                        <option value="Justicare">
+                        <option value="K2L">
+                        <option value="KLC">
+                        <option value="KPIT">
+                        <option value="KPIT Technologies">
+                        <option value="KPMG">
+                        <option value="KSL">
+                        <option value="KSL Staubtechnik">
+                        <option value="KU Leuven">
+                        <option value="Kabel Tech">
+                        <option value="Kabeltech">
+                        <option value="Kaeser">
+                        <option value="Kaiser+Kraft">
+                        <option value="Kaiser+kraft">
+                        <option value="Kancelaria Patentowa Łukaszyk">
+                        <option value="Kappes Polska">
+                        <option value="Karam-Ball">
+                        <option value="Karczma Rohatyna">
+                        <option value="Karier+Kraft">
+                        <option value="Karl Kufner">
+                        <option value="Karpex-Bis">
+                        <option value="Kaser">
+                        <option value="Kasmar">
+                        <option value="Kastilo">
+                        <option value="Kate-Art">
+                        <option value="Kate-art">
+                        <option value="Katowicz Łukasz">
+                        <option value="Kaupke">
+                        <option value="Keen Point">
+                        <option value="Keiser+Kraft">
+                        <option value="Kepco">
+                        <option value="Keyence">
+                        <option value="Keysight">
+                        <option value="King Skór">
+                        <option value="Kinga Małgorzata Rębkowska-Gryzek">
+                        <option value="Kleinkoenen">
+                        <option value="KlimaTest">
+                        <option value="Klocwork">
+                        <option value="Klub Sportowy "PROF"">
+                        <option value="Klub Sportowy Futbolowa Liga">
+                        <option value="Kluber">
+                        <option value="Kluber Lubrication">
+                        <option value="Koh Young">
+                        <option value="Kolektor">
+                        <option value="Kolporter">
+                        <option value="Komax">
+                        <option value="Kompart Pomiar">
+                        <option value="Komputronik">
+                        <option value="Konica Minolta">
+                        <option value="Konsalnet">
+                        <option value="Konsultacje-Szkolenia-Szymon Kulczycki">
+                        <option value="Kontel">
+                        <option value="Kopax">
+                        <option value="Korczyk">
+                        <option value="Korporacja Quantum">
+                        <option value="Korporacja Transferu Quantum">
+                        <option value="Kostal">
+                        <option value="Kottermann">
+                        <option value="Krajowa Izba Rozliczeniowa">
+                        <option value="Krakchemia">
+                        <option value="Krakowskie Centrum Handlowe">
+                        <option value="Krakowskie Centrum Handlowo Targowe">
+                        <option value="Krakweb">
+                        <option value="Kraków z pasją">
+                        <option value="Kreator">
+                        <option value="Kronacher">
+                        <option value="Krótoszynski">
+                        <option value="Ku LEuven">
+                        <option value="Kunststaff">
+                        <option value="Kunststoff">
+                        <option value="Kuss Filtration">
+                        <option value="Kwapil">
+                        <option value="Kwesto">
+                        <option value="Kwiaty">
+                        <option value="Kwieciem Pleciem">
+                        <option value="LAbortronic">
+                        <option value="LGM Ingenierie">
+                        <option value="LIM Sółka z ograniczoną odpowiedzialnością">
+                        <option value="LP Products">
+                        <option value="La Farga">
+                        <option value="La Punta">
+                        <option value="La Putna Cablaggi">
+                        <option value="Lab-El">
+                        <option value="Lab-Szkło">
+                        <option value="Lab-el">
+                        <option value="Labco">
+                        <option value="Labem">
+                        <option value="Laboratories">
+                        <option value="Labortronic">
+                        <option value="Labotronic">
+                        <option value="Labsoft">
+                        <option value="Labstand">
+                        <option value="Lafot">
+                        <option value="Lafot Elektronik">
+                        <option value="Lafot Elektronika">
+                        <option value="Laird">
+                        <option value="Language Partner">
+                        <option value="Lanxess">
+                        <option value="Lapp Kabel">
+                        <option value="Larid">
+                        <option value="Laser Cut">
+                        <option value="Lasotronix">
+                        <option value="Lastra Catering">
+                        <option value="Leader">
+                        <option value="Leaders Island">
+                        <option value="Lean Executives">
+                        <option value="Lear Corporation">
+                        <option value="Lech-Gotthardt">
+                        <option value="Lelon Electronics">
+                        <option value="Lennox">
+                        <option value="Lenso">
+                        <option value="Leoni">
+                        <option value="Leroy Merlin">
+                        <option value="Light TEc">
+                        <option value="Light Tec">
+                        <option value="Lima Therm Sensor">
+                        <option value="Limatherm">
+                        <option value="Limatherm Sensor">
+                        <option value="Lincoln">
+                        <option value="Litex Promo">
+                        <option value="Littelfuse">
+                        <option value="Lobos">
+                        <option value="Logistyka Janusz Antkiewicz">
+                        <option value="Logosmycz">
+                        <option value="Lotnisko Kamień Sląski">
+                        <option value="Lotnisko Kamień Ślaski">
+                        <option value="Lotnisko Kamień Śląski">
+                        <option value="Lotos Paliwa">
+                        <option value="Lp Products">
+                        <option value="Lubelska Project">
+                        <option value="Ludatec">
+                        <option value="Lumel">
+                        <option value="Luminar">
+                        <option value="Lundi">
+                        <option value="Lynka">
+                        <option value="M-Cars">
+                        <option value="M-hotel">
+                        <option value="M.A.S.">
+                        <option value="M.S. Ambrogio">
+                        <option value="M.S.Ambrogio">
+                        <option value="M3Elektro">
+                        <option value="MBLE">
+                        <option value="MCC Mazurkas">
+                        <option value="MCPP Poland">
+                        <option value="MD Elektronik">
+                        <option value="MDDP">
+                        <option value="MEADWESTVACO">
+                        <option value="MESco">
+                        <option value="MIC">
+                        <option value="MICAN">
+                        <option value="MJCC">
+                        <option value="MOLO">
+                        <option value="MPEC">
+                        <option value="MPWIK">
+                        <option value="MPWiK">
+                        <option value="MTM Automatyka">
+                        <option value="Maciej Mleczko PROMM">
+                        <option value="Maciej Mleczko Promm">
+                        <option value="Maciosoft">
+                        <option value="Maestro">
+                        <option value="Magna Steyr">
+                        <option value="Magneti">
+                        <option value="Magneti Marelli">
+                        <option value="Magnetic media">
+                        <option value="Mahle">
+                        <option value="Maj-Star">
+                        <option value="Maj-Star Elektronik">
+                        <option value="Maj-star">
+                        <option value="Makro Cash">
+                        <option value="Manex">
+                        <option value="Mango">
+                        <option value="Manutan">
+                        <option value="Marada">
+                        <option value="Maraton">
+                        <option value="Marazet">
+                        <option value="Marengo">
+                        <option value="MariVVI">
+                        <option value="Marian">
+                        <option value="Maritex">
+                        <option value="Marposs">
+                        <option value="Marsh">
+                        <option value="Marthel">
+                        <option value="Maschinenfabrik guido">
+                        <option value="Master Colors">
+                        <option value="Masters">
+                        <option value="Matchtech">
+                        <option value="Materialise">
+                        <option value="Maxim Integrated">
+                        <option value="MeadWestvaco">
+                        <option value="Meadwestvaco">
+                        <option value="Mecalbi">
+                        <option value="Mecalux">
+                        <option value="MechaSys">
+                        <option value="Media Direction">
+                        <option value="MediaPixel">
+                        <option value="Medicover">
+                        <option value="Mediqa">
+                        <option value="Megadyne">
+                        <option value="Melexis">
+                        <option value="Mellow">
+                        <option value="Mentor">
+                        <option value="Mentor Graphics">
+                        <option value="Mera-Projekt">
+                        <option value="Meratronic">
+                        <option value="Meratronik">
+                        <option value="Merazet">
+                        <option value="Mercedes-Benz">
+                        <option value="Merkar">
+                        <option value="Messring">
+                        <option value="Messtechnik">
+                        <option value="Metal Work">
+                        <option value="MetalFlow">
+                        <option value="Metalogis">
+                        <option value="Metchem">
+                        <option value="Methodpark">
+                        <option value="Metro-Term">
+                        <option value="Metrotest">
+                        <option value="Meusburger">
+                        <option value="Miary I Wagi">
+                        <option value="Michael Page">
+                        <option value="Michael Page International">
+                        <option value="Michalin">
+                        <option value="Microchip">
+                        <option value="Microchip Technology">
+                        <option value="Microchip Technology Ireland">
+                        <option value="Micronel">
+                        <option value="Mikado Hotel">
+                        <option value="Mikrosonic">
+                        <option value="Milar">
+                        <option value="Minda">
+                        <option value="Minda KTSN">
+                        <option value="Ministerstwo Sprawiedliwosci">
+                        <option value="Ministerstwo Sprawiedliwości">
+                        <option value="Mission">
+                        <option value="Misumi">
+                        <option value="Misumi Europa">
+                        <option value="Mitsubishi">
+                        <option value="Mitsubushi">
+                        <option value="Mitutoyo">
+                        <option value="Mixpol">
+                        <option value="Mobica">
+                        <option value="Mobileye">
+                        <option value="Mobileye Vision Technologies">
+                        <option value="Mobipol">
+                        <option value="Modcomp">
+                        <option value="Modestia">
+                        <option value="Modestia Investments">
+                        <option value="Moerele.net">
+                        <option value="Molex">
+                        <option value="Monika Piwowarska">
+                        <option value="Montajes abrera">
+                        <option value="Montermann">
+                        <option value="Montes">
+                        <option value="Montremann DTM">
+                        <option value="Morele.Net">
+                        <option value="Morele.net">
+                        <option value="Mortin Stocker">
+                        <option value="Moto-Gabra">
+                        <option value="Moto-Profil">
+                        <option value="Mouser">
+                        <option value="Mouser Electronic">
+                        <option value="Mouser Electronics">
+                        <option value="Multek">
+                        <option value="Multicert">
+                        <option value="Municom">
+                        <option value="Mur&Accompagnement">
+                        <option value="Music Audio Sklep Muzyczny">
+                        <option value="Muthiah">
+                        <option value="My Benefit">
+                        <option value="MyBenefit">
+                        <option value="NDK">
+                        <option value="NDN">
+                        <option value="NOFFZ">
+                        <option value="NPL">
+                        <option value="NXP Semiconductors">
+                        <option value="Nan Ya Printed">
+                        <option value="Nataional Instruments">
+                        <option value="National Instruments">
+                        <option value="Nationl Instruments">
+                        <option value="Nedcon">
+                        <option value="Nematech">
+                        <option value="Neo24">
+                        <option value="Neo24.pl">
+                        <option value="Nesse">
+                        <option value="Net automobil Srbjia">
+                        <option value="Net-Sport">
+                        <option value="Netia">
+                        <option value="Neumuller">
+                        <option value="Next Generation">
+                        <option value="Next Generation Engineering">
+                        <option value="Nichia">
+                        <option value="Nichia Corporation">
+                        <option value="Ningbo">
+                        <option value="Ningbo Sunny">
+                        <option value="No Name">
+                        <option value="No name">
+                        <option value="NobleProg">
+                        <option value="Noma 2">
+                        <option value="Norbert Szymczykiewicz">
+                        <option value="Norsteel">
+                        <option value="Nova">
+                        <option value="Nowa">
+                        <option value="Nowa Komputery">
+                        <option value="Nowa Tomasz Kasprzyk">
+                        <option value="OBA">
+                        <option value="OD&M Consulting">
+                        <option value="ODiTK">
+                        <option value="OKAMI">
+                        <option value="OMC Envag">
+                        <option value="OPP">
+                        <option value="OSG">
+                        <option value="OSG Polska">
+                        <option value="Oba">
+                        <option value="Obróbka Metali Kazimierz Wcisło">
+                        <option value="Obróbka Metali Wcisło">
+                        <option value="Obróbka metali Kazimierz Wcisło">
+                        <option value="Ochrona Przeciwpożarowa">
+                        <option value="Oddział ELastomerów i Technologii Gumy">
+                        <option value="Odys">
+                        <option value="Ognik">
+                        <option value="Ojega">
+                        <option value="Okami">
+                        <option value="Okami Maciej Drobczyk">
+                        <option value="Okregowy Urząd Miar">
+                        <option value="Okręgowy Urząd Miar">
+                        <option value="Okręgowy Urząd Miar w Gdańsku">
+                        <option value="Okręgowy Urząd Miar w Krakowie">
+                        <option value="Olympus">
+                        <option value="Omega">
+                        <option value="Omron">
+                        <option value="On Limited">
+                        <option value="On Semiconductor">
+                        <option value="Ondo">
+                        <option value="Onninen">
+                        <option value="Operational Services">
+                        <option value="Oponeo">
+                        <option value="Opp unlocking potential">
+                        <option value="Opragramowanie Naukowo-Techniczne">
+                        <option value="Oprogramowanie Naukowo-Techniczne">
+                        <option value="Optoelektronika">
+                        <option value="Optosoft">
+                        <option value="Orange">
+                        <option value="Orbis">
+                        <option value="Osram">
+                        <option value="Osrodek Szkoleń Effect">
+                        <option value="Ost Sped">
+                        <option value="Otis">
+                        <option value="Ove Arup">
+                        <option value="Oxford">
+                        <option value="Oxford Technical Solutions">
+                        <option value="Ośrodek szkoleń i informacji "EFFECT"">
+                        <option value="P.D.W. Marthel">
+                        <option value="P.H. Karpex-Bis">
+                        <option value="P.H.U. Cukiernia">
+                        <option value="P.P.H.U. Maestro">
+                        <option value="P/A">
+                        <option value="PCA Slovakia">
+                        <option value="PES/SCC">
+                        <option value="PGNiG">
+                        <option value="PHU Agasystem">
+                        <option value="PK Firma Handlowo-Usługowa">
+                        <option value="PLC Poland">
+                        <option value="PMT">
+                        <option value="PROduction">
+                        <option value="PTR Messtechnik">
+                        <option value="Pagum">
+                        <option value="Panalpina">
+                        <option value="Panasonic">
+                        <option value="Panduit">
+                        <option value="Papayo">
+                        <option value="Park Hotel Diament">
+                        <option value="Partner CRS">
+                        <option value="Pathways">
+                        <option value="Perfect">
+                        <option value="Perplastic">
+                        <option value="Perschman">
+                        <option value="Perschmann">
+                        <option value="Peugeot Citroen">
+                        <option value="Pewa-Projekt">
+                        <option value="Pfinder">
+                        <option value="Pfluger">
+                        <option value="Phoenix Contact">
+                        <option value="Phoenix Testlab">
+                        <option value="Pi Innovo">
+                        <option value="Pi innovo">
+                        <option value="Pickering">
+                        <option value="Pickering Interfaces">
+                        <option value="PikeTec">
+                        <option value="Pilz Polska">
+                        <option value="Piping Construction">
+                        <option value="Piping Construction Consulting">
+                        <option value="Pius-Hof">
+                        <option value="Pizzeria Banolli">
+                        <option value="Plast Line">
+                        <option value="Plastic Omnium">
+                        <option value="Plastic Omnium Auto">
+                        <option value="Pmexperts">
+                        <option value="Pneumat System">
+                        <option value="Poczta Polska">
+                        <option value="Pod Aniołami">
+                        <option value="Pohl&Pohl">
+                        <option value="Poler-Grand">
+                        <option value="Poligraficy">
+                        <option value="Politechnika Krakowska">
+                        <option value="Politechnika Rzeszowska">
+                        <option value="Politechnika Wrocławska">
+                        <option value="Pollab">
+                        <option value="Polski Komitet Normalizacyjny">
+                        <option value="Polskie Sklady Oponiarskie">
+                        <option value="Polskie Skład Oponiarskie">
+                        <option value="Polskie Składy Oponiarsie">
+                        <option value="Polskie Składy Oponiarskie">
+                        <option value="PolyOne">
+                        <option value="Polyplast">
+                        <option value="Power Signal">
+                        <option value="PowerTech">
+                        <option value="Praca.pl">
+                        <option value="Pracownia Projektowa Architekt Robert Cekiera">
+                        <option value="Pracownia Projektowa Robert Cekiera">
+                        <option value="Press Service">
+                        <option value="Press Servoce">
+                        <option value="Press- Service">
+                        <option value="Press-Service">
+                        <option value="Priority Electronics">
+                        <option value="Pro-Roast">
+                        <option value="Pro-Tech">
+                        <option value="Pro.eff">
+                        <option value="ProQual">
+                        <option value="ProRent">
+                        <option value="Procad">
+                        <option value="Produktion Effektive">
+                        <option value="Prof-Us">
+                        <option value="Prof-us">
+                        <option value="Progress Project">
+                        <option value="Progress project">
+                        <option value="Proloc">
+                        <option value="Promag">
+                        <option value="Promm">
+                        <option value="Proqual">
+                        <option value="Proton">
+                        <option value="Proverta">
+                        <option value="Provertha">
+                        <option value="Proxima">
+                        <option value="Prywatne Studium Językowe">
+                        <option value="Przedsiębiorstwo AMS">
+                        <option value="Przedsiębiorstwo Badań i Ekspertyz Środowiska SEPO">
+                        <option value="Przedsiębiorstwo Gospodarki Wodno-Sciekowej">
+                        <option value="Przedsiębiorstwo Gospodarki Wodno-Ściekowej">
+                        <option value="Przedsiębiorstwo Handlowo Techniczne Supon">
+                        <option value="Przedsiębiorstwo Handlu Zagracznego INTREX">
+                        <option value="Przedsiębiorstwo Produkcyjno-Handlowe Bormech">
+                        <option value="Przedsiębiorstwo Produkcyjno-Usługowe Małgorzata Bebejewska">
+                        <option value="Przedsiębiorstwo Wielobranżowe BPW-Serwis">
+                        <option value="Przedstawicielstwo Schafer">
+                        <option value="Przemysłowy Instytut Automatyki i Pomiarów">
+                        <option value="PwC Polska">
+                        <option value="Pyroplex">
+                        <option value="Q-Service Equipment">
+                        <option value="QLS">
+                        <option value="QLS Automotive">
+                        <option value="R-K System">
+                        <option value="REnex">
+                        <option value="RJL">
+                        <option value="RJL Micro&Analytic">
+                        <option value="ROI Doradztwo i Szkolenia">
+                        <option value="RPK S. COOP">
+                        <option value="RPK Vitoria">
+                        <option value="RS COmponents">
+                        <option value="RS Comopnents">
+                        <option value="RS Components">
+                        <option value="RTP">
+                        <option value="Raben">
+                        <option value="Rabio Taxi Barbakan">
+                        <option value="Rabugino">
+                        <option value="Racelogic">
+                        <option value="Radio Taxi Barbakan">
+                        <option value="Radio Taxi Wawel">
+                        <option value="Radio-Taxi Barbakan">
+                        <option value="Radiotechnika">
+                        <option value="Radisson">
+                        <option value="Radisson BLU">
+                        <option value="Radwag">
+                        <option value="Radwell">
+                        <option value="Rajapack">
+                        <option value="Rakstal">
+                        <option value="Raven">
+                        <option value="Raven Media">
+                        <option value="Raymond">
+                        <option value="Raziol">
+                        <option value="ReTecCom">
+                        <option value="Rebugno">
+                        <option value="Regalit">
+                        <option value="Reichelt">
+                        <option value="Remex">
+                        <option value="Remondis">
+                        <option value="Renesas">
+                        <option value="Renex">
+                        <option value="Rennsteig">
+                        <option value="Rent a Car">
+                        <option value="Retail Department IHS">
+                        <option value="Rewotec">
+                        <option value="Rhenus">
+                        <option value="Rhode&Schwarz">
+                        <option value="Riachtschieko">
+                        <option value="Riachtschieko Automotive">
+                        <option value="Riachtschienko Automotive">
+                        <option value="Riegermann">
+                        <option value="Rinde">
+                        <option value="Riwotec">
+                        <option value="Ro-Car">
+                        <option value="Roban">
+                        <option value="Robert Bosch">
+                        <option value="RockAuto">
+                        <option value="Rockalto">
+                        <option value="Rockwell Automation">
+                        <option value="Rohde Schwarz">
+                        <option value="Rohde&Schwartz">
+                        <option value="Rohde&Schwarz">
+                        <option value="Rohde&Shwarz">
+                        <option value="Rolin Escober">
+                        <option value="Roller">
+                        <option value="Rollfix">
+                        <option value="Rontil">
+                        <option value="Rosenberger">
+                        <option value="Rowa">
+                        <option value="Rubena">
+                        <option value="S.M.D. Optoelektornika">
+                        <option value="S.M.D. Optoelektronika">
+                        <option value="SAP Polska">
+                        <option value="SAS Etabilssements Georges Renault">
+                        <option value="SAS Etablissements Georges Renault">
+                        <option value="SCGG">
+                        <option value="SDV">
+                        <option value="SDV Belgium">
+                        <option value="SEKA">
+                        <option value="SGS">
+                        <option value="SIA Sporta komplekss">
+                        <option value="SKD">
+                        <option value="SKK">
+                        <option value="SLE">
+                        <option value="SMC">
+                        <option value="SMD">
+                        <option value="SMK">
+                        <option value="SMK Europe">
+                        <option value="SMP">
+                        <option value="SOP">
+                        <option value="SP">
+                        <option value="SP Technical Research">
+                        <option value="SPCG">
+                        <option value="SSI">
+                        <option value="SSI Schafer">
+                        <option value="SSI-Controls">
+                        <option value="STMicroelectronics">
+                        <option value="STaples">
+                        <option value="Sabaj">
+                        <option value="Sabaj System">
+                        <option value="Sabic">
+                        <option value="Sages">
+                        <option value="Salena">
+                        <option value="Salient Sport">
+                        <option value="Samartest">
+                        <option value="Samsung">
+                        <option value="Samtec">
+                        <option value="Samwha">
+                        <option value="Sarkuysan">
+                        <option value="Sarl Axitec">
+                        <option value="Sarrel">
+                        <option value="Satland">
+                        <option value="Saur Neptun">
+                        <option value="Sawa Taxi">
+                        <option value="Saymon">
+                        <option value="Scalar">
+                        <option value="Scanmed">
+                        <option value="Schaeffer">
+                        <option value="Schaeffer Sag">
+                        <option value="Schafer Shop">
+                        <option value="Schenker">
+                        <option value="Scheugenpflug">
+                        <option value="Schlemmer">
+                        <option value="Schmersal-Polska">
+                        <option value="Schrack">
+                        <option value="Schrader">
+                        <option value="Schramberg">
+                        <option value="Schrunk">
+                        <option value="Schunk">
+                        <option value="Schunk Intec">
+                        <option value="Schwanz">
+                        <option value="Schwarzbeck">
+                        <option value="Schwarzbeck Mess">
+                        <option value="Seco/Warwick Europe">
+                        <option value="Securitas">
+                        <option value="Sefar">
+                        <option value="Seho">
+                        <option value="Seka">
+                        <option value="Selena Róża Bocheńska">
+                        <option value="Sellpro">
+                        <option value="Semcon">
+                        <option value="Semicon">
+                        <option value="Semiconductor">
+                        <option value="Serko">
+                        <option value="Serma">
+                        <option value="ServiceNow">
+                        <option value="Sevel">
+                        <option value="Shangent">
+                        <option value="Shin-Etsu">
+                        <option value="Siemens PLM Software">
+                        <option value="Siganal Iduna">
+                        <option value="Signal Iduna">
+                        <option value="Signal Iduna (Mediqa)">
+                        <option value="Sii">
+                        <option value="Singh">
+                        <option value="Sklep Szczepan">
+                        <option value="Sky Blue">
+                        <option value="SkyBlue">
+                        <option value="Slavia">
+                        <option value="Slawbit">
+                        <option value="Smart Solution">
+                        <option value="Smart Solutions">
+                        <option value="Smith">
+                        <option value="Smith & Associates">
+                        <option value="Smith&Asociates">
+                        <option value="Smith&Associates">
+                        <option value="Sobieski Hotel">
+                        <option value="Sobiesław Zasada">
+                        <option value="Sobiesław Zasada Automotive">
+                        <option value="Sobisław Zasada">
+                        <option value="Sodexo">
+                        <option value="Softkinetic">
+                        <option value="Softkinetic International">
+                        <option value="Sogo">
+                        <option value="SolAlva">
+                        <option value="Solalva">
+                        <option value="Solara">
+                        <option value="Solara Design">
+                        <option value="Sollner">
+                        <option value="Solvadis">
+                        <option value="Solvadis Polska">
+                        <option value="SonicTech">
+                        <option value="Sonictech">
+                        <option value="Soteris">
+                        <option value="Soyter">
+                        <option value="Spectro Light">
+                        <option value="Spectro-Lab">
+                        <option value="Spektro-Lab">
+                        <option value="Splast Travel">
+                        <option value="Sprimag">
+                        <option value="Sruby">
+                        <option value="Stanisław Krotoszyński">
+                        <option value="Stanley">
+                        <option value="Staples">
+                        <option value="Star Electronics">
+                        <option value="Starfax">
+                        <option value="Stemplex">
+                        <option value="Stena Recycling">
+                        <option value="Stoldrew">
+                        <option value="Stomet">
+                        <option value="Stowarzyszenie Inzynierów i Techników">
+                        <option value="Stowarzyszenie Inżynierów i Techników">
+                        <option value="Stowarzyszenie Inżynierów i Techników Komunikacji Rzeczypospolitej Polskiej">
+                        <option value="Stowarzyszenie Jakości Systemów Informatycznych">
+                        <option value="Stowarzyszenie Ksiegowych">
+                        <option value="Stowarzyszenie Ksiegowych w Polsce">
+                        <option value="Stowarzyszenie Księgowych w Polsce">
+                        <option value="Stowarzyszenie Studentów Best AGH">
+                        <option value="Struers">
+                        <option value="Stuco">
+                        <option value="Studio Format">
+                        <option value="Subec">
+                        <option value="Supon">
+                        <option value="Synopsys">
+                        <option value="Systemy Ochrony Przeciwpożarowej">
+                        <option value="Systemy Pomiarowe">
+                        <option value="Systemy ochrony przeciwpożarowej">
+                        <option value="Szkoła Podstawowa">
+                        <option value="Szkoła Podstawowa Nr 29">
+                        <option value="Szkoła Podstawowa nr 26">
+                        <option value="Szkoła Podstawowa nr 29">
+                        <option value="T&L Sheet">
+                        <option value="T&L Sheet Metal">
+                        <option value="T-Mobile">
+                        <option value="T-mobile">
+                        <option value="T.E.A. Time">
+                        <option value="T.E.R. Calibration">
+                        <option value="T.Studnicki">
+                        <option value="T.Studnicki K.Płeszka">
+                        <option value="TBF-Poland">
+                        <option value="TDK">
+                        <option value="TE">
+                        <option value="TE Connectivity">
+                        <option value="TEchnologies">
+                        <option value="THETA Doradztwo Techniczne">
+                        <option value="TI Automotive">
+                        <option value="TIM">
+                        <option value="TKR">
+                        <option value="TME">
+                        <option value="TNT">
+                        <option value="TOA E&I Taiwan">
+                        <option value="TPMS">
+                        <option value="TQMsoft">
+                        <option value="TRP">
+                        <option value="TSC">
+                        <option value="TT-Line">
+                        <option value="TTTech">
+                        <option value="TUV NORD">
+                        <option value="TUV SUD">
+                        <option value="Tac Consilium">
+                        <option value="Taiyo">
+                        <option value="Taiyo MFG">
+                        <option value="Taiyo Technology">
+                        <option value="TapeFormers">
+                        <option value="Tarbonus">
+                        <option value="Taucraft">
+                        <option value="Tauron">
+                        <option value="Tauron Dystrybucja">
+                        <option value="Tax Consilium">
+                        <option value="Taxi Osobowe Smolczyk">
+                        <option value="Taxpoint">
+                        <option value="Te Connectivity">
+                        <option value="Teatr Ludowy">
+                        <option value="Tecalco">
+                        <option value="Technica">
+                        <option value="Technika Obliczeniowa">
+                        <option value="Techno-Serivce">
+                        <option value="Techno-Service">
+                        <option value="Technologies">
+                        <option value="Technology&Norms">
+                        <option value="Techo-Service">
+                        <option value="Techsystem">
+                        <option value="Tecmaplast">
+                        <option value="Tekno Kauck">
+                        <option value="Tele-Best">
+                        <option value="Tele-Fonika">
+                        <option value="Tele-best">
+                        <option value="Telemotive">
+                        <option value="Telemotive AG">
+                        <option value="Telkom-Telos">
+                        <option value="Teoresi">
+                        <option value="Terez Performance Polymers">
+                        <option value="Tesa">
+                        <option value="Tesco">
+                        <option value="Tespol">
+                        <option value="Testo">
+                        <option value="TetraTec">
+                        <option value="Teufel">
+                        <option value="Texas">
+                        <option value="Texas Instruments">
+                        <option value="The Digital Learning">
+                        <option value="The International School of Krakow">
+                        <option value="The QT">
+                        <option value="Theta">
+                        <option value="Thierry">
+                        <option value="Thomas">
+                        <option value="Thora">
+                        <option value="Thora Elektronik">
+                        <option value="Todenko">
+                        <option value="Tofas">
+                        <option value="Top Marketing">
+                        <option value="Total Phase">
+                        <option value="Towers Watson">
+                        <option value="Toyota Peugeot">
+                        <option value="Toyota Peugeot Citroen">
+                        <option value="Trane">
+                        <option value="Transcat">
+                        <option value="Transition">
+                        <option value="Treko">
+                        <option value="Treko Laser">
+                        <option value="Trescal">
+                        <option value="Trialon">
+                        <option value="Trigo">
+                        <option value="Trigo France">
+                        <option value="Trigo Solutions">
+                        <option value="Trimillennium">
+                        <option value="Trimillennium Corp">
+                        <option value="Trodat">
+                        <option value="Truck Partner">
+                        <option value="Truly">
+                        <option value="Truly Electronics">
+                        <option value="Tuv Nord">
+                        <option value="Twin">
+                        <option value="UEI">
+                        <option value="UEI Urządzenia Elektorniczne Import">
+                        <option value="UEK">
+                        <option value="UPS">
+                        <option value="US-Bud">
+                        <option value="UTAC">
+                        <option value="Ultron">
+                        <option value="Unicorn">
+                        <option value="Union Suppo">
+                        <option value="Unisys">
+                        <option value="Unitronic">
+                        <option value="Universal Express">
+                        <option value="Uniwersytet Ekonomiczny">
+                        <option value="Uniwersytet Jagielloński">
+                        <option value="Uniwesytet Ekonomiczny">
+                        <option value="Unwired">
+                        <option value="Urszula Kukuła">
+                        <option value="Urszula Kukuła ROI">
+                        <option value="Urząd Celny">
+                        <option value="Urząd Dozoru Technicznego">
+                        <option value="Us-Bud">
+                        <option value="Usługi Budowlane Piotr Lubas">
+                        <option value="Usługi Budowlane i Remontowe">
+                        <option value="VDA">
+                        <option value="VIP Mirosław Szymczak">
+                        <option value="VS DATA">
+                        <option value="VWR">
+                        <option value="VWR INTERNATIONAL">
+                        <option value="VWR International">
+                        <option value="Vak-Pol&Gaz">
+                        <option value="Varitronix">
+                        <option value="Vector">
+                        <option value="Vega-Tronik">
+                        <option value="Velox">
+                        <option value="Veolia">
+                        <option value="Veritas">
+                        <option value="Veryst">
+                        <option value="VideoJet">
+                        <option value="Videojet">
+                        <option value="VidiCom">
+                        <option value="Vilardell Putri">
+                        <option value="Vilardell purti">
+                        <option value="Viomar">
+                        <option value="Viscom">
+                        <option value="Vishay">
+                        <option value="Vitec">
+                        <option value="Volkswagen">
+                        <option value="Volvo Polska">
+                        <option value="W.G. Electronics">
+                        <option value="W.G. Elektronics">
+                        <option value="W.H. Augenstein">
+                        <option value="WEH">
+                        <option value="WEH Polska">
+                        <option value="WEH Polska Marek Humbek">
+                        <option value="WObit">
+                        <option value="WWT EMEA">
+                        <option value="Wagi Wielkopolska Henryk Ossowski">
+                        <option value="Waldhotel Tropfseinholle">
+                        <option value="Warema">
+                        <option value="Watoland">
+                        <option value="Webasto">
+                        <option value="WeeTech">
+                        <option value="Weh">
+                        <option value="Weh Polska Marek Humbek">
+                        <option value="Welmis">
+                        <option value="Werkzeugbau Siegfried Hofmann">
+                        <option value="Wessling">
+                        <option value="West Henrietta">
+                        <option value="Wikar">
+                        <option value="Wikom-Seal">
+                        <option value="Wilhelm">
+                        <option value="Wimed">
+                        <option value="Wine&Dine">
+                        <option value="Witrochem">
+                        <option value="Wix-Filtron">
+                        <option value="Wobit">
+                        <option value="WolfOS">
+                        <option value="Wolters">
+                        <option value="Wolters Kluwer">
+                        <option value="Work Serivce">
+                        <option value="Work Service">
+                        <option value="Work service">
+                        <option value="Work-Service">
+                        <option value="Wrocławski Park Technologiczny">
+                        <option value="Wszechnica Uniwersytetu Jagiellońskiego">
+                        <option value="Wydawnictwo C.H.Beck">
+                        <option value="Wydawnictwo Podatkowe Gofin">
+                        <option value="Wydawnistwo Legis">
+                        <option value="XRG">
+                        <option value="Xerox">
+                        <option value="ZPAS">
+                        <option value="ZPH Gawra">
+                        <option value="ZPUH "Mini-Zap"">
+                        <option value="Zabłocki">
+                        <option value="Zach Metalchem">
+                        <option value="Zacharzewska">
+                        <option value="Zakład Badawczy Konstrukcyjno-Technologiczny">
+                        <option value="Zakład Elektrotechniki Motoryzacyjnej">
+                        <option value="Zakład Elektryczny UPH Dziewoński">
+                        <option value="Zakład Mechaniczny Kazimieruk">
+                        <option value="Zakład Produkcji Opakowań">
+                        <option value="Zakład Produkcyjno-Handlowy">
+                        <option value="Zakład Przetwórstwa Tworzyw Sztucznych">
+                        <option value="Zakład mechaniczny Eromet">
+                        <option value="Zakład produkcji Automatyki Sieciowej">
+                        <option value="Zakłady Elektroniczne Elektra">
+                        <option value="Zakłady Kazimieruk">
+                        <option value="Zakłady Mechaniczne Kazimieruk">
+                        <option value="Zamin">
+                        <option value="Zaptech">
+                        <option value="Zarząd Infrastruktury Sportowej">
+                        <option value="Zarząd Infrastruktury Sportowej w Krakowie">
+                        <option value="Zawieja">
+                        <option value="Zeiss">
+                        <option value="Zetom">
+                        <option value="Zhongshan">
+                        <option value="Zortrax">
+                        <option value="Zwick">
+                        <option value="Zwick Polska-Service">
+                        <option value="Zwick Roell">
+                        <option value="alitech">
+                        <option value="bhpCenterBHP-Center">
+                        <option value="brak">
+                        <option value="cafe+co Delikomat">
+                        <option value="e-prototypy">
+                        <option value="eBilet Polska">
+                        <option value="eRecruitment Solution">
+                        <option value="eRecruitment Solutions">
+                        <option value="eRecuitment Solutions">
+                        <option value="eXtra.com">
+                        <option value="iSystem">
+                        <option value="ifm electronic">
+                        <option value="itekna">
+                        <option value="item">
+                        <option value="jsail Mariusz Juszczak">
+                        <option value="kate-art">
+                        <option value="kate-art LEszek NAjder">
+                        <option value="klocwork">
+                        <option value="kwieciem Pleciem">
+                        <option value="labortronic">
+                        <option value="mobica">
+                        <option value="national Instruments">
+                        <option value="nazwa.pl">
+                        <option value="pickering">
+                        <option value="pracownia">
+                        <option value="urząd Dozoru Technicznego">
+                        <option value="vector">
+                        <option value="vega-tronik">
+                        <option value="viaToll">
+                        <option value="vitec">
+                        <option value="Śruby">
+
+                    </datalist>
+                </form>
+            </div>
+            <div class="modal-fixed-footer blue">
+                <a onclick="closeModal('advSearch');" class="modal-close">
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
+                </a>
+            </div>
+        </div>
+        <!-- ============================ Modal Structure for advSearchByColor ============================================= -->
+        <div id="advSearchByColor" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
+                <h5 style="text-align: center">Advance Search By color</h5>
+                <form method="post">
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column" id="search_query_columns" name="search_query_columns" type="text" value="RowColor">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="color?" id="search_query_value" list="colors" name="search_query_value" type="text">
+                        </div>
+                        <div class="col s3">
+                            <input type="submit" class="btn" style="padding: 0 30px">
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_columns2" list="columns" name="search_query_columns2" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign2" list="signs" name="search_query_sign2" type="text" value="">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_value2" name="search_query_value2" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_columns3" list="columns" name="search_query_columns3" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign3" list="signs" name="search_query_sign3" type="text" value="">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_value3" name="search_query_value3" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-fixed-footer blue">
+                <a onclick="closeModal('advSearchByColor');" class="modal-close">
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
+                </a>
+            </div>
+        </div>
+        <!-- ============================ Modal Structure for advSearchBySupplierPO ======================================== -->
+        <div id="advSearch7" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
+                <h5 style="text-align: center">Advance Search Supplier & PO</h5>
+                <form method="post">
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column" id="search_query_columns" name="search_query_columns" type="text" value="Supplier">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="LIKE">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="supplier?" list="suppliers" id="search_query_value" name="search_query_value" type="text">
+                        </div>
+                        <div class="col s3">
+                            <input type="submit" class="btn" style="padding: 0 30px">
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column2" id="search_query_columns2" list="columns" name="search_query_columns2" type="text" value="PO">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign2" list="signs" name="search_query_sign2" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="PO number?" id="search_query_value2" name="search_query_value2" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_columns3" list="columns" name="search_query_columns3" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign3" list="signs" name="search_query_sign3" type="text" value="">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_value3" name="search_query_value3" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-fixed-footer blue">
+                <a onclick="closeModal('advSearch7');" class="modal-close">
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
+                </a>
+            </div>
+        </div>
+        <!-- ============================ Modal Structure for advSearchBySupplierPOAuthEmail =============================== -->
+        <div id="advSearch8" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
+                <h5 style="text-align: center">Advance Search Supplier + PO + AuthEmail not Blank</h5>
+                <form method="post">
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column" id="search_query_columns" name="search_query_columns" type="text" value="Supplier">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="LIKE">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="supplier?" list="suppliers" id="search_query_value" name="search_query_value" type="text">
+                        </div>
+                        <div class="col s3">
+                            <input type="submit" class="btn" style="padding: 0 30px">
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column2" id="search_query_columns2" list="columns" name="search_query_columns2" type="text" value="PO">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign2" list="signs" name="search_query_sign2" type="text" value="=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="PO number?" id="search_query_value2" name="search_query_value2" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column3" id="search_query_columns3" list="columns" name="search_query_columns3" type="text" value="AuthEmail">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign3" list="signs" name="search_query_sign3" type="text" value="!=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="search value3" id="search_query_value3" name="search_query_value3" type="text" value="null">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-fixed-footer blue">
+                <a onclick="closeModal('advSearch8');" class="modal-close">
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
+                </a>
+            </div>
+        </div>
+        <!-- ================================ Modal Structure for Advance Search Supplier + Status not blank =============== -->
+        <div id="advSearch9" class="modal" style="border: 1px solid #bbb">
+            <div class="modal-content white" style="height: auto">
+                <h5 style="text-align: center">Advance Search Supplier + Status not blank</h5>
+                <form method="post">
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column" id="search_query_columns" name="search_query_columns" type="text" value="Supplier">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign" list="signs" name="search_query_sign" type="text" value="LIKE">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="supplier?" list="suppliers" id="search_query_value" name="search_query_value" type="text">
+                        </div>
+                        <div class="col s3">
+                            <input type="submit" class="btn" style="padding: 0 30px">
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="search column2" id="search_query_columns2" list="columns" name="search_query_columns2" type="text" value="Status">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign2" list="signs" name="search_query_sign2" type="text" value="!=">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="search value2" id="search_query_value2" name="search_query_value2" type="text" value="null">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_columns3" list="columns" name="search_query_columns3" type="text">
+                        </div>
+                        <div class="col s1 center">
+                            <input id="search_query_sign3" list="signs" name="search_query_sign3" type="text" value="">
+                        </div>
+                        <div class="col s4">
+                            <input placeholder="" id="search_query_value3" name="search_query_value3" type="text">
+                        </div>
+                        <div class="col s3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-fixed-footer blue">
+                <a onclick="closeModal('advSearch9');" class="modal-close">
+                    <h5 style="padding: 8px;border: 1px solid #2196F3;margin: 10px 0 0 0;">Close</h5>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- ============================ Search input ===================================================================== -->
+    <form class="col s2 no-padding" method="post">
+        <label for="search_query"></label>
+        <input placeholder="search" id="search_query" name="search_query" type="search">
+    </form>
+    <!-- ============================ 2nd row for Tab Header =========================================================== -->
+    <aside class="row">
+        <table style="border-left: 6px solid transparent; font-size: 0,85em">
+            <tbody>
+            <tr>
+                <td class="IM-ID">
+                    <span style="color: dodgerblue">ID</span>
+                    <a href="/IFV/ID/gte/0/ID/ASC/1">
+                        <i class="fa fa-sort-desc right-align" style="color: dodgerblue;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-BC">
+                    <span style="color: inherit">Barcode</span>
+                    <a href="/IFV/ID/gte/0/BC/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-EntryDate">
+                    <span style="color: inherit">Date</span>
+                    <a href="/IFV/ID/gte/0/EntryDate/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-Supplier">
+                    <span style="color: inherit">Supplier</span>
+                    <a href="/IFV/ID/gte/0/Supplier/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR">
+                    <span style="color: inherit">InvoiceNR</span>
+                    <a href="/IFV/ID/gte/0/InvoiceNR/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-InvDate">
+                    <span style="color: inherit">InvDate</span>
+                    <a href="/IFV/ID/gte/0/InvDate/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-PO">
+                    <span style="color: inherit">Purchase Order</span>
+                    <a href="/IFV/ID/gte/0/PO/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-NetPrice">
+                    <span style="color: inherit">Net Price</span>
+                    <a href="/IFV/ID/gte/0/NetPrice/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-Currency">
+                    <span style="color: inherit">Cur</span>
+                    <a href="/IFV/ID/gte/0/Currency/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-AuthContact">
+                    <span style="color: inherit">Authorization</span>
+                    <a href="/IFV/ID/gte/0/AuthContact/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <span style="color: inherit"></span>
+                    <!--<a href="">
+                        <i class="fa  right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>-->
+                </td>
+                <td class="IM-GR">
+                    <span style="color: inherit">Goods Recipt</span>
+                    <a href="/IFV/ID/gte/0/GR/DESC/1">
+                        <i class="fa fa-sort right-align" style="color: black;padding: 0 0 0 5px" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-details"></td>
+            </tr>
+            </tbody>
+        </table>
+    </aside>
+</header>
+<!-- ============================ InvoicesList ===================================================================== -->
+<main class="row">
+    <!-- ============================ ID = 53223 ======================================================================= -->
+    <article class="hoverable">
+        <table class="white lighten-3" style="border-left: 6px solid #1ba530">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/IFV/ID/eq/53223/ID/DESC/1">53223</a></td>
+                <td class="IM-BC">
+                    <a href="/ID/53223/scan" onClick="scan53223=window.open('/ID/53223/scan','scan53223','width=640,height=480');
+                                                    setTimeout(function () { scan53223.close();}, 500);
+                                                    return false;">
+                        <span style="color: black">31-05-1...</span>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-06-03</td>
+                <td class="IM-Supplier">
+                    <a href="/IFV/Supplier/eq/pracownia/ID/DESC/1">
+                        pracownia
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR"><a href="/IFV/InvoiceNR/=//ID/DESC/1" target="_blank" style="color: red"></a></td>
+                <td class="IM-InvDate">2016-06-26</td>
+                <td class="IM-PO"><a href="/IFV/Supplier/eq/pracownia/PO/eq//ID/DESC/1"></td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">5.60</td>
+                <td class="IM-Currency">EUR</td>
+                <td class="IM-AuthContact" >
+                    <a href="/ID/53223/authEmail" onClick="authEmail53223=window.open('/ID/53223/authEmail','authEmail53223','width=640,height=480');
+                            setTimeout(function () { authEmail53223.close();}, 500);
+                            return false;">
+
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/53223/Folder" onClick="Folder53223=window.open('/ID/53223/Folder','Folder53223','width=640,height=480');
+                            setTimeout(function () { Folder53223.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('53223')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ============================ Process stage Indicator ========================================================== -->
+        <!-- off -->
+        <!-- ============================ Details for inv ID =============================================================== -->
+        <section id="53223" class="w3-accordion-content">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>31-05-16 Delphi (transza 3)</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>pracownia</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>Bochenek, Malgorzata</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-06-26</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>faktura_03.06.2016</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td>1. No limit in purchase order – lack of control by users</td>
+                </tr>
+                <tr>
+                    <td>FinanceComments:</td>
+                    <td>Finance Comments: test 2</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+    <!-- ============================ ID = 53222 ======================================================================= -->
+    <article class="hoverable">
+        <table class="white lighten-3" style="border-left: 6px solid #1ba530">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/IFV/ID/eq/53222/ID/DESC/1">53222</a></td>
+                <td class="IM-BC">
+                    <a href="/ID/53222/scan" onClick="scan53222=window.open('/ID/53222/scan','scan53222','width=640,height=480');
+                                                    setTimeout(function () { scan53222.close();}, 500);
+                                                    return false;">
+                        <span style="color: black">31-05-1...</span>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-06-03</td>
+                <td class="IM-Supplier">
+                    <a href="/IFV/Supplier/eq/Pracownia+Projektowa+Architekt+Robert+Cekiera/ID/DESC/1">
+                        Pracownia Proje...
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR">3/05/2016</td>
+                <td class="IM-InvDate">2016-05-31</td>
+                <td class="IM-PO"><a href="/IFV/Supplier/eq/Pracownia+Projektowa+Architekt+Robert+Cekiera/PO/eq/4540273656/ID/DESC/1">4540273656</td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">27500.00</td>
+                <td class="IM-Currency">PLN</td>
+                <td class="IM-AuthContact" >
+                    <a href="/ID/53222/authEmail" onClick="authEmail53222=window.open('/ID/53222/authEmail','authEmail53222','width=640,height=480');
+                            setTimeout(function () { authEmail53222.close();}, 500);
+                            return false;">
+
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/53222/Folder" onClick="Folder53222=window.open('/ID/53222/Folder','Folder53222','width=640,height=480');
+                            setTimeout(function () { Folder53222.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('53222')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ============================ Process stage Indicator ========================================================== -->
+        <!-- off -->
+        <!-- ============================ Details for inv ID =============================================================== -->
+        <section id="53222" class="w3-accordion-content">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>31-05-16 Delphi (transza 3)</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>Pracownia Projektowa Architekt Robert Cekiera</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td>3/05/2016</td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td>4540273656</td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>Bochenek, Malgorzata</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-05-31</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>faktura_03.06.2016</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>FinanceComments:</td>
+                    <td>test</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+    <!-- ============================ ID = 53221 ======================================================================= -->
+    <article class="hoverable">
+        <table class="white lighten-3" style="border-left: 6px solid #4a148c">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/IFV/ID/eq/53221/ID/DESC/1">53221</a></td>
+                <td class="IM-BC">
+                    <a href="/ID/53221/scan" onClick="scan53221=window.open('/ID/53221/scan','scan53221','width=640,height=480');
+                                                    setTimeout(function () { scan53221.close();}, 500);
+                                                    return false;">
+                        <span style="color: black">4801273569</span>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-05-11</td>
+                <td class="IM-Supplier">
+                    <a href="/IFV/Supplier/eq/Business+Lease/ID/DESC/1">
+                        Business Lease
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR"><a href="/IFV/InvoiceNR/=/56876/ID/DESC/1" target="_blank" style="color: red">56876</a></td>
+                <td class="IM-InvDate">2016-03-01</td>
+                <td class="IM-PO"><a href="/IFV/Supplier/eq/Business+Lease/PO/eq//ID/DESC/1"></td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">4139.53</td>
+                <td class="IM-Currency">PLN</td>
+                <td class="IM-AuthContact" >
+                    <a href="/ID/53221/authEmail" onClick="authEmail53221=window.open('/ID/53221/authEmail','authEmail53221','width=640,height=480');
+                            setTimeout(function () { authEmail53221.close();}, 500);
+                            return false;">
+
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/53221/Folder" onClick="Folder53221=window.open('/ID/53221/Folder','Folder53221','width=640,height=480');
+                            setTimeout(function () { Folder53221.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('53221')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ============================ Process stage Indicator ========================================================== -->
+        <!-- off -->
+        <!-- ============================ Details for inv ID =============================================================== -->
+        <section id="53221" class="w3-accordion-content">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>4801273569</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>Business Lease</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td>56876</td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>resolution@apdelphi.com</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-03-01</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>EXT SENDER-Invoice Resolution Required#[ref:_Case-000015839:ref]:BarCode#4801273569:Supplier#BUSINESS LEASE POLAND SP Z O O:Reason#Goods Receipt missing in SAP</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>FinanceComments:</td>
+                    <td>test</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+    <!-- ============================ ID = 53220 ======================================================================= -->
+    <article class="hoverable">
+        <table class="white lighten-3" style="border-left: 6px solid #4a148c">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/IFV/ID/eq/53220/ID/DESC/1">53220</a></td>
+                <td class="IM-BC">
+                    <a href="/ID/53220/scan" onClick="scan53220=window.open('/ID/53220/scan','scan53220','width=640,height=480');
+                                                    setTimeout(function () { scan53220.close();}, 500);
+                                                    return false;">
+                        <span style="color: black">4801292308</span>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-05-11</td>
+                <td class="IM-Supplier">
+                    <a href="/IFV/Supplier/eq/American+Express/ID/DESC/1">
+                        American Express
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR">BT 37160416</td>
+                <td class="IM-InvDate">2016-05-02</td>
+                <td class="IM-PO"><a href="/IFV/Supplier/eq/American+Express/PO/eq//ID/DESC/1"></td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">97.22</td>
+                <td class="IM-Currency">PLN</td>
+                <td class="IM-AuthContact" >
+                    <a href="/ID/53220/authEmail" onClick="authEmail53220=window.open('/ID/53220/authEmail','authEmail53220','width=640,height=480');
+                            setTimeout(function () { authEmail53220.close();}, 500);
+                            return false;">
+
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/53220/Folder" onClick="Folder53220=window.open('/ID/53220/Folder','Folder53220','width=640,height=480');
+                            setTimeout(function () { Folder53220.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('53220')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ============================ Process stage Indicator ========================================================== -->
+        <!-- off -->
+        <!-- ============================ Details for inv ID =============================================================== -->
+        <section id="53220" class="w3-accordion-content">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>4801292308</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>American Express</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td>BT 37160416</td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>resolutionap@delphi.com</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-05-02</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>EXT SENDER-Invoice Resolution Required#[ref:_Case-000191674:ref]:BarCode#4801292308:Supplier#GLOBAL BUSINESS TRAVEL POLAND SA:Reason#Goods Receipt missing in SAP</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td>2016-05-11</td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>FinanceComments:</td>
+                    <td>test</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+    <!-- ============================ ID = 53219 ======================================================================= -->
+    <article class="hoverable">
+        <table class="yellow lighten-3" style="border-left: 6px solid #4a148c">
+            <tbody>
+            <tr>
+                <td class="IM-ID"><a href="/IFV/ID/eq/53219/ID/DESC/1">53219</a></td>
+                <td class="IM-BC">
+                    <a href="/ID/53219/scan" onClick="scan53219=window.open('/ID/53219/scan','scan53219','width=640,height=480');
+                                                    setTimeout(function () { scan53219.close();}, 500);
+                                                    return false;">
+                        <span style="color: black">4801292303</span>
+                    </a>
+                </td>
+                <td class="IM-EntryDate ">2016-05-11</td>
+                <td class="IM-Supplier">
+                    <a href="/IFV/Supplier/eq/American+Express/ID/DESC/1">
+                        American Express
+                    </a>
+                </td>
+                <td class="IM-InvoiceNR">BT 37140416</td>
+                <td class="IM-InvDate">2016-05-02</td>
+                <td class="IM-PO"><a href="/IFV/Supplier/eq/American+Express/PO/eq//ID/DESC/1"></td>
+                <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">611.02</td>
+                <td class="IM-Currency">PLN</td>
+                <td class="IM-AuthContact" >
+                    <a href="/ID/53219/authEmail" onClick="authEmail53219=window.open('/ID/53219/authEmail','authEmail53219','width=640,height=480');
+                            setTimeout(function () { authEmail53219.close();}, 500);
+                            return false;">
+                        Marta.Jodlowska...
+                    </a>
+                </td>
+                <td class="IM-AuthEmail">
+                    <a href="/ID/53219/Folder" onClick="Folder53219=window.open('/ID/53219/Folder','Folder53219','width=640,height=480');
+                            setTimeout(function () { Folder53219.close();}, 500);
+                            return false;">
+                        <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    </a>
+                </td>
+                <td class="IM-GR"></td>
+                <td class="IM-details"><i class="fa fa-angle-double-down" onclick="myFunction('53219')"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ============================ Process stage Indicator ========================================================== -->
+        <!-- off -->
+        <!-- ============================ Details for inv ID =============================================================== -->
+        <section id="53219" class="w3-accordion-content">
+            <table class="highlight IM-detailsTabel" style="border-top: none">
+                <tbody>
+                <tr>
+                    <td>BC:</td>
+                    <td>4801292303</td>
+                </tr>
+                <tr>
+                    <td>Supplier:</td>
+                    <td>American Express</td>
+                </tr>
+                <tr>
+                    <td>InvNr:</td>
+                    <td>BT 37140416</td>
+                </tr>
+                <tr>
+                    <td>PO:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GR:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ContactGenpact:</td>
+                    <td>resolutionap@delphi.com</td>
+                </tr>
+                <tr>
+                    <td>InvDate:</td>
+                    <td>2016-05-02</td>
+                </tr>
+                <tr>
+                    <td>EmailSubject:</td>
+                    <td>EXT SENDER-Invoice Resolution Required#[ref:_Case-000191687:ref]:BarCode#4801292303:Supplier#GLOBAL BUSINESS TRAVEL POLAND SA:Reason#Goods Receipt missing in SAP</td>
+                </tr>
+                <tr>
+                    <td>AuthDate:</td>
+                    <td>2016-05-11</td>
+                </tr>
+                <tr>
+                    <td>AuthReplyDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>EndDate:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>GenpactLastReply:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>UserComments:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>FinanceComments:</td>
+                    <td>test</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </article>
+
+
+    <!-- ============================ Input Form ===================================================================== -->
+</main>
+
+<!-- ============================ Footer       ===================================================================== -->
+<footer class="page-footer blue">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Invoices Manager 3.0</h5>
+                <a href="mailto:karol.kistela@delphi.com?cc=karol.kistela@gmail.com&subject=Invoices%20Manager"
+                <p class="grey-text text-lighten-4">Author: karol.kistela@delphi.com</p>
+                </a>
+                <a href="https://pl.linkedin.com/in/karol-kistela-65073b5b">
+                    <i class="fa fa-linkedin fa-2x white-text" style="padding: 5px" aria-hidden="true"></i>
+                </a>
+                <a href="https://github.com/KarolKistela">
+                    <i class="fa fa-github fa-2x white-text" style="padding: 5px" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Documentation</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="#!">User instruction</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">Java documentation</a></li>
+                    <li><a class="grey-text text-lighten-3" href="#!">VBA documentation</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/KarolKistela/InvoiceManager-3.0">Source Code</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            <p>© 2016 Copyright Delphi Polska</p>
+            <a class="grey-text text-lighten-4 right" href="#!"><img src="http://delphi.com/images/default-source/site-design/delphi-logo-white.png?sfvrsn=2"></a>
+        </div>
+    </div>
+</footer>
+
+
+<script>
+    function w3_open() {
+        document.getElementsByClassName("IM-sidenav")[0].style.display = "block";
+        document.getElementsByClassName("IM-overlay")[0].style.display = "block";
+    }
+    function w3_close() {
+        document.getElementsByClassName("IM-sidenav")[0].style.display = "none";
+        document.getElementsByClassName("IM-overlay")[0].style.display = "none";
+    }
+    function myAccFunc() {
+        var x = document.getElementById("demoAcc");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
+    function myDropFunc() {
+        var x = document.getElementById("demoDrop");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
+    $(document).ready(function(){
+        $('.collapsible').collapsible({
+            accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+        });
+    });
+    function myFunction(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
+    function popUpModal(id) {
+        var modalId = document.getElementById(id);
+        modalId.style.display='block';
+        setTimeout(function () { document.getElementById(id).style.display='none';}, 1500);
+        return false;
+    }
+    function openModal(id) {
+        var modalId = document.getElementById(id)
+        modalId.style.display='block';
+    }
+    function closeModal(id) {
+        var modalId = document.getElementById(id)
+        modalId.style.display='none';
+    }
+    $(document).ready(function(){
+        $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
+    });
+    $(document).ready(function(){
+        $('.tooltipped').tooltip({delay: 50});
+    });
+    $(document).ready(function() {
+        Materialize.updateTextFields();
+    });
+    $('.datepicker').pickadate({
+        format: 'yyyy-mm-dd',
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+    });
+</script>
+</body>
+</html>

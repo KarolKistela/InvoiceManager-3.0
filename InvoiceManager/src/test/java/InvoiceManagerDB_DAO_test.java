@@ -1,5 +1,5 @@
 import Model.Invoice;
-import Model.InvoiceManagerDB_DAO;
+import Model.DAO.InvoiceManagerDB_DAO;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;

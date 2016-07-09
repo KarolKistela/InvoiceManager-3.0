@@ -32,7 +32,7 @@
 //    private int pageNr;
 //    private int records;
 //    private String sqlQuery;
-//    private List<String[]> resultSet;
+//    private List<String[]> invoices;
 //    private HashMap<String, String> usersColors;
 //    private HashMap<String, Integer> invDuplicatesMap;
 //
@@ -45,7 +45,7 @@
 //            System.out.println("********View.Renderers.InvNrView ROUT: " + this.rout + this.pageNr + " ********");
 //            InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
 //            this.sqlQuery = sqlQueryConstructorInvNr(request);
-//            this.resultSet = db.sqlSELECT(sqlQuery, pageNr, true, true);    // get resultSet of query
+//            this.invoices = db.sqlSELECT(sqlQuery, pageNr, true, true);    // get invoices of query
 //            this.usersColors = db.usersColorMap();                          // get colors
 //            this.records = db.sqlCOUNT(sqlQuery.replace("*", "count(ID)"));  // get how many records will return query
 //            if (ImCFG.isCheckForInvDuplicates()) {                          // if true check for duplicates in invoice nrs
@@ -55,10 +55,10 @@
 //            }
 //        } catch (SQLException e) {
 //            e.printStackTrace();
-//            this.resultSet = null;
+//            this.invoices = null;
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
-//            this.resultSet = null;
+//            this.invoices = null;
 //        }
 //
 //    }
@@ -76,7 +76,7 @@
 //                                            this.tabHeader,
 //                                            this.tabHeaderWithSort,
 //                                            this.pagination).render());
-//        replaceMap.put("DBTable", new DBTable(this.resultSet,
+//        replaceMap.put("DBTable", new DBTable(this.invoices,
 //                                              this.usersColors,
 //                                              this.invDuplicatesMap).render());
 //        replaceMap.put("Footer", getTemplate("/Parts/Footer.ftl").toString());

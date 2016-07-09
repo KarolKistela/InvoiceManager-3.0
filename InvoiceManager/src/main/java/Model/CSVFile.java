@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.Controller;
+import Model.DAO.InvoiceManagerDB_DAO;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,20 +10,21 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static Controller.Controller.CSV_EXPORT_FOLDER_PATH;
 import static Model.Helpers.fileExists;
 
 /**
  * Created by Karol Kistela on 01-Jun-16.
  */
 public class CSVFile {
-    private final String CSVPATH = "src/main/resources/DBcsv/IM.csv";
+    private final String CSVPATH = CSV_EXPORT_FOLDER_PATH + "\\IM.csv";
     private final Path csvFilePath = Paths.get(CSVPATH);
     private BufferedWriter writer;
     private List<String[]> rs = new LinkedList<>();
 
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
-        CSVFile s = new CSVFile(Controller.sqlQuery);
-    }
+//    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+//        CSVFile s = new CSVFile("SELECT * from InvoicesFullView;");
+//    }
 
     public CSVFile(String sqlQuery) throws IOException, ClassNotFoundException, SQLException {
         this.rs = new InvoiceManagerDB_DAO().sqlSELECT(sqlQuery,1,false,false);
@@ -62,16 +63,27 @@ public class CSVFile {
         writer.append("User" + '\t');
         writer.append("RowColor" + '\t');
         writer.append("ProcessStatus" + '\t');
-        writer.append("ProcessStage" + '\n');
+//        writer.append("ProcessStage" + '\t');
+        writer.append("FinanceComments" + '\t');
+        writer.append("InvNrDuplicates" + '\t');
+        writer.append("UserColor" + '\n');
 
         for (String[] r: this.rs) {
             int i;
             for (i = 0; i<r.length; i++) {
                 if (i!=r.length-1) {
-                    writer.append(r[i].replace(",",""));
+                    try {
+                        writer.append(r[i].replace(",", ""));
+                    } catch (NullPointerException e) {
+                        writer.append("");
+                    }
                     writer.append('\t');
                 } else {
-                    writer.append(r[i].replace(",",""));
+                    try {
+                        writer.append(r[i].replace(",", ""));
+                    } catch (NullPointerException e) {
+                        writer.append("");
+                    }
                     writer.append('\n');
                 }
             }

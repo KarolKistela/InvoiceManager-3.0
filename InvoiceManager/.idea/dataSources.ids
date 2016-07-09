@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="Sqlite (Xerial) - InvoiceManager.cfg" uuid="1fa96ad0-7465-4936-8bf3-2088df7973b3">
+  <data-source name="Sqlite (Xerial) - InvoicesManager.cfg" uuid="1fa96ad0-7465-4936-8bf3-2088df7973b3">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
@@ -15,6 +15,10 @@
       <column name="userNetID" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="false" jdbcType="12" def="J0RCJw=="/>
       <column name="userEmail" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12" def="Jyc="/>
       <column name="userColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12" def="Jyc="/>
+      <column name="DNSserver" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="DNSuser" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="DNSpass" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="DNSjdbcClass" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <primary-key name="cfg_pk" columns="id"/>
     </table>
     <table name="Currencies" schema="" catalog="" type="TABLE">
@@ -58,10 +62,14 @@
       <column name="seq" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
   </data-source>
-  <data-source name="Sqlite (Xerial) - InvoicesManager.db" uuid="3ecc8eab-645e-4d18-8e3d-69b944133666">
+  <data-source name="Old SQLITE DB no FinnanceComments" uuid="2db88d52-99f1-459e-b18e-14dff5aa10b4">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
+    <table name="InvNrList" schema="" catalog="" type="VIEW">
+      <column name="InvoiceNR" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="count(ID)" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+    </table>
     <table name="Invoices" schema="" catalog="" type="TABLE">
       <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
       <column name="BC" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
@@ -88,13 +96,120 @@
       <column name="RowColor" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="ProcessStatus" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="ProcessStage" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="FinanceComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12" def="Jyc="/>
       <primary-key name="invoices_pk" columns="id"/>
+    </table>
+    <table name="InvoicesFullView" schema="" catalog="" type="VIEW">
+      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="BC" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EntryDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ContactGenpact" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Supplier" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvoiceNR" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvScanPath" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="PO" sqlType="VARCHAR(10)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="NetPrice" sqlType="DECIMAL(16,2)" precision="0" scale="-1" nullable="true" jdbcType="6"/>
+      <column name="Currency" sqlType="VARCHAR(3)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EmailSubject" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthContact" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthReplyDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthEmail" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EndDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GenpactLastReply" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Status" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="User" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="RowColor" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ProcessStatus" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ProcessStage" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="FinanceComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvNrDuplicates" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
     <table name="Users" schema="" catalog="" type="TABLE">
       <column name="NetID" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
       <column name="Email" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
       <primary-key name="users_pk" columns="netid"/>
+    </table>
+  </data-source>
+  <data-source name="Sqlite (Xerial) - InvoicesManager.db" uuid="64d14503-d836-4fc5-997a-2ee7031767e4">
+    <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
+    <schema name="" catalog=""/>
+    <table name="InvNrList" schema="" catalog="" type="VIEW">
+      <column name="InvoiceNR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvNrDuplicates" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="Invoices" schema="" catalog="" type="TABLE">
+      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="BC" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EntryDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ContactGenpact" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Supplier" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvoiceNR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvScanPath" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="PO" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="NetPrice" sqlType="DECIMAL(16,2)" precision="0" scale="-1" nullable="true" jdbcType="6"/>
+      <column name="Currency" sqlType="VARCHAR(3)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EmailSubject" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthContact" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthReplyDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthEmail" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EndDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GenpactLastReply" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Status" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="User" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="RowColor" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ProcessStatus" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="FinanceComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <primary-key columns="id"/>
+    </table>
+    <table name="InvoicesFullView" schema="" catalog="" type="VIEW">
+      <column name="ID" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
+      <column name="BC" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EntryDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ContactGenpact" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Supplier" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvoiceNR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvScanPath" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="PO" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="NetPrice" sqlType="DECIMAL(16,2)" precision="0" scale="-1" nullable="true" jdbcType="6"/>
+      <column name="Currency" sqlType="VARCHAR(3)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EmailSubject" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthContact" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthReplyDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="AuthEmail" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="EndDate" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GR" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="GenpactLastReply" sqlType="DATE" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="Status" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="User" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="RowColor" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="ProcessStatus" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="FinanceComments" sqlType="TEXT" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="InvNrDuplicates" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="Users" schema="" catalog="" type="TABLE">
+      <column name="NetID" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="Email" sqlType="VARCHAR(255)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="UserColor" sqlType="VARCHAR(7)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <primary-key columns="netid"/>
+    </table>
+    <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
+      <column name="name" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
+      <column name="seq" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
     </table>
   </data-source>
 </component>

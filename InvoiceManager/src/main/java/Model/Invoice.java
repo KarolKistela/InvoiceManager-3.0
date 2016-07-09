@@ -1,5 +1,6 @@
 package Model;
 
+import Model.DAO.InvoiceManagerDB_DAO;
 import spark.Request;
 
 import java.io.FileNotFoundException;
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Model.Helpers.decimal;
+import static Controller.Controller.FINANCE_VIEW;
 
 /**
  * Created by mzjdx6 on 21-Apr-16.
@@ -37,12 +38,16 @@ public class Invoice {
     private String User;
     private String RowColor;
     private String ProcessStatus;
-    private int ProcessStage;
+//    private int ProcessStage;
+    private String FinanceComments;
+    private Integer InvNrDuplicates;
+    private String UserColor;
 
     public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
         Invoice inv = new Invoice(50000);
-        inv.toString();
         System.out.println(inv.getAuthContact());
+        inv.toString();
+
     }
 
     public Invoice(ResultSet rs) throws SQLException {
@@ -63,7 +68,6 @@ public class Invoice {
         this.AuthReplyDate = (rs.getString("AuthReplyDate"));
         this.AuthEmail = (rs.getString("AuthEmail"));
         this.EndDate = (rs.getString("EndDate"));
-//        this.GR = (rs.getString("GR"));
         this.GR = (rs.getString("GR"));
         this.GenpactLastReply = (rs.getString("GenpactLastReply"));
         this.UserComments = (rs.getString("UserComments"));
@@ -71,7 +75,10 @@ public class Invoice {
         this.User = (rs.getString("User"));
         this.RowColor = (rs.getString("RowColor"));
         this.ProcessStatus = (rs.getString("ProcessStatus"));
-        this.ProcessStage = (rs.getInt("ProcessStage"));
+//        this.ProcessStage = (rs.getInt("ProcessStage"));
+        this.FinanceComments = rs.getString("FinanceComments");
+        this.InvNrDuplicates = rs.getInt("InvNrDuplicates");
+        this.UserColor = rs.getString("UserColor");
     }
 
     public Invoice() {
@@ -81,19 +88,51 @@ public class Invoice {
     public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException {
         InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
 
-        db.upsertInvoice(request);
+        if (FINANCE_VIEW) {
+            db.upsertInvoiceFinance(request);
+        } else {
+            db.upsertInvoice(request);
+        }
 
         return true;
     }
 
     public Invoice(Integer pageNr) throws FileNotFoundException, ClassNotFoundException, SQLException {
-        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
-        db.sqlSELECTid(pageNr);
+        String[] invRow = new InvoiceManagerDB_DAO().sqlSELECTid2(pageNr);
+
+        this.ID = Integer.parseInt(invRow[0]);
+        this.BC = invRow[1];
+        this.EntryDate = invRow[2];
+        this.ContactGenpact = invRow[3];
+        this.Supplier = invRow[4];
+        this.InvoiceNR = invRow[5];
+        this.InvScanPath =  invRow[6];
+        this.PO = invRow[7];
+        this.NetPrice = Double.parseDouble(invRow[8]);
+        this.Currency = invRow[9];
+        this.InvDate = invRow[10];
+        this.EmailSubject = invRow[11];
+        this.AuthContact = invRow[12];
+        this.AuthDate = invRow[13];
+        this.AuthReplyDate = invRow[14];
+        this.AuthEmail = invRow[15];
+        this.EndDate = invRow[16];
+        this.GR = invRow[17];
+        this.GenpactLastReply = invRow[18];
+        this.UserComments = invRow[19];
+        this.Status = invRow[20];
+        this.User = invRow[21];
+        this.RowColor = invRow[22];
+        this.ProcessStatus = invRow[23];
+//        this.ProcessStage = Integer.parseInt(invRow[24]);
+        this.FinanceComments = invRow[24];
+        this.InvNrDuplicates = Integer.parseInt(invRow[25]);
+        this.UserColor = invRow[26];
     }
 
     public List<String[]> getResultSet() {
         List<String[]> retVal = new LinkedList();
-        String[] row = new String[25];
+        String[] row = new String[27];
         row[0] = Integer.toString(ID).replace(",","");
         row[1] = BC;
         row[2] = EntryDate;
@@ -118,7 +157,10 @@ public class Invoice {
         row[21] = User;
         row[22] = RowColor;
         row[23] = ProcessStatus;
-        row[24] = Integer.toString(ProcessStage);
+//        row[24] = Integer.toString(ProcessStage);
+        row[24] = FinanceComments;
+        row[25] = Integer.toString(InvNrDuplicates);
+        row[26] = UserColor;
         retVal.add(row);
         return retVal;
     }
@@ -150,17 +192,19 @@ public class Invoice {
                 ", User='" + User + '\'' +
                 ", RowColor='" + RowColor + '\'' +
                 ", ProcessStatus='" + ProcessStatus + '\'' +
-                ", ProcessStage=" + ProcessStage +
+                ", FinanceComents=" + FinanceComments +
+                ", InvNrDuplicates=" + InvNrDuplicates +
+                ", UserColor=" + UserColor +
                 '}';
     }
 
-    public int getProcessStage() {
-        return ProcessStage;
-    }
-
-    public void setProcessStage(int processStage) {
-        ProcessStage = processStage;
-    }
+//    public int getProcessStage() {
+//        return ProcessStage;
+//    }
+//
+//    public void setProcessStage(int processStage) {
+//        ProcessStage = processStage;
+//    }
 
     public int getID() {
         return ID;
@@ -352,5 +396,29 @@ public class Invoice {
 
     public void setProcessStatus(String processStatus) {
         ProcessStatus = processStatus;
+    }
+
+    public String getFinanceComments() {
+        return FinanceComments;
+    }
+
+    public void setFinanceComments(String financeComments) {
+        FinanceComments = financeComments;
+    }
+
+    public Integer getInvNrDuplicates() {
+        return InvNrDuplicates;
+    }
+
+    public void setInvNrDuplicates(Integer invNrDuplicates) {
+        InvNrDuplicates = invNrDuplicates;
+    }
+
+    public String getUserColor() {
+        return UserColor;
+    }
+
+    public void setUserColor(String userColor) {
+        UserColor = userColor;
     }
 }

@@ -1,4 +1,4 @@
-import Model.InvoiceManagerDB_DAO;
+import Model.DAO.InvoiceManagerDB_DAO;
 
 import java.io.File;
 import java.io.IOException;

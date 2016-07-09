@@ -3,56 +3,81 @@ package Controller;
 /**
  * Created by mzjdx6 on 24-Mar-16.
  * TODO: rewrite it to use with spark 2.3 - low priority
- * TODO: ImCFG should be Initiated in controller only, other objects should only do reload method on that object
- * TODO:
  */
 
-import Model.*;
+import Model.DAO.InvoiceManagerCFG;
+import Model.DAO.InvoiceManagerDB_DAO;
+import Model.Invoice;
+import Model.Suppliers;
+import View.HtmlFactory;
 import View.Renderer;
 import freemarker.template.TemplateException;
+import org.joda.time.LocalDate;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import View.HtmlFactory;
 
-import java.net.InetAddress;
-import java.net.URLEncoder;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 
 import static Model.Helpers.*;
 import static spark.Spark.*;
 
-import org.joda.time.LocalDate;
-
 public class Controller {
     public static final Integer PORT = 8082;
-    public static boolean isConnectedToDB;
+    public static String CFG_PATH = "C:\\InvoicesManager\\SQLITE\\InvoiceManagerCFG";
+    public static String CSV_EXPORT_FOLDER_PATH = "C:\\InvoicesManager\\SQLITE\\DBcsvExport";
+    public static boolean FINANCE_VIEW = false;
     public static InvoiceManagerCFG ImCFG;
-    // TODO: if there will be need to add more list (for eg: Authorization contanct list) then move them to class FilterLists - one class to rule them all
     public static Suppliers suppliers;
+    public static boolean isConnectedToDB;
+    public String errorMSG; // not sure if it will stay or not
+    public static String sqlQuery = new String(); // story last SQL query executed by Invoices Manager go to DAO_InvoicesFullView constructor
+
     private final HtmlFactory htmlFactory;
-    // TODO: do log class for storying errors, recent routs, sql queryies
-    public PrintWriter errorMSG; // not sure if it will stay or not
-    public static String advanceSearchSQLquery = new String();
-    public static String sqlQuery = new String();
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         //TODO: (args.length == 0) ? connect to getDBview from ImCFG : connect to test getDBview for show case
         if (args.length == 0) {
-            new Controller();
+            new Controller(); // use default path to InvoicesManager.cfg
         }
         else {
-            new Controller();
+            new Controller(args[0]); // use not default path to cfg
         }
     }
 
     public Controller() throws IOException, ClassNotFoundException {
-        ImCFG = new InvoiceManagerCFG();
+        ImCFG = new InvoiceManagerCFG(CFG_PATH);
+        htmlFactory = new HtmlFactory();
+        suppliers = new Suppliers();
+        suppliers.toString();
+
+        if (fileExists(ImCFG.getImDBPath())) {
+            isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
+        }
+
+        System.err.println(new LocalDate().toString() + " testing connection to DB: " + isConnectedToDB);
+
+        setPort(PORT);
+        externalStaticFileLocation(ImCFG.getImExternalFolderPath());
+        staticFileLocation("/"); // => /resources
+        initializeRoutes();
+        try { // Open chrome with Invoices Manager address
+            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + PORT + "/");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Controller(String cfgPath) throws IOException, ClassNotFoundException {
+        this.CFG_PATH = cfgPath;
+        ImCFG = new InvoiceManagerCFG(CFG_PATH);
         htmlFactory = new HtmlFactory();
         suppliers = new Suppliers();
         suppliers.toString();
@@ -86,8 +111,8 @@ public class Controller {
             try {
                 doHandle(request, response, writer);
             } catch (Exception e) {
-                e.printStackTrace(errorMSG); ;
-                response.redirect("/error/");
+                errorMSG = e.getMessage();
+                response.redirect("/error");
             }
             return writer;
         }
@@ -95,28 +120,66 @@ public class Controller {
         protected abstract void doHandle(final Request request, final Response response, final StringWriter writer)
                 throws IOException, TemplateException, ClassNotFoundException, SQLException;
 
-        public void searchRespons(Request request, Response response){
+        public void searchRespons(Request request, Response response) throws UnsupportedEncodingException, FileNotFoundException, ClassNotFoundException {
             // TODO: change this to switch case
-            if (request.queryParams("search_query") == null) {
-                if (request.queryParams("search_query_columns") == null) {
-                    System.out.println(request.pathInfo());
-                } else if (!request.queryParams("search_query_columns2").equals("")) {
-                    advanceSearchSQLquery = advanceSearchSQLqueryConstructor(request);
-                    response.redirect("/advSearchQuery/OrderBy");
+            if (request.queryParams("search_query") == null) { // quick search is empty do Advance search
+                if (request.queryParams("search_query_columns") == null) { // advance search is empty
+                    // save Invoice from INVinputForm
+                    System.out.println("ID " + request.params("value1") + " update");
+                    for (String s: request.queryParams()
+                            ) {
+                        System.out.println(s + " = " + request.queryParams(s));
+                    }
+                    if (new Invoice().save(request)) {
+                        response.redirect("/IFV/ID/eq/" + request.params("value1") + "/ID/DESC/1");
+                    } else {
+                        response.redirect("/Error");
+                    }
                 } else {
-                    String searchValue = URLEncoder.encode(request.queryParams("search_query_value"));
-                    if (searchValue.equals("")) searchValue = "null";
-                    response.redirect("/View/" + request.queryParams("search_query_columns")
-                                               + "/" + signConvertor(request.queryParams("search_query_sign"))
-                                               + "/" + searchValue
-                                               +"/OrderBy");
+                    response.redirect(this.getIFVadvanceSearchURL(request));
                 }
-            } else if (request.queryParams("search_query").length() == 10) {
-                response.redirect("/View/BC/eq/" + request.queryParams("search_query") + "/OrderBy");
-            } else {
-                response.redirect("/ID/" + request.queryParams("search_query"));
+            } else if (request.queryParams("search_query").length() == 10) { // quick search is for BarCode
+                response.redirect("/IFV/BC/eq/" + request.queryParams("search_query") + "/ID/DESC/1");
+            } else { // quick search is for ID
+                response.redirect("/IFV/ID/eq/" + request.queryParams("search_query") + "/ID/DESC/1");
             }
         };
+
+        private String getIFVadvanceSearchURL(Request request) throws UnsupportedEncodingException {
+            String retVal = "/IFV/";
+
+            if (!request.queryParams("search_query_columns").equals("")) {
+                retVal += URLEncoder.encode(request.queryParams("search_query_columns"), "UTF-8") + "/";
+                retVal += URLEncoder.encode(signConvertor(request.queryParams("search_query_sign")), "UTF-8") + "/";
+                if (request.queryParams("search_query_value").equals("")) {
+                    retVal += "null/";
+                } else {
+                    retVal += URLEncoder.encode(request.queryParams("search_query_value"), "UTF-8") + "/";
+                }
+            }
+
+            if (!request.queryParams("search_query_columns2").equals("")) {
+                retVal += URLEncoder.encode(request.queryParams("search_query_columns2"), "UTF-8") + "/";
+                retVal += URLEncoder.encode(signConvertor(request.queryParams("search_query_sign2")), "UTF-8") + "/";
+                if (request.queryParams("search_query_value2").equals("")) {
+                    retVal += "null/";
+                } else {
+                    retVal += URLEncoder.encode(request.queryParams("search_query_value2"), "UTF-8") + "/";
+                }
+            }
+
+            if (!request.queryParams("search_query_columns3").equals("")) {
+                retVal += URLEncoder.encode(request.queryParams("search_query_columns3"), "UTF-8") + "/";
+                retVal += URLEncoder.encode(signConvertor(request.queryParams("search_query_sign3")), "UTF-8") + "/";
+                if (request.queryParams("search_query_value3").equals("")) {
+                    retVal += "null/";
+                } else {
+                    retVal += URLEncoder.encode(request.queryParams("search_query_value3"), "UTF-8") + "/";
+                }
+            }
+
+            return retVal + "ID/DESC/1";
+        }
 
         public boolean redirectToSettings() throws ClassNotFoundException {
             if (isConnectedToDB) {
@@ -143,152 +206,62 @@ public class Controller {
                 if (redirectToSettings()) {
                     response.redirect("/Settings");
                 } else {
-                    // change orderByClaouse from Imcfg, eg. 'ORDER BY ID DESC' => 'ID/DESC'
-                    String orderByClause = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/");
-                    response.redirect("/View/ID/gte/0/OrderBy/" + orderByClause + "/1");
+                    response.redirect("/IFV/ID/gte/0/ID/DESC/1");
                 }
             }
         });
-// ================================= Single Invoice view ====================================================================================
-        get(new FreemarkerBasedRoute("/ID/:id") {
+// ================================= Invoices view =====================================================================
+        get(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:column2/:sign2/:value2/:column3/:sign3/:value3/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 if (redirectToSettings()) {
                     response.redirect("/Settings");
                 } else {
-                    Renderer InvoiceView = htmlFactory.getIDView(request);
-                    webPage.write(InvoiceView.render());
+                    Renderer InvoicesView = htmlFactory.getInvoicesView(request);
+                    webPage.write(InvoicesView.render());
                 }
             }
         });
-        post(new FreemarkerBasedRoute("/ID/:id") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (request.queryParams("search_query") == null) {
-                    if (request.queryParams("search_query_columns") == null) {
-                        System.out.println("ID " + request.params("id") + " update");
-                        for (String s: request.queryParams()
-                                ) {
-                            System.out.println(s + " = " + request.queryParams(s));
-                        }
-                        if (new Invoice().save(request)) {
-                            response.redirect("/ID/" + request.params("id"));
-                        } else {
-                            response.redirect("/Error/InvoiceUpadate");
-                        }
-                        response.redirect("/ID/" + request.params("id"));
-                    } else {
-                        System.out.println("Advanced search: ");
-                        for (String s: request.queryParams()
-                                ) {
-                            System.out.println(s + " = " + request.queryParams(s));
-                        }
-                        this.searchRespons(request, response);
-                    }
-                } else {
-                    System.out.println("Search for ID: ");
-                    for (String s: request.queryParams()
-                         ) {
-                        System.out.println(s + " = " + request.queryParams(s));
-                    }
-                    this.searchRespons(request, response);
-                }
-            }
-        });
-// ================================= Main view for displaying queries returning 1 or more records from DB ===================================
-        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (redirectToSettings()) {
-                    response.redirect("/Settings");
-                } else {
-                    Renderer queryView = htmlFactory.getQueryView(request);
-                    webPage.write(queryView.render());
-                }
-            }
-        });
-        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                response.redirect("/View/" + request.params("columnName") + "/"
-                        + request.params("sign") + "/" + request.params("value")
-                        + "/OrderBy/" + ImCFG.getOrderByClauseURL());
-            }
-        });
-        post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+        post(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:column2/:sign2/:value2/:column3/:sign3/:value3/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
             }
         });
-// ================================= Main view for displaying queries with AND clause =======================================================
-        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr") {
+        get(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:column2/:sign2/:value2/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 if (redirectToSettings()) {
                     response.redirect("/Settings");
                 } else {
-                    Renderer queryView = htmlFactory.getQueryView(request, request.params("columnName3"), request.params("value3"));
-                    webPage.write(queryView.render());
+                    Renderer InvoicesView = htmlFactory.getInvoicesView(request);
+                    webPage.write(InvoicesView.render());
                 }
             }
         });
-        post(new FreemarkerBasedRoute("\"/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr\"") {
+        post(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:column2/:sign2/:value2/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
             }
         });
-// ================================= Main view for displaying filter view returning 1 or more records from DB ===================================
-        get(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy/:columnName2/:direction/:pageNr") {
+        get(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 if (redirectToSettings()) {
                     response.redirect("/Settings");
                 } else {
-                    Renderer queryView = htmlFactory.getQueryView(request, Integer.parseInt(request.params("filterNR"))-1);
-                    webPage.write(queryView.render());
+                    Renderer InvoicesView = htmlFactory.getInvoicesView(request);
+                    webPage.write(InvoicesView.render());
                 }
             }
         });
-        get(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                response.redirect("/FilterView/" + request.params("filterNr") + "/"
-                        + "OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
-            }
-        });
-        post(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy/:columnName2/:direction/:pageNr") {
+        post(new FreemarkerBasedRoute("/IFV/:column1/:sign1/:value1/:orderBy/:sort/:pageNr") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
                 this.searchRespons(request, response);
             }
         });
-// ================================= Main view for displaying adv search query 1 or more records from DB ===================================
-        get(new FreemarkerBasedRoute("/advSearchQuery/OrderBy/:columnName2/:direction/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (redirectToSettings()) {
-                    response.redirect("/Settings");
-                } else {
-                    Renderer queryView = htmlFactory.getQueryView(request, true);
-                    webPage.write(queryView.render());
-                }
-            }
-        });
-        get(new FreemarkerBasedRoute("/advSearchQuery/OrderBy") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                response.redirect("/advSearchQuery/OrderBy/" + ImCFG.getOrderByClauseURL());
-            }
-        });
-        post(new FreemarkerBasedRoute("/advSearchQuery/OrderBy/:columnName2/:direction/:pageNr") {
-            @Override
-            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                this.searchRespons(request, response);
-            }
-        });
-
 // ================================= Settings view ==========================================================================================
         get(new FreemarkerBasedRoute("/Settings") {
             @Override
@@ -300,12 +273,12 @@ public class Controller {
         post(new FreemarkerBasedRoute("/Settings") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                if (ImCFG.save(request)) {
-                    response.redirect("/Settings");
-                } else {
-                    response.redirect("/Error/UpdateCFG");
+                    if (ImCFG.save(request)) {
+                        response.redirect("/Settings");
+                    } else {
+                        response.redirect("/Error/UpdateCFG");
+                    }
                 }
-            }
         });
 // ================================= Save query result to file ==============================================================================
         get(new FreemarkerBasedRoute("/Save") {
@@ -318,7 +291,7 @@ public class Controller {
         });
 // ================================= Error view - not implemented yet =======================================================================
 // TODO: error msg handling
-        get(new FreemarkerBasedRoute("/error/:errorMSG") {
+        get(new FreemarkerBasedRoute("/error") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException {
                 writer.write(errorMSG.toString());
@@ -454,5 +427,156 @@ public class Controller {
 //            @Override
 //            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
 //                this.searchRespons(request, response);
+//            }
+//        });
+
+// ================================= Main view for displaying queries returning 1 or more records from DB ===================================
+//        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    Renderer queryView = htmlFactory.getQueryView(request);
+//                    webPage.write(queryView.render());
+//                }
+//            }
+//        });
+//        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                response.redirect("/View/" + request.params("columnName") + "/"
+//                        + request.params("sign") + "/" + request.params("value")
+//                        + "/OrderBy/" + ImCFG.getOrderByClauseURL());
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+// ================================= Main view for displaying queries with AND clause =======================================================
+//        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    Renderer queryView = htmlFactory.getQueryView(request, request.params("columnName3"), request.params("value3"));
+//                    webPage.write(queryView.render());
+//                }
+//            }
+//        });
+//        get(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:columnName4/:value4/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                response.redirect("/View/" + request.params("columnName") + "/"
+//                        + request.params("sign") + "/" + request.params("value")
+//                        + "/OrderBy/" + request.params("columnName2") + "/"
+//                        + request.params("direction") + "/"
+//                        + request.params("columnName3") + "/"
+//                        + request.params("value3") + "/" + request.params("pageNr"));
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/View/:columnName/:sign/:value/OrderBy/:columnName2/:direction/:columnName3/:value3/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+// ================================= Main view for displaying filter view returning 1 or more records from DB ===================================
+//        get(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    Renderer queryView = htmlFactory.getQueryView(request, Integer.parseInt(request.params("filterNR"))-1);
+//                    webPage.write(queryView.render());
+//                }
+//            }
+//        });
+//        get(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                response.redirect("/FilterView/" + request.params("filterNr") + "/"
+//                        + "OrderBy/" + ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1");
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/FilterView/:filterNR/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+// ================================= Main view for displaying adv search query 1 or more records from DB ===================================
+//        get(new FreemarkerBasedRoute("/advSearchQuery/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    Renderer queryView = htmlFactory.getQueryView(request, true);
+//                    webPage.write(queryView.render());
+//                }
+//            }
+//        });
+//        get(new FreemarkerBasedRoute("/advSearchQuery/OrderBy") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                response.redirect("/advSearchQuery/OrderBy/" + ImCFG.getOrderByClauseURL());
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/advSearchQuery/OrderBy/:columnName2/:direction/:pageNr") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                this.searchRespons(request, response);
+//            }
+//        });
+//// ================================= Single Invoice view ====================================================================================
+//        get(new FreemarkerBasedRoute("/ID/:id") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (redirectToSettings()) {
+//                    response.redirect("/Settings");
+//                } else {
+//                    Renderer InvoiceView = htmlFactory.getInvoiceView(request);
+//                    webPage.write(InvoiceView.render());
+//                }
+//            }
+//        });
+//        post(new FreemarkerBasedRoute("/ID/:id") {
+//            @Override
+//            protected void doHandle(Request request, Response response, StringWriter webPage) throws IOException, TemplateException, ClassNotFoundException, SQLException {
+//                if (request.queryParams("search_query") == null) {
+//                    if (request.queryParams("search_query_columns") == null) {
+//                        System.out.println("ID " + request.params("id") + " update");
+//                        for (String s: request.queryParams()
+//                                ) {
+//                            System.out.println(s + " = " + request.queryParams(s));
+//                        }
+//                        if (new Invoice().save(request)) {
+//                            response.redirect("/ID/" + request.params("id"));
+//                        } else {
+//                            response.redirect("/Error/InvoiceUpadate");
+//                        }
+//                        response.redirect("/ID/" + request.params("id"));
+//                    } else {
+//                        System.out.println("Advanced search: ");
+//                        for (String s: request.queryParams()
+//                                ) {
+//                            System.out.println(s + " = " + request.queryParams(s));
+//                        }
+//                        this.searchRespons(request, response);
+//                    }
+//                } else {
+//                    System.out.println("Search for ID: ");
+//                    for (String s: request.queryParams()
+//                         ) {
+//                        System.out.println(s + " = " + request.queryParams(s));
+//                    }
+//                    this.searchRespons(request, response);
+//                }
 //            }
 //        });

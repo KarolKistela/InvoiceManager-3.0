@@ -1,5 +1,7 @@
 package Model;
 
+import Model.DAO.InvoiceManagerDB_DAO;
+
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;

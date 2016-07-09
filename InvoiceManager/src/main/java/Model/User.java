@@ -1,6 +1,9 @@
 package Model;
 
+import Model.DAO.InvoiceManagerDB_DAO;
+
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -11,22 +14,17 @@ public class User {
     private String userMail;
     private String userColor;
 
-    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException {
-        InvoiceManagerCFG cfg = new InvoiceManagerCFG();
-        User u = new User(cfg.getUserNetID(), cfg.getUserColor(), cfg.getUserEmail());
-
-        if (u.isUserInDB()) {
-            System.out.println(u.toString());
-        } else {
-            System.out.println("Probably there is no such a user!");
-        }
-    }
-
     public User(String netID, String Email, String Color) throws ClassNotFoundException {
             this.userID = netID;
             this.userColor = Color;
             this.userMail = Email;
-        }
+    }
+
+    public User(ResultSet rs) throws SQLException {
+        this.userID = rs.getString("NetID");
+        this.userMail = rs.getString("Email");
+        this.userColor = rs.getString("UserColor");
+    }
 
     @Override
     public String toString() {
