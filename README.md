@@ -20,14 +20,20 @@ Folder structure of git repository:
   
     |--outlook/             - VBA addin for MS OutLook
   
-    |--excel/               - Excel sheet with macros for reporting
+    |--excel/               - Excel sheet with macros for reporting, 10-july-2016 not required anymore
   
-    |--InvoivceManager/     - Maven project source code
+    |--InvoivceManager/     - Java source code
+    
+To create this application I have used:
 
-RoadMap:
+Database engine: SQLITE3
 
-1 may 2016 - working web app and Outlook addIns, beta version
+Web Framework: Spark Web
 
-1 june 2016 - production version ready
+Template engine: Freemarker
 
-1 july 2016 - documentation
+CSS: Materialize, W3.CSS
+
+JS: jQuery
+
+Fonts/Icons: Font Awsome
