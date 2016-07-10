@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Class-Path: spark-core-1.1.1.jar slf4j-api-1.7.2.jar slf4j-simple-1.7.
+ 2.jar jetty-server-9.0.2.v20130417.jar javax.servlet-3.0.0.v201112011
+ 016.jar jetty-http-9.0.2.v20130417.jar jetty-util-9.0.2.v20130417.jar
+  jetty-io-9.0.2.v20130417.jar jetty-webapp-9.0.2.v20130417.jar jetty-
+ xml-9.0.2.v20130417.jar jetty-servlet-9.0.2.v20130417.jar jetty-secur
+ ity-9.0.2.v20130417.jar freemarker-2.3.19.jar sqlite-jdbc-3.8.9.1.jar
+Main-Class: Controller.Controller
+

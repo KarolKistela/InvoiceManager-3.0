@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_invoicesmangerpr" default="compile.module.invoicesmangerpr">
+  <dirname property="module.invoicesmangerpr.basedir" file="${ant.file.module_invoicesmangerpr}"/>
+  
+  <property name="module.jdk.home.invoicesmangerpr" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.invoicesmangerpr" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.invoicesmangerpr" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.invoicesmangerpr" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="invoicesmangerpr.output.dir" value="${module.invoicesmangerpr.basedir}/out/production/InvoicesMangerPR"/>
+  <property name="invoicesmangerpr.testoutput.dir" value="${module.invoicesmangerpr.basedir}/out/test/InvoicesMangerPR"/>
+  
+  <path id="invoicesmangerpr.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="invoicesmangerpr.module.production.classpath">
+    <path refid="${module.jdk.classpath.invoicesmangerpr}"/>
+    <path refid="library.org.xerial:sqlite-jdbc:3.8.9.1.classpath"/>
+    <path refid="library.com.sparkjava:spark-core:1.1.1.classpath"/>
+    <path refid="library.org.freemarker:freemarker:2.3.19.classpath"/>
+  </path>
+  
+  <path id="invoicesmangerpr.runtime.production.module.classpath">
+    <pathelement location="${invoicesmangerpr.output.dir}"/>
+    <path refid="library.org.xerial:sqlite-jdbc:3.8.9.1.classpath"/>
+    <path refid="library.com.sparkjava:spark-core:1.1.1.classpath"/>
+    <path refid="library.org.freemarker:freemarker:2.3.19.classpath"/>
+  </path>
+  
+  <path id="invoicesmangerpr.module.classpath">
+    <path refid="${module.jdk.classpath.invoicesmangerpr}"/>
+    <pathelement location="${invoicesmangerpr.output.dir}"/>
+    <path refid="library.org.xerial:sqlite-jdbc:3.8.9.1.classpath"/>
+    <path refid="library.com.sparkjava:spark-core:1.1.1.classpath"/>
+    <path refid="library.org.freemarker:freemarker:2.3.19.classpath"/>
+  </path>
+  
+  <path id="invoicesmangerpr.runtime.module.classpath">
+    <pathelement location="${invoicesmangerpr.testoutput.dir}"/>
+    <pathelement location="${invoicesmangerpr.output.dir}"/>
+    <path refid="library.org.xerial:sqlite-jdbc:3.8.9.1.classpath"/>
+    <path refid="library.com.sparkjava:spark-core:1.1.1.classpath"/>
+    <path refid="library.org.freemarker:freemarker:2.3.19.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.invoicesmangerpr">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.invoicesmangerpr">
+    <patternset refid="excluded.from.module.invoicesmangerpr"/>
+  </patternset>
+  
+  <path id="invoicesmangerpr.module.sourcepath">
+    <dirset dir="${module.invoicesmangerpr.basedir}">
+      <include name="src"/>
+      <include name="resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.invoicesmangerpr" depends="compile.module.invoicesmangerpr.production,compile.module.invoicesmangerpr.tests" description="Compile module InvoicesMangerPR"/>
+  
+  <target name="compile.module.invoicesmangerpr.production" depends="register.custom.compilers" description="Compile module InvoicesMangerPR; production classes">
+    <mkdir dir="${invoicesmangerpr.output.dir}"/>
+    <javac2 destdir="${invoicesmangerpr.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.invoicesmangerpr}/javac">
+      <compilerarg line="${compiler.args.invoicesmangerpr}"/>
+      <bootclasspath refid="invoicesmangerpr.module.bootclasspath"/>
+      <classpath refid="invoicesmangerpr.module.production.classpath"/>
+      <src refid="invoicesmangerpr.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.invoicesmangerpr"/>
+    </javac2>
+    
+    <copy todir="${invoicesmangerpr.output.dir}">
+      <fileset dir="${module.invoicesmangerpr.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.invoicesmangerpr.basedir}/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.invoicesmangerpr.tests" depends="register.custom.compilers,compile.module.invoicesmangerpr.production" description="compile module InvoicesMangerPR; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.invoicesmangerpr" description="cleanup module">
+    <delete dir="${invoicesmangerpr.output.dir}"/>
+    <delete dir="${invoicesmangerpr.testoutput.dir}"/>
+  </target>
+</project>
