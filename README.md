@@ -1,4 +1,6 @@
-# InvoiceManager-3.0
+# Invoices Manager 
+##### Version
+3.0
 
 My first commercial project.
 
@@ -10,8 +12,6 @@ Application will be made of 3 components:
 
 2. Outlook addin - most of the process is tracked based on recived e-mails
 
-3. Excel sheet - for reporting
-
 Folder structure of git repository:
 
     InvoiceManager-3.0/
@@ -20,20 +20,22 @@ Folder structure of git repository:
   
     |--outlook/             - VBA addin for MS OutLook
   
-    |--excel/               - Excel sheet with macros for reporting, 10-july-2016 not required anymore
-  
-    |--InvoivceManager/     - Java source code
-    
+    |--InvoivcesManager/     - Java source code
+
+### Tech
 To create this application I have used:
+* Database engine: [SQLITE3]
+* Web Framework: [Spark Web]
+* Template engine: [Freemarker]
+* CSS: [Materialize], [W3.CSS]
+* JS: [jQuery]
+* Fonts/Icons: [Font Awsome] 
 
-Database engine: SQLITE3
+[SQLITE3]: <https://www.sqlite.org/>
+[Spark Web]: <http://sparkjava.com/>
+[Freemarker]: <http://freemarker.org/>
+[Materialize]: <http://materializecss.com/>
+[W3.CSS]: <http://www.w3schools.com/w3css/default.asp>
+[jQuery]: <http://jquery.com>
+[Font Awsome]: <http://fontawesome.io/icons/>
 
-Web Framework: Spark Web
-
-Template engine: Freemarker
-
-CSS: Materialize, W3.CSS
-
-JS: jQuery
-
-Fonts/Icons: Font Awsome
