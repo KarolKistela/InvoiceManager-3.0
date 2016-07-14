@@ -18,6 +18,7 @@ import static Model.Helpers.InvoicesManagerDBconnection;
 public class InvoiceManagerCFG {
     private String InvoicesManagerCFGPath;
     private String imExternalFolderPath;
+    private String outlookExePath;
     private String imDBPath;
     private Integer rowsPerPage;
     private String backgroundColor;
@@ -31,7 +32,12 @@ public class InvoiceManagerCFG {
     private String userColor;
     private List<String[]> invoicesMetaData;
     private List<String> statusMetaData = new LinkedList<>();
-    private List<String> curencies = new LinkedList<>();
+
+    private List<String> currencies = new LinkedList<>();
+    private List<String> suppliers = new LinkedList<>();
+    private List<String> authContact = new LinkedList<>();
+    private List<String> contactGenpact = new LinkedList<>();
+
     private List<String> rowColor = new LinkedList<>();
     private List<String> processStatus = new LinkedList<>();
     // DNS db credentials
@@ -48,6 +54,7 @@ public class InvoiceManagerCFG {
     public void clearData(){
         this.imExternalFolderPath = new String();
         this.imDBPath = new String();
+        this.outlookExePath = new String();
         this.rowsPerPage = new Integer(0);
         this.backgroundColor = new String();
         this.tableWidth = new Double(0.00);
@@ -60,12 +67,20 @@ public class InvoiceManagerCFG {
         this.userColor = new String();
         this.invoicesMetaData = new LinkedList<>();
         this.statusMetaData = new LinkedList<>();
-        this.curencies = new LinkedList<>();
+        this.currencies = new LinkedList<>();
         this.rowColor = new LinkedList<>();
         this.processStatus = new LinkedList<>();
     }
 
-    /* Connetct to db cfg file at src/main/resources/InvoiceManagerCFG/InvoiceManager.cfg and load data from this file. Basically serialization for this class */
+    public String getOutlookExePath() {
+        return outlookExePath;
+    }
+
+    public void setOutlookExePath(String outlookExePath) {
+        this.outlookExePath = outlookExePath;
+    }
+
+    /* Connetct to db cfg file and load data from this file. Basically serialization for this class */
     public void loadData() throws ClassNotFoundException {
         this.clearData();
         // load the sqlite-JDBC driver using the current class loader
@@ -95,6 +110,7 @@ public class InvoiceManagerCFG {
             this.setDNSuser(resultSet.getString("DNSuser"));
             this.setDNSpass(resultSet.getString("DNSpass"));
             this.setDNSjdbcClass(resultSet.getString("DNSjdbcClass"));
+            this.setOutlookExePath(resultSet.getString("outlookExePath"));
 
             resultSet = statement.executeQuery("SELECT * FROM Filters");
             List<String[]> l = new LinkedList();
@@ -129,7 +145,22 @@ public class InvoiceManagerCFG {
 
             resultSet = statement.executeQuery("SELECT * FROM Currencies");
             while (resultSet.next()) {
-                this.curencies.add(resultSet.getString(1));
+                this.currencies.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM AuthContact");
+            while (resultSet.next()) {
+                this.authContact.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM Suppliers");
+            while (resultSet.next()) {
+                this.suppliers.add(resultSet.getString(1));
+            }
+
+            resultSet = statement.executeQuery("SELECT * FROM ContactGenpact");
+            while (resultSet.next()) {
+                this.contactGenpact.add(resultSet.getString(1));
             }
 
             resultSet = statement.executeQuery("SELECT * FROM RowColors");
@@ -176,18 +207,23 @@ public class InvoiceManagerCFG {
         String orderBy = "ID";
         String orderByClause = "ORDER BY "+orderBy+" "+order;
         Integer InvDuplicates = 1;
-        String userNetID = "FINAN";
-        String userEmail = "finance@delphi.com";
-        String userColor = "#FFFFFF";
+        String userNetID = "";
+        String userEmail = "";
+        String userColor = "";
         if (!FINANCE_VIEW) {
             userNetID = request.queryParams("userID").toUpperCase();
             userEmail = request.queryParams("userEmail").toLowerCase();
             userColor = request.queryParams("userColor");
+        } else {
+            userNetID = "FINAN";
+            userEmail = "finance@delphi.com";
+            userColor = "#FFFFFF";
         }
         String DNSserver = request.queryParams("imDNSserver");
         String DNSuser = request.queryParams("imDNSuser");
         String DNSpass = request.queryParams("imDNSpass");
         String DNSjdbcClass = request.queryParams("imDNSjdbcClass");
+        String outlookExePath = request.queryParams("outlookExePath");
 
         System.out.println(" Update CFG tab with: ====================================================================");
         System.out.println("imExternalFolderPath: " + imExternalFolderPath);
@@ -202,6 +238,7 @@ public class InvoiceManagerCFG {
         System.out.println("             DNSuser: " + DNSuser);
         System.out.println("             DNSpass: " + DNSpass);
         System.out.println("        DNSjdbcClass: " + DNSjdbcClass);
+        System.out.println("      outlookExePath: " + outlookExePath);
 
         Connection connection = null;
         try {
@@ -212,7 +249,7 @@ public class InvoiceManagerCFG {
 
             if (!FINANCE_VIEW) {
                 PreparedStatement prepStmt = connection.prepareStatement(
-                        "UPDATE CFG SET imExternalFolderPath=?,imDBPath=?,rowsPerPage=?,OrderByClause=?,InvDuplicates=?,userNetID=?,userEmail=?,userColor=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=? WHERE ID=1");
+                        "UPDATE CFG SET imExternalFolderPath=?,imDBPath=?,rowsPerPage=?,OrderByClause=?,InvDuplicates=?,userNetID=?,userEmail=?,userColor=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=?, outlookExePath=? WHERE ID=1");
                 prepStmt.setString(1, imExternalFolderPath);
                 prepStmt.setString(2, imDBPath);
                 prepStmt.setInt(3, rowPerPage);
@@ -225,6 +262,7 @@ public class InvoiceManagerCFG {
                 prepStmt.setString(10, DNSuser);
                 prepStmt.setString(11, DNSpass);
                 prepStmt.setString(12, DNSjdbcClass);
+                prepStmt.setString(13, outlookExePath);
 
                 prepStmt.execute();
             } else { //for finance view allow to upodate only folder,DB paths
@@ -378,8 +416,8 @@ public class InvoiceManagerCFG {
         return statusMetaData;
     }
 
-    public List<String> getCurencies() {
-        return curencies;
+    public List<String> getCurrencies() {
+        return currencies;
     }
 
     public List<String> getRowColor() {
@@ -422,6 +460,18 @@ public class InvoiceManagerCFG {
         this.DNSjdbcClass = DNSjdbcClass;
     }
 
+    public List<String> getSuppliers() {
+        return suppliers;
+    }
+
+    public List<String> getAuthContact() {
+        return authContact;
+    }
+
+    public List<String> getContactGenpact() {
+        return contactGenpact;
+    }
+
     @Override
     public String toString() {
         return "InvoiceManagerCFG{" +
@@ -438,6 +488,188 @@ public class InvoiceManagerCFG {
                 ", userEmail='" + userEmail + '\'' + '\n' +
                 ", userColor='" + userColor + '\'' +
                 '}';
+    }
+
+    public void updateComboLists(DAO_InvoicesComboLists dao) throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        Connection connection = null;
+
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection.setAutoCommit(true);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            int i = 1;
+
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Suppliers VALUES (?)");
+            for (String s: dao.suppliers) {
+                if (!this.suppliers.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Update Suppliers in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Update Suppliers in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("INSERT INTO AuthContact VALUES (?)");
+            i = 1;
+            for (String s: dao.authContact) {
+                if (!this.authContact.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Update AuthContact in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Update AuthContact in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("INSERT INTO Currencies VALUES (?)");
+            i = 1;
+            for (String s: dao.currencies) {
+                if (!this.currencies.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Update Currencies in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Update Currencies in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("INSERT INTO ContactGenpact VALUES (?)");
+            i = 1;
+            for (String s: dao.contactGenpact) {
+                if (!this.contactGenpact.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Update ContactGenpact in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Update ContactGenpact in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        try {
+            if (connection != null)
+                connection.close();
+        } catch (SQLException e) {
+            // connection close failed.
+            System.err.println(e);
+        }
+    }
+    }
+
+    public void synchronizeComboLists(DAO_InvoicesComboLists dao) throws ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        Connection connection = null;
+
+        try {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection.setAutoCommit(true);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            int i = 1;
+
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Suppliers WHERE supplier=(?)");
+            for (String s: this.suppliers) {
+                if (!dao.suppliers.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Delete Suppliers in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Delete Suppliers in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("DELETE FROM AuthContact WHERE authContact=(?)");
+            i = 1;
+            for (String s: this.authContact) {
+                if (!dao.authContact.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Delete AuthContact in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Delete AuthContact in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("DELETE FROM Currencies WHERE currency=(?)");
+            i = 1;
+            for (String s: this.currencies) {
+                if (!dao.currencies.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Delete Currencies in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Delete Currencies in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement("DELETE FROM ContactGenpact WHERE contactGenpact=(?)");
+            i = 1;
+            for (String s: this.contactGenpact) {
+                if (!dao.contactGenpact.contains(s)) {
+                    preparedStatement.setString(1, s);
+                    preparedStatement.addBatch();
+                    i++;
+                }
+                if (i % 1001 == 0) {
+                    preparedStatement.executeBatch();
+                    System.out.println("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
+                }
+            }
+            preparedStatement.executeBatch();
+            System.out.println("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
     }
 }
 

@@ -4,9 +4,11 @@ package Controller;
  * Created by Karol Kistela on 10-07-2016.
  */
 
-import Model.*;
+import Model.ComboList;
 import Model.DAO.InvoiceManagerCFG;
 import Model.DAO.InvoiceManagerDB_DAO;
+import Model.Invoice;
+import Model.Suppliers;
 import View.HtmlFactory;
 import View.Renderer;
 import freemarker.template.TemplateException;
@@ -26,21 +28,22 @@ import java.sql.SQLException;
 import static Model.Helpers.*;
 import static spark.Spark.*;
 
-// ================================= Duplicate Invoice view =================================================================================
-
 public class Controller {
     public static final Integer PORT = 8082;
     public static String CFG_PATH = "C:\\InvoicesManager\\SQLITE\\InvoiceManagerCFG";
     public static String CSV_EXPORT_FOLDER_PATH = "C:\\InvoicesManager\\SQLITE\\DBcsvExport";
-    public static boolean FINANCE_VIEW = true;
+    public static String OUTLOOK_OTM_PATH = "C:\\InvoicesManager\\IM\\resources\\OutlookVBA\\VbaProject.OTM";
+    public static boolean FINANCE_VIEW = false;
+    public static boolean COPY_OTM = false;
     public static InvoiceManagerCFG ImCFG;
+    public static ComboList comboList;
     public static Suppliers suppliers;
     public static boolean isConnectedToDB;
     public String errorMSG; // not sure if it will stay or not
     public static String sqlQuery = new String(); // story last SQL query executed by Invoices Manager go to DAO_InvoicesFullView constructor
     private final HtmlFactory htmlFactory;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         if (args.length == 0) {
             new Controller(); // use default path to InvoicesManager.cfg
         }
@@ -49,26 +52,28 @@ public class Controller {
         }
     }
 
-    public Controller() throws IOException, ClassNotFoundException {
+    public Controller() throws IOException, ClassNotFoundException, SQLException {
         ImCFG = new InvoiceManagerCFG(CFG_PATH);
         htmlFactory = new HtmlFactory();
         suppliers = new Suppliers();
-        suppliers.toString();
+        comboList = new ComboList();
 
         if (fileExists(ImCFG.getImDBPath())) {
             isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
         }
-
-        System.out.println("Testing connection to DB: " + isConnectedToDB);
+        System.out.println("Connected to DB? " + isConnectedToDB);
 
         setPort(PORT);
         externalStaticFileLocation("C:/InvoicesManager/IM/resources/");
         initializeRoutes();
+
         try { // Open chrome with Invoices Manager address
             runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + PORT + "/");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        if (COPY_OTM) copyOTMfile();
     }
 
     public Controller(String cfgPath) throws IOException, ClassNotFoundException {
@@ -92,6 +97,8 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        if (COPY_OTM) copyOTMfile();
     }
 
     abstract class FreemarkerBasedRoute extends Route {
@@ -115,7 +122,7 @@ public class Controller {
         protected abstract void doHandle(final Request request, final Response response, final StringWriter writer)
                 throws IOException, TemplateException, ClassNotFoundException, SQLException;
 
-        public void searchRespons(Request request, Response response) throws UnsupportedEncodingException, FileNotFoundException, ClassNotFoundException {
+        public void searchRespons(Request request, Response response) throws UnsupportedEncodingException, FileNotFoundException, ClassNotFoundException, SQLException {
             // TODO: change this to switch case
             if (request.queryParams("search_query") == null) { // quick search is empty do Advance search
                 if (request.queryParams("search_query_columns") == null) { // advance search is empty

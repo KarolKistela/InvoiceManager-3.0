@@ -36,6 +36,71 @@ ${IDinputForm}
 <!-- ============================ Footer       ===================================================================== -->
 ${Footer}
 
+<datalist id="columns">
+    <option value="BC">
+    <option value="EntryDate">
+    <option value="ContactGenpact">
+    <option value="Supplier">
+    <option value="InvoiceNR">
+    <option value="InvScanPath">
+    <option value="PO">
+    <option value="NetPrice">
+    <option value="Currency">
+    <option value="InvDate">
+    <option value="EmailSubject">
+    <option value="AuthContact">
+    <option value="AuthDate">
+    <option value="AuthReplyDate">
+    <option value="AuthEmail">
+    <option value="EndDate">
+    <option value="GR">
+    <option value="GenpactLastReply">
+    <option value="UserComments">
+    <option value="Status">
+    <option value="User">
+    <option value="RowColor">
+    <option value="ProcessStatus">
+    <option value="FinanceComments">
+</datalist>
+<datalist id="signs">
+    <option value="=">
+    <option value="!=">
+    <option value=">">
+    <option value=">=">
+    <option value="<">
+    <option value="<=">
+    <option value="LIKE">
+    <option value="NOT LIKE">
+</datalist>
+<datalist id="colors">
+    <option style="color: cyan" >
+    <option style="color: pink" >
+    <option style="color: purple">
+    <option style="color: indigo">
+    <option style="color: teal">
+    <option style="color: red">
+    <option style="color: green">
+    <option style="color: lime">
+    <option style="color: #ffc107">
+    <option style="color: orange">
+    <option style="color: #ff5722">
+    <option style="color: #607d8b">
+    <option style="color: grey">
+    <option style="color: yellow">
+</datalist>
+<datalist id="suppliers">
+${supplierList}
+</datalist>
+<datalist id="currency">
+${CurrencyList}
+</datalist>
+<datalist id="authContact">
+${authContactList}
+</datalist>
+<datalist id="contactGenpact">
+${contactGenpactList}
+</datalist>
+
 <#--<script>-->
     <#--function w3_open() {-->
         <#--document.getElementsByClassName("IM-sidenav")[0].style.display = "block";-->

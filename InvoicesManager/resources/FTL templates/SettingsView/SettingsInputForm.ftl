@@ -20,6 +20,10 @@
 
     ${value_DNSserver}
     ${activeClass_DNSserver}
+
+    outlookExePathIconColor
+    value_outlookExePath
+    activeClass_outlookExePath
 -->
 <main style="margin-top: 70px; padding: 0 5%">
     <article class="card">
@@ -42,7 +46,17 @@
                         <label class="${activeClass_imDBPath}" for="imDBPath">Path to SQLITE DB InvoicesManager.db</label>
                     </div>
                 </div>
-<!-- ============================ DNS server ====================================================================== -->
+<!-- ============================ outlook.exe path ================================================================= -->
+                ${financeView1}<div class="row" style="margin-bottom: 10px">
+                    <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${outlookExePathIconColor}">
+                        <i class="fa fa-envelope fa-2x" aria-hidden="true"></i>
+                    </div>
+                    <div class="input-field col s10">
+                        <input  value="${value_outlookExePath}" id="outlookExePath" name="outlookExePath" type="text">
+                        <label class="${activeClass_outlookExePath}" for="outlookExePath">Path to outlook.exe (for eg.: C:\Program Files (x86)\Microsoft Office\Office14\outlook.exe</label>
+                    </div>
+                </div>${financeView2}
+<!-- ============================ DNS server ======================================================================= -->
                 <div class="row" style="margin-bottom: 10px">
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${DNSserverIconColor}">
                             <i class="fa fa-server fa-2x" aria-hidden="true"></i>
@@ -132,7 +146,7 @@
                     </div>
                     <div class="input-field col s2">
                         <input value="${value_userID}" id="userID" type="text" name="userID" length="6">
-                        <label class="${activeClass_userID}" for="userID">netid</label>
+                        <label class="${activeClass_userID}" for="userID">NetID</label>
                     </div>
                     <div class="col s1 IM-SettingsLabels" style="padding-top: 25px${isEmail}">
                         <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>

@@ -61,7 +61,7 @@ ${ProcessStatus-activeClass}
 <!-- ============== 1.1 BarCode ==================================================================================== -->
                     <div class="input-field col s3">
                         <input value="${BC}" id="BC" name="BC" type="text">
-                        <label class="${BC_activeClass}" for="BC">BarCode</label>
+                        <label class="${BC_activeClass}" for="BC">Barcode</label>
                     </div>
 <!-- ============== 1.2 EntryDate ================================================================================== -->
                     <div class="input-field col s3">
@@ -70,12 +70,12 @@ ${ProcessStatus-activeClass}
                     </div>
 <!-- ============== 1.3 ContactGenpact ============================================================================= -->
                     <div class="input-field col s3">
-                        <input value="${ContactGenpact}" id="ContactGenpact" name="ContactGenpact" type="text">
+                        <input value="${ContactGenpact}" list="contactGenpact" id="ContactGenpact" name="ContactGenpact" type="text">
                         <label class="${ContactGenpact_activeClass}" for="ContactGenpact">Contact Genpact</label>
                     </div>
 <!-- ============== 1.4 Supplier =================================================================================== -->
                     <div class="input-field col s3">
-                        <input value="${Supplier}" id="Supplier" name="Supplier" type="text">
+                        <input value="${Supplier}" list="suppliers" id="Supplier" name="Supplier" type="text">
                         <label class="${Supplier_activeClass}" for="Supplier">Supplier</label>
                     </div>
                 </div>
@@ -107,11 +107,11 @@ ${ProcessStatus-activeClass}
                     <#--</div>-->
 <!-- ============== 2.5 Currency =================================================================================== -->
                     <div class="input-field col s1">
-                        <input value="${Currency}" list="Currency" name="Currency" >
+                        <input value="${Currency}" list="currency" name="Currency" >
                         <label class="active" for="Currency">Currency</label>
-                        <datalist id="Currency">
-                        ${CurrencyList}
-                        </datalist>
+                        <#--<datalist id="Currency">-->
+                        <#--${CurrencyList}-->
+                        <#--</datalist>-->
                     </div>
                 </div>
 <!-- ========== 3rd Row - 4 columns ================================================================================ -->
@@ -128,7 +128,7 @@ ${ProcessStatus-activeClass}
                     </div>
 <!-- ============== 3.3 AuthContact ================================================================================ -->
                     <div class="input-field col s3">
-                        <input value="${AuthContact}" id="AuthContact" name="AuthContact" type="text">
+                        <input value="${AuthContact}" list="authContact" id="AuthContact" name="AuthContact" type="text">
                         <label class="${AuthContact_activeClass}" for="AuthContact">Authorization Contact</label>
                     </div>
 <!-- ============== 3.4 AuthDate =================================================================================== -->
@@ -157,7 +157,7 @@ ${ProcessStatus-activeClass}
 <!-- ============== 4.4 GR ========================================================================================= -->
                     <div class="input-field col s3">
                         <input value="${GR}" id="GR" name="GR" type="text">
-                        <label class="${GR_activeClass}" for="GR">Good Recipt</label>
+                        <label class="${GR_activeClass}" for="GR">Goods Recipt</label>
                     </div>
                 </div>
 <!-- ========== 5th Row - 3 columns ================================================================================ -->
@@ -188,7 +188,7 @@ ${ProcessStatus-activeClass}
                         <#--<input value="${User}" id="User" name="User" type="text">-->
                         <#--<label class="${User_activeClass}" for="User">User</label>-->
                         <input value="${User}" list="User" name="User" >
-                        <label class="active" for="User">User</label>
+                        <label class="active" for="User">NetID</label>
                         <datalist id="User">
                         ${UserList}
                         </datalist>

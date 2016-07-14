@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static Controller.Controller.OUTLOOK_OTM_PATH;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
 
@@ -24,8 +25,35 @@ import static java.nio.file.Files.isDirectory;
 public class Helpers {
 
     public static void main(String[] args) throws InterruptedException, SQLException, ClassNotFoundException, IOException {
-        int i = 49544;
-        runShellCommand("PATH");
+        copyOTMfile();
+    }
+
+    public static void  copyOTMfile() throws IOException {
+        Runtime runTime = Runtime.getRuntime();
+        String cmd = new String();
+        cmd = "copy /b/v/y \"" + OUTLOOK_OTM_PATH + "\" \"%appdata%\\Microsoft\\Outlook\\\"";
+        System.out.println("========================== shellCmd: " + cmd);
+        String[] processCommand = {"cmd", "/c", cmd};
+
+        Process shellProcess = runTime.exec(processCommand);
+
+        BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(shellProcess.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(shellProcess.getErrorStream()));
+
+//         read the output from the command;
+        String s = null;
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
+        }
+
+        // read any errors from the attempted command
+        System.out.println("Standard error of the command (if any):\n");
+        while ((s = stdError.readLine()) != null) {
+            System.out.println(s);
+        }
     }
 
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
@@ -56,12 +84,12 @@ public class Helpers {
     public static void runShellCommand2(int i) throws IOException, InterruptedException, SQLException, ClassNotFoundException {
         Runtime runTime = Runtime.getRuntime();
         Invoice inv = new InvoiceManagerDB_DAO().sqlSELECTid(i);
+        String outlookEXEpath = "\"" + Controller.ImCFG.getOutlookExePath() + "\"";
 
-        String cmd = "\"outlook /c ipm.note /m \"" + inv.getAuthContact() + "&subject=ID%3A%20" + inv.getID() + "\" /a " + Controller.ImCFG.getImExternalFolderPath() + inv.getInvScanPath() + "\"";
+        String cmd = outlookEXEpath + " /c ipm.note /m \"" + inv.getAuthContact() + "&subject=ID%3A%20" + inv.getID() + "\" /a \"" + Controller.ImCFG.getImExternalFolderPath() + inv.getInvScanPath() + "\"";
 
         System.out.println("========================== shellCmd: " + cmd);
-        String[] processCommand = {"cmd", "/c", cmd};
-        Process shellProcess = runTime.exec(processCommand);
+        Process shellProcess = runTime.exec(cmd);
 
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(shellProcess.getInputStream()));
@@ -312,9 +340,9 @@ public class Helpers {
 
     public static boolean InvoicesManagerDBconnection(String imDBPath) throws ClassNotFoundException {
         String query = "SELECT count(ID) FROM Invoices;";
-        System.err.println("Testing connection to DB");
-        System.err.println("DB path: " + imDBPath);
-        System.err.println("  Query: " + query);
+        System.out.println("Testing connection to DB");
+        System.out.println("DB path: " + imDBPath);
+        System.out.println("  Query: " + query);
 
         Connection connection = null;
 

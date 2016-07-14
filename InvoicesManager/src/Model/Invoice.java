@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.Controller;
 import Model.DAO.InvoiceManagerDB_DAO;
 import spark.Request;
 
@@ -86,7 +87,7 @@ public class Invoice {
 
     }
 
-    public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException {
+    public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException, SQLException {
         InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
 
         if (FINANCE_VIEW) {
@@ -94,7 +95,9 @@ public class Invoice {
         } else {
             db.upsertInvoice(request);
         }
-
+        // relode the combolist on save action - it works to slow
+        Controller.ImCFG.loadData();
+        Controller.comboList.reload();
         return true;
     }
 

@@ -22,7 +22,7 @@ public class DAO_InvoicesFullView extends InvoicesDB{
 
     public DAO_InvoicesFullView(String sqlQuery, String sqlQueryCount) throws FileNotFoundException, ClassNotFoundException, SQLException {
         super();
-        Controller.sqlQuery = sqlQuery.substring(0,sqlQuery.indexOf("LIMIT"));
+        Controller.sqlQuery = sqlQuery.substring(0,sqlQuery.indexOf("LIMIT")); // this is used when IM wants to export data to CSV from last executed query.
         try {
             // create a database connection
             System.out.println("Model.DAO.DAO_InvoicesFullView connected to: " + this.DB_Path);

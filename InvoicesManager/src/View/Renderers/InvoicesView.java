@@ -1,5 +1,6 @@
 package View.Renderers;
 
+import Controller.Controller;
 import Model.DAO.DAO_InvoicesFullView;
 import Model.Invoice;
 import Model.Rout;
@@ -19,8 +20,8 @@ import java.net.URLEncoder;
 import java.sql.SQLException;
 
 import static Controller.Controller.FINANCE_VIEW;
-import static Controller.Controller.suppliers;
-import static Model.Helpers.*;
+import static Model.Helpers.fileExists;
+import static Model.Helpers.truncuate;
 
 /**
  * Created by Karol Kistela on 20-Jun-16.
@@ -69,27 +70,31 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("FINANCE_VIEW","");
         }
 
+        replaceMap.put("Footer", new Footer().render());
+        replaceMap.put("supplierList", Controller.comboList.getSuppliersOptionValue());
+        replaceMap.put("CurrencyList", Controller.comboList.getCurrencyOptionValue());
+        replaceMap.put("authContactList", Controller.comboList.getAuthContactOptionValue());
+        replaceMap.put("contactGenpactList", Controller.comboList.getContactGenpactOptionValue());
+
         switch (queryData.nrOfRecords) {
             case 0:
                 replaceMap.put("Style", new Style().render());
                 replaceMap.put("Header", new IFVHeader().render());
+                //TODO: 0 records return info, replace it with something more eyecandy
                 replaceMap.put("DBTable", "<main class=\"row\"><h3>Query: " + sql.query + "</h3>" + "<h4>Returns: " + queryData.nrOfRecords + " records</h4></main>");
                 replaceMap.put("IDinputForm", "");
-                replaceMap.put("Footer", getTemplate("FTL templates/Footer/Footer.ftl").toString());
                 break;
             case 1:
                 replaceMap.put("Style", new Style().render());
                 replaceMap.put("Header", new IFVHeader().render());
                 replaceMap.put("DBTable", new IFVDBtable().render());
                 replaceMap.put("IDinputForm", new IDinputForm(queryData.invoices.get(0)).render());
-                replaceMap.put("Footer", getTemplate("FTL templates/Footer/Footer.ftl").toString());
                 break;
             default:
                 replaceMap.put("Style", new Style().render());
                 replaceMap.put("Header", new IFVHeader().render());
                 replaceMap.put("DBTable", new IFVDBtable().render());
                 replaceMap.put("IDinputForm", "");
-                replaceMap.put("Footer", new Footer().render());
                 break;
         }
         return process(template);
@@ -141,7 +146,6 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
         @Override
         public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
             Template templateHeader = getTemplate(headerFTL);
-            String supplierList = this.getSupplierList();
             String tableHeader;
             if (this.tabHeaderWithSort) {
                 tableHeader = this.getTableHeader();
@@ -149,7 +153,6 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
                 tableHeader = this.getTableHeaderWithoutSort();
             }
 
-            int pageNumber = rout.pageNr;
             int rowPerPage = ImCFG.getRowsPerPage();
             int lastPage = queryData.nrOfRecords/rowPerPage + 1;
 
@@ -241,7 +244,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
 
 //            replaceMap.put("filterList", filterList);
             replaceMap.put("NetID", ImCFG.getUserNetID());
-            replaceMap.put("supplierList", supplierList);
+            replaceMap.put("supplierList", Controller.comboList.getSuppliersOptionValue()); //supplierList);
             replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active" : "");
             replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active" : "");
             replaceMap.put("menu3", (menuButtonActive == 3) ? " IM-menu-active" : "");
@@ -260,15 +263,6 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("tableHeader", (tabHeaderWithSort) ? tableHeader : "");
 
             return process(templateHeader);
-        }
-
-        private String getSupplierList() {
-            String retVal = "";
-            for (String[] s: suppliers.getSupplierList()
-                    ) {
-                retVal += "                      <option value=\"" + s[0] + "\">\n";
-            }
-            return retVal;
         }
 
         private String getTableHeader() throws IOException, ClassNotFoundException, SQLException, TemplateException {
@@ -392,7 +386,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
                 }
                 replaceMap.put("currency",invoice.getCurrency());
                 replaceMap.put("authorization", truncuate(invoice.getAuthContact(),18));
-                replaceMap.put("authEmailExists", (fileExists(emailAuthPath)) ? "":"-o");
+                replaceMap.put("authEmailExists", !invoice.getAuthEmail().equals("") ? "":"-o");
                 // new option, opens folder with inv scan and msg (if already sent)
                 replaceMap.put("email", "<i class=\"fa fa-folder-open-o\" aria-hidden=\"true\"></i>"); // depreciated to deletion
 
@@ -460,7 +454,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("Currency", this.invoice.getCurrency());
             if (this.invoice.getCurrency().equals("")) { replaceMap.put("Currency_activeClass","");} else {replaceMap.put("Currency_activeClass","active");}
             String currencyOption = "";
-            for (String s: ImCFG.getCurencies()
+            for (String s: ImCFG.getCurrencies()
                     ) {
                 currencyOption = currencyOption + "<option value=\"" + s + "\">\n";
             }

@@ -19,6 +19,7 @@ abstract class InvoicesDB {
     public Connection connection;
 
     public InvoicesDB() throws ClassNotFoundException, FileNotFoundException {
+        //TODO: add option to connetct to other types of DBs
         Class.forName("org.sqlite.JDBC");
 
         if (fileExists(Controller.ImCFG.getImDBPath())) {

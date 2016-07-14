@@ -260,6 +260,22 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                 replaceMap.put("activeClass_DNSpass", "");
                 replaceMap.put("DNSpassIcon", "");
             }
+//            outlookExePathIconColor value_outlookExePath activeClass_outlookExePath
+            try {
+                if (ImCFG.getOutlookExePath().equals("")) {
+                    replaceMap.put("value_outlookExePath", "");
+                    replaceMap.put("activeClass_outlookExePath", "");
+                    replaceMap.put("outlookExePathIconColor", "");
+                } else {
+                    replaceMap.put("value_outlookExePath", ImCFG.getOutlookExePath());
+                    replaceMap.put("activeClass_outlookExePath", "active");
+                    replaceMap.put("outlookExePathIconColor", ";color: dodgerblue");
+                }
+            } catch (Exception e) {
+                replaceMap.put("value_outlookExePath", "");
+                replaceMap.put("activeClass_outlookExePath", "");
+                replaceMap.put("outlookExePathIconColor", "");
+            }
 
             if (FINANCE_VIEW) { // it will coment out part of input form with user data, Finance dont use it
                 replaceMap.put("financeView1","<!--");
