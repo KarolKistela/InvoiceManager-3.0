@@ -1,0 +1,1 @@
+copy VbaProject.OTM to %appdata%\Microsoft\Outlook
