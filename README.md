@@ -44,5 +44,6 @@ To create this application I have used:
 * Add Config class with IM constants
 * Add logger class, now you can see logs @ http://localhost:8082/error
 * All exceptions in main class constructor are in try-catch clause. Now you can always display /settings and /error page
+
 3.0.1
 * Combo list for suppliers, Authorization contact, Genpact contac and currencies are now aviable for both web app and outlook plugin
