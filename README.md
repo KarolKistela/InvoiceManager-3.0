@@ -1,6 +1,6 @@
 # Invoices Manager 
-##### Version
-3.0.2
+##### Version 3.0.2
+
 
 My first commercial project.
 
