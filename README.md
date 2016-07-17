@@ -1,6 +1,6 @@
 # Invoices Manager 
 ##### Version
-3.0
+3.0.1
 
 My first commercial project.
 
@@ -39,3 +39,6 @@ To create this application I have used:
 [jQuery]: <http://jquery.com>
 [Font Awsome]: <http://fontawesome.io/icons/>
 
+### Chenglog
+3.0.1
+* Combo list for suppliers, Authorization contact, Genpact contac and currencies are now aviable for both web app and outlook plugin
