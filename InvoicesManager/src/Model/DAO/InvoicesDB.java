@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static Controller.Controller.CFG_PATH;
+import static Controller.Controller.config;
 import static Model.Helpers.fileExists;
 
 /**
@@ -19,14 +19,14 @@ abstract class InvoicesDB {
     public Connection connection;
 
     public InvoicesDB() throws ClassNotFoundException, FileNotFoundException {
-        //TODO: add option to connetct to other types of DBs
+        //TODO: addException option to connetct to other types of DBs
         Class.forName("org.sqlite.JDBC");
 
         if (fileExists(Controller.ImCFG.getImDBPath())) {
             this.DB_Path = Controller.ImCFG.getImDBPath();
             this.connectionString = "jdbc:sqlite:"+this.DB_Path;
         } else {
-            this.DB_Path = CFG_PATH + "\\saveToDelete.file";
+            this.DB_Path = config.CFG_PATH + "\\saveToDelete.file";
             throw new FileNotFoundException();
         }
     }

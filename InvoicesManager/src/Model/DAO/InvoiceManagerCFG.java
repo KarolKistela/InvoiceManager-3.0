@@ -8,7 +8,9 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Controller.Controller.FINANCE_VIEW;
+import static Controller.Controller.comboList;
+import static Controller.Controller.config;
+import static Controller.Controller.logger;
 import static Model.Helpers.InvoicesManagerDBconnection;
 
 /**
@@ -16,17 +18,20 @@ import static Model.Helpers.InvoicesManagerDBconnection;
  * Configuration Class for Invoice Manager. Data are serialized in ../../resources/InvoiceManagerCFG/InvoiceManager.cfg database.
  */
 public class InvoiceManagerCFG {
-    private String InvoicesManagerCFGPath;
+    /**
+     * Path to folder with .tif and .msg files
+     */
     private String imExternalFolderPath;
-    private String outlookExePath;
+    /**
+     * Path to InvoicesManager.db
+     */
     private String imDBPath;
-    private Integer rowsPerPage;
-    private String backgroundColor;
-    private double tableWidth;
+    /**
+     * Path to outlook.exe. When sending authorization, Im using shell command to setup email.
+     */
+    private String outlookExePath;
     private int totalNrOfPages;
     private List<String[]> filters;
-    private String orderByClause;
-    private boolean checkForInvDuplicates;
     private String userNetID;
     private String userEmail;
     private String userColor;
@@ -40,14 +45,13 @@ public class InvoiceManagerCFG {
 
     private List<String> rowColor = new LinkedList<>();
     private List<String> processStatus = new LinkedList<>();
-    // DNS db credentials
+
     private String DNSserver;
     private String DNSuser;
     private String DNSpass;
     private String DNSjdbcClass;
 
-    public InvoiceManagerCFG(String cfgPath) throws ClassNotFoundException {
-        this.InvoicesManagerCFGPath = cfgPath + "/InvoicesManager.cfg";
+    public InvoiceManagerCFG(String cfgPath) throws ClassNotFoundException, SQLException {
         this.loadData();
     }
 
@@ -55,13 +59,8 @@ public class InvoiceManagerCFG {
         this.imExternalFolderPath = new String();
         this.imDBPath = new String();
         this.outlookExePath = new String();
-        this.rowsPerPage = new Integer(0);
-        this.backgroundColor = new String();
-        this.tableWidth = new Double(0.00);
         this.totalNrOfPages = new Integer(0);
         this.filters = new LinkedList<>();
-        this.orderByClause = new String();
-        this.checkForInvDuplicates = new Boolean(true);
         this.userNetID = new String();
         this.userEmail = new String();
         this.userColor = new String();
@@ -72,37 +71,23 @@ public class InvoiceManagerCFG {
         this.processStatus = new LinkedList<>();
     }
 
-    public String getOutlookExePath() {
-        return outlookExePath;
-    }
-
-    public void setOutlookExePath(String outlookExePath) {
-        this.outlookExePath = outlookExePath;
-    }
-
     /* Connetct to db cfg file and load data from this file. Basically serialization for this class */
-    public void loadData() throws ClassNotFoundException {
+    public void loadData() throws ClassNotFoundException, SQLException {
         this.clearData();
         // load the sqlite-JDBC driver using the current class loader
         Class.forName("org.sqlite.JDBC");
-
         Connection connection = null;
+
         try
         {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + config.CFG_PATH);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             ResultSet resultSet;
 
-            resultSet = statement.executeQuery("SELECT * FROM CFG ORDER BY ID DESC LIMIT 1;");
+            resultSet = statement.executeQuery("SELECT * FROM UserSettings ORDER BY ID DESC LIMIT 1;");
             this.setImExternalFolderPath(resultSet.getString("imExternalFolderPath"));
             this.setImDBPath(resultSet.getString("imDBPath"));
-            this.setRowsPerPage(resultSet.getInt("rowsPerPage"));
-            this.setBackgroundColor(resultSet.getString("backgroundColor"));
-            this.setTableWidth(85.5);  // not sure if needed
-            this.setOrderByClause(resultSet.getString("OrderByClause"));
-            this.setCheckForInvDuplicates(resultSet.getBoolean("InvDuplicates"));
             this.setUserNetID(resultSet.getString("userNetID"));
             this.setUserEmail(resultSet.getString("userEmail"));
             this.setUserColor(resultSet.getString("userColor"));
@@ -112,18 +97,18 @@ public class InvoiceManagerCFG {
             this.setDNSjdbcClass(resultSet.getString("DNSjdbcClass"));
             this.setOutlookExePath(resultSet.getString("outlookExePath"));
 
-            resultSet = statement.executeQuery("SELECT * FROM Filters");
-            List<String[]> l = new LinkedList();
-            while (resultSet.next()){
-                String[] filter;
-                filter = new String[resultSet.getMetaData().getColumnCount()];
-
-                for (int i=1; i <= resultSet.getMetaData().getColumnCount(); i++){
-                    filter[i-1]=resultSet.getString(i);
-                }
-                l.add(filter);
-            }
-            this.setFilters(l);
+//            resultSet = statement.executeQuery("SELECT * FROM Filters");
+//            List<String[]> l = new LinkedList();
+//            while (resultSet.next()){
+//                String[] filter;
+//                filter = new String[resultSet.getMetaData().getColumnCount()];
+//
+//                for (int i=1; i <= resultSet.getMetaData().getColumnCount(); i++){
+//                    filter[i-1]=resultSet.getString(i);
+//                }
+//                l.add(filter);
+//            }
+//            this.setFilters(l);
 
             resultSet = statement.executeQuery("SELECT * FROM InvoicesMetaData WHERE DisplayOrder>0 ORDER BY DisplayOrder ASC");
             List<String[]> metaDataList = new LinkedList();
@@ -172,15 +157,11 @@ public class InvoiceManagerCFG {
             while (resultSet.next()) {
                 this.processStatus.add(resultSet.getString(1));
             }
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
-            System.err.println(e.getMessage());
-        }
-        finally
-        {
+            logger.addException(e);
+        } finally {
             try
             {
                 if(connection != null)
@@ -189,28 +170,22 @@ public class InvoiceManagerCFG {
             catch(SQLException e)
             {
                 // connection close failed.
-                System.err.println(e);
+                logger.addException(e);
             }
         }
     }
 
-    public boolean save(Request request) throws ClassNotFoundException, FileNotFoundException {
+    public boolean save(Request request) throws ClassNotFoundException, FileNotFoundException, SQLException {
         String imExternalFolderPath = request.queryParams("imExternalFolderPath");
         if (imExternalFolderPath.lastIndexOf("\\") != imExternalFolderPath.length()-1) {
             imExternalFolderPath += "\\";
-            System.out.println("Add \\ at the end of the path = " + imExternalFolderPath);
         }
 
         String imDBPath = request.queryParams("imDBPath");
-        Integer rowPerPage = 250;
-        String order = "DESC";
-        String orderBy = "ID";
-        String orderByClause = "ORDER BY "+orderBy+" "+order;
-        Integer InvDuplicates = 1;
         String userNetID = "";
         String userEmail = "";
         String userColor = "";
-        if (!FINANCE_VIEW) {
+        if (!config.FINANCE_VIEW) {
             userNetID = request.queryParams("userID").toUpperCase();
             userEmail = request.queryParams("userEmail").toLowerCase();
             userColor = request.queryParams("userColor");
@@ -225,71 +200,53 @@ public class InvoiceManagerCFG {
         String DNSjdbcClass = request.queryParams("imDNSjdbcClass");
         String outlookExePath = request.queryParams("outlookExePath");
 
-        System.out.println(" Update CFG tab with: ====================================================================");
-        System.out.println("imExternalFolderPath: " + imExternalFolderPath);
-        System.out.println("            imDBPath: " + imDBPath);
-        System.out.println("          rowPerPage: " + rowPerPage);
-        System.out.println("       orderByClause: " + orderByClause);
-        System.out.println("       InvDuplicates: " + InvDuplicates);
-        System.out.println("           userNetID: " + userNetID);
-        System.out.println("           userEmail: " + userEmail);
-        System.out.println("           userColor: " + userColor);
-        System.out.println("           DNSserver: " + DNSserver);
-        System.out.println("             DNSuser: " + DNSuser);
-        System.out.println("             DNSpass: " + DNSpass);
-        System.out.println("        DNSjdbcClass: " + DNSjdbcClass);
-        System.out.println("      outlookExePath: " + outlookExePath);
-
         Connection connection = null;
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + config.CFG_PATH);
+            logger.add("Connecting to: " + config.CFG_PATH );
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            if (!FINANCE_VIEW) {
+            if (!config.FINANCE_VIEW) {
                 PreparedStatement prepStmt = connection.prepareStatement(
-                        "UPDATE CFG SET imExternalFolderPath=?,imDBPath=?,rowsPerPage=?,OrderByClause=?,InvDuplicates=?,userNetID=?,userEmail=?,userColor=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=?, outlookExePath=? WHERE ID=1");
+                        "UPDATE UserSettings SET imExternalFolderPath=?,imDBPath=?,userNetID=?,userEmail=?,userColor=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=?, outlookExePath=? WHERE ID=1");
                 prepStmt.setString(1, imExternalFolderPath);
                 prepStmt.setString(2, imDBPath);
-                prepStmt.setInt(3, rowPerPage);
-                prepStmt.setString(4, orderByClause);
-                prepStmt.setInt(5, InvDuplicates);
-                prepStmt.setString(6, userNetID);
-                prepStmt.setString(7, userEmail);
-                prepStmt.setString(8, userColor);
-                prepStmt.setString(9, DNSserver);
-                prepStmt.setString(10, DNSuser);
-                prepStmt.setString(11, DNSpass);
-                prepStmt.setString(12, DNSjdbcClass);
-                prepStmt.setString(13, outlookExePath);
-
-                prepStmt.execute();
-            } else { //for finance view allow to upodate only folder,DB paths
-                PreparedStatement prepStmt = connection.prepareStatement(
-                        "UPDATE CFG SET imExternalFolderPath=?,imDBPath=?,rowsPerPage=?,OrderByClause=?,InvDuplicates=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=? WHERE ID=1");
-                prepStmt.setString(1, imExternalFolderPath);
-                prepStmt.setString(2, imDBPath);
-                prepStmt.setInt(3, rowPerPage);
-                prepStmt.setString(4, orderByClause);
-                prepStmt.setInt(5, InvDuplicates);
+                prepStmt.setString(3, userNetID);
+                prepStmt.setString(4, userEmail);
+                prepStmt.setString(5, userColor);
                 prepStmt.setString(6, DNSserver);
                 prepStmt.setString(7, DNSuser);
                 prepStmt.setString(8, DNSpass);
                 prepStmt.setString(9, DNSjdbcClass);
+                prepStmt.setString(10, outlookExePath);
+                logger.add("Execute sql query: " + "UPDATE UserSettings SET imExternalFolderPath=?,imDBPath=?,userNetID=?,userEmail=?,userColor=?, DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=?, outlookExePath=? WHERE ID=1");
 
                 prepStmt.execute();
+                this.loadData();
+                comboList.reload();
+            } else { //for finance view allow to update only folder,DB paths
+                PreparedStatement prepStmt = connection.prepareStatement(
+                        "UPDATE UserSettings SET imExternalFolderPath=?,imDBPath=?,DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=? WHERE ID=1");
+                prepStmt.setString(1, imExternalFolderPath);
+                prepStmt.setString(2, imDBPath);
+                prepStmt.setString(3, DNSserver);
+                prepStmt.setString(4, DNSuser);
+                prepStmt.setString(5, DNSpass);
+                prepStmt.setString(6, DNSjdbcClass);
+                logger.add("Execute sql query: " + "UPDATE UserSettings SET imExternalFolderPath=?,imDBPath=?,DNSserver=?, DNSuser=?, DNSpass=?, DNSjdbcClass=? WHERE ID=1");
+
+                prepStmt.execute();
+                this.loadData();
+                comboList.reload();
             }
-            // connect to InvoicesManager DB and insert/upsert users, if path is correct!
             if (InvoicesManagerDBconnection(imDBPath)) {
                 User user = new User(userNetID, userEmail, userColor);
                 user.upsertUserToIMDB();
             }
-
         } catch (SQLException e) {
-            // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println(e.getMessage());
+            logger.addException(e);
             return false;
         } finally {
             try {
@@ -297,19 +254,18 @@ public class InvoiceManagerCFG {
                     connection.close();
             } catch (SQLException e) {
                 // connection close failed.
-                System.err.println(e);
+                logger.addException(e);
             }
         }
-        this.loadData();
         return true;
     }
 
-    public String getOrderByClauseURL(){
-        return this.getOrderByClause().replace("ORDER BY ","").replace(" ","/") + "/1";
-    }
-
     public String getUserNetID() {
-        return userNetID;
+        if (userNetID == null) {
+            return new String("");
+        } else {
+            return userNetID;
+        }
     }
 
     public void setUserNetID(String user) {
@@ -317,7 +273,11 @@ public class InvoiceManagerCFG {
     }
 
     public String getImExternalFolderPath() {
-        return imExternalFolderPath;
+        if (imExternalFolderPath == null) {
+            return new String("");
+        } else {
+            return imExternalFolderPath;
+        }
     }
 
     public void setImExternalFolderPath(String imExternalFolderPath) {
@@ -325,27 +285,15 @@ public class InvoiceManagerCFG {
     }
 
     public String getImDBPath() {
-        return imDBPath;
+        if (imDBPath == null) {
+            return new String("");
+        } else {
+            return imDBPath;
+        }
     }
 
     public void setImDBPath(String imDBPath) {
         this.imDBPath = imDBPath;
-    }
-
-    public Integer getRowsPerPage() {
-        return rowsPerPage;
-    }
-
-    public void setRowsPerPage(int rowsPerPage) {
-        this.rowsPerPage = rowsPerPage;
-    }
-
-    public void setBackgroundColor(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public String getBackgroundColor() {
-        return this.backgroundColor;
     }
 
     public int getTotalNrOfPages() {
@@ -356,14 +304,6 @@ public class InvoiceManagerCFG {
         this.totalNrOfPages = totalNrOfPages;
     }
 
-    public double getTableWidth() {
-        return tableWidth;
-    }
-
-    public void setTableWidth(double tableWidth) {
-        this.tableWidth = tableWidth;
-    }
-
     public List<String[]> getFilters() {
         return filters;
     }
@@ -372,24 +312,12 @@ public class InvoiceManagerCFG {
         this.filters = list;
     }
 
-    public String getOrderByClause() {
-        return orderByClause;
-    }
-
-    public void setOrderByClause(String orderByClause) {
-        this.orderByClause = orderByClause;
-    }
-
-    public boolean isCheckForInvDuplicates() {
-        return checkForInvDuplicates;
-    }
-
-    public void setCheckForInvDuplicates(boolean checkForInvDuplicates) {
-        this.checkForInvDuplicates = checkForInvDuplicates;
-    }
-
     public String getUserEmail() {
-        return userEmail;
+        if (userEmail == null) {
+            return new String("");
+        } else {
+            return userEmail;
+        }
     }
 
     public void setUserEmail(String userEmail) {
@@ -397,7 +325,11 @@ public class InvoiceManagerCFG {
     }
 
     public String getUserColor() {
-        return userColor;
+        if (userColor == null) {
+            return new String("");
+        } else {
+            return userColor;
+        }
     }
 
     public void setUserColor(String userColor) {
@@ -429,7 +361,11 @@ public class InvoiceManagerCFG {
     }
 
     public String getDNSserver() {
-        return DNSserver;
+        if (DNSserver == null) {
+            return new String("");
+        } else {
+            return DNSserver;
+        }
     }
 
     public void setDNSserver(String DNSserver) {
@@ -437,7 +373,11 @@ public class InvoiceManagerCFG {
     }
 
     public String getDNSuser() {
-        return DNSuser;
+        if (DNSuser == null) {
+            return new String("");
+        } else {
+            return DNSuser;
+        }
     }
 
     public void setDNSuser(String DNSuser) {
@@ -445,7 +385,11 @@ public class InvoiceManagerCFG {
     }
 
     public String getDNSpass() {
-        return DNSpass;
+        if (DNSpass == null) {
+            return new String("");
+        } else {
+            return DNSpass;
+        }
     }
 
     public void setDNSpass(String DNSpass) {
@@ -453,7 +397,12 @@ public class InvoiceManagerCFG {
     }
 
     public String getDNSjdbcClass() {
-        return DNSjdbcClass;
+
+        if (DNSjdbcClass == null) {
+            return new String("");
+        } else {
+            return DNSjdbcClass;
+        }
     }
 
     public void setDNSjdbcClass(String DNSjdbcClass) {
@@ -472,18 +421,26 @@ public class InvoiceManagerCFG {
         return contactGenpact;
     }
 
+    public void setOutlookExePath(String outlookExePath) {
+        this.outlookExePath = outlookExePath;
+    }
+
+    public String getOutlookExePath() {
+        if (outlookExePath == null) {
+            return new String("");
+        } else {
+            return outlookExePath;
+        }
+    }
+
     @Override
     public String toString() {
         return "InvoiceManagerCFG{" +
-                "InvoicesManagerCFGPath='" + InvoicesManagerCFGPath + '\'' + '\n' +
+                "InvoicesManagerCFGPath='" + config.CFG_PATH + '\'' + '\n' +
                 ", imExternalFolderPath='" + imExternalFolderPath + '\'' + '\n' +
                 ", imDBPath='" + imDBPath + '\'' + '\n' +
-                ", rowsPerPage=" + rowsPerPage + '\n' +
-                ", backgroundColor='" + backgroundColor + '\'' + '\n' +
-                ", tableWidth=" + tableWidth + '\n' +
+                ", rowsPerPage=" + config.RECORDS_PER_PAGE + '\n' +
                 ", totalNrOfPages=" + totalNrOfPages + '\n' +
-                ", orderByClause='" + orderByClause + '\'' + '\n' +
-                ", checkForInvDuplicates=" + checkForInvDuplicates + '\n' +
                 ", userNetID='" + userNetID + '\'' + '\n' +
                 ", userEmail='" + userEmail + '\'' + '\n' +
                 ", userColor='" + userColor + '\'' +
@@ -496,7 +453,7 @@ public class InvoiceManagerCFG {
 
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + config.CFG_PATH);
             connection.setAutoCommit(true);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -511,11 +468,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Update Suppliers in ImCFG: " + (i-1) + " records");
+                    logger.add("Update Suppliers in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Update Suppliers in ImCFG: " + (i-1) + " records");
+            logger.add("Update Suppliers in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("INSERT INTO AuthContact VALUES (?)");
@@ -528,11 +485,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Update AuthContact in ImCFG: " + (i-1) + " records");
+                    logger.add("Update AuthContact in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Update AuthContact in ImCFG: " + (i-1) + " records");
+            logger.add("Update AuthContact in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("INSERT INTO Currencies VALUES (?)");
@@ -545,11 +502,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Update Currencies in ImCFG: " + (i-1) + " records");
+                    logger.add("Update Currencies in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Update Currencies in ImCFG: " + (i-1) + " records");
+            logger.add("Update Currencies in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("INSERT INTO ContactGenpact VALUES (?)");
@@ -562,11 +519,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Update ContactGenpact in ImCFG: " + (i-1) + " records");
+                    logger.add("Update ContactGenpact in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Update ContactGenpact in ImCFG: " + (i-1) + " records");
+            logger.add("Update ContactGenpact in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -587,7 +544,7 @@ public class InvoiceManagerCFG {
 
         try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:" + this.InvoicesManagerCFGPath);
+            connection = DriverManager.getConnection("jdbc:sqlite:" + config.CFG_PATH);
             connection.setAutoCommit(true);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -602,11 +559,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Delete Suppliers in ImCFG: " + (i-1) + " records");
+                    logger.add("Delete Suppliers in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Delete Suppliers in ImCFG: " + (i-1) + " records");
+            logger.add("Delete Suppliers in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("DELETE FROM AuthContact WHERE authContact=(?)");
@@ -619,11 +576,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Delete AuthContact in ImCFG: " + (i-1) + " records");
+                    logger.add("Delete AuthContact in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Delete AuthContact in ImCFG: " + (i-1) + " records");
+            logger.add("Delete AuthContact in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("DELETE FROM Currencies WHERE currency=(?)");
@@ -636,11 +593,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Delete Currencies in ImCFG: " + (i-1) + " records");
+                    logger.add("Delete Currencies in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Delete Currencies in ImCFG: " + (i-1) + " records");
+            logger.add("Delete Currencies in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement("DELETE FROM ContactGenpact WHERE contactGenpact=(?)");
@@ -653,11 +610,11 @@ public class InvoiceManagerCFG {
                 }
                 if (i % 1001 == 0) {
                     preparedStatement.executeBatch();
-                    System.out.println("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
+                    logger.add("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
                 }
             }
             preparedStatement.executeBatch();
-            System.out.println("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
+            logger.add("Delete ContactGenpact in ImCFG: " + (i-1) + " records");
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();

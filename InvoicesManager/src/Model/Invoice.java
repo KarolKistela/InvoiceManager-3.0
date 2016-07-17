@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Controller.Controller.FINANCE_VIEW;
+import static Controller.Controller.config;
+import static Controller.Controller.logger;
 
 /**
  * Created by mzjdx6 on 21-Apr-16.
@@ -47,7 +48,7 @@ public class Invoice {
 
     public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
         Invoice inv = new Invoice(50000);
-        System.out.println(inv.getAuthContact());
+        logger.add(inv.getAuthContact());
         inv.toString();
 
     }
@@ -90,7 +91,7 @@ public class Invoice {
     public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException, SQLException {
         InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
 
-        if (FINANCE_VIEW) {
+        if (config.FINANCE_VIEW) {
             db.upsertInvoiceFinance(request);
         } else {
             db.upsertInvoice(request);
@@ -161,7 +162,6 @@ public class Invoice {
         row[21] = User;
         row[22] = RowColor;
         row[23] = ProcessStatus;
-//        row[24] = Integer.toString(ProcessStage);
         row[24] = FinanceComments;
         row[25] = Integer.toString(InvNrDuplicates);
         row[26] = UserColor;
@@ -201,14 +201,6 @@ public class Invoice {
                 ", UserColor=" + UserColor +
                 '}';
     }
-
-//    public int getProcessStage() {
-//        return ProcessStage;
-//    }
-//
-//    public void setProcessStage(int processStage) {
-//        ProcessStage = processStage;
-//    }
 
     public int getID() {
         return ID;

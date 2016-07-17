@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import static Controller.Controller.logger;
+
 /**
  * Created by Karol Kistela on 11-Jul-16.
  */
@@ -27,14 +29,14 @@ public class DAO_InvoicesComboLists extends InvoicesDB {
         super();
         try {
             // create a database connection
-            System.out.println("Model.DAO.DAO_InvoicesComboLists connected to: " + this.DB_Path);
+            logger.add("Model.DAO.DAO_InvoicesComboLists connected to: " + this.DB_Path);
 
             connection = DriverManager.getConnection(connectionString);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
 
             // Suppliers List
-            System.out.println("Get suppliers List: " + suppliersSQL);
+            logger.add("Get suppliers List: " + suppliersSQL);
             ResultSet rs = statement.executeQuery(suppliersSQL);
             while (rs.next()){
                 if (!rs.getString(1).equals("")) suppliers.add(rs.getString(1));
@@ -43,7 +45,7 @@ public class DAO_InvoicesComboLists extends InvoicesDB {
             statement.close();
 
             // authContact List
-            System.out.println("Get authContact List: " + authContactSQL);
+            logger.add("Get authContact List: " + authContactSQL);
             rs = statement.executeQuery(authContactSQL);
             while (rs.next()){
                 if (!rs.getString(1).equals("")) authContact.add(rs.getString(1));
@@ -52,7 +54,7 @@ public class DAO_InvoicesComboLists extends InvoicesDB {
             statement.close();
 
             // currencies List
-            System.out.println("Get currencies List: " + currenciesSQL);
+            logger.add("Get currencies List: " + currenciesSQL);
             rs = statement.executeQuery(currenciesSQL);
             while (rs.next()){
                 if (!rs.getString(1).equals("")) currencies.add(rs.getString(1));
@@ -61,7 +63,7 @@ public class DAO_InvoicesComboLists extends InvoicesDB {
             statement.close();
 
             // contactGenpact List
-            System.out.println("Get contactGenpact List: " + contactGenpactSQL);
+            logger.add("Get contactGenpact List: " + contactGenpactSQL);
             rs = statement.executeQuery(contactGenpactSQL);
             while (rs.next()){
                 if (!rs.getString(1).equals("")) contactGenpact.add(rs.getString(1));

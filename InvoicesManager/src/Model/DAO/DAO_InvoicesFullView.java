@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import static Controller.Controller.logger;
+
 /**
  * Created by Karol Kistela on 21-Jun-16.
  */
@@ -25,9 +27,9 @@ public class DAO_InvoicesFullView extends InvoicesDB{
         Controller.sqlQuery = sqlQuery.substring(0,sqlQuery.indexOf("LIMIT")); // this is used when IM wants to export data to CSV from last executed query.
         try {
             // create a database connection
-            System.out.println("Model.DAO.DAO_InvoicesFullView connected to: " + this.DB_Path);
-            System.out.println("Model.DAO.DAO_InvoicesFullView sqlQuery: " + sqlQuery);
-            System.out.println("Model.DAO.DAO_InvoicesFullView sqlQuery: " + sqlQueryCount);
+            logger.add("Model.DAO.DAO_InvoicesFullView connected to: " + this.DB_Path);
+            logger.add("Model.DAO.DAO_InvoicesFullView sqlQuery: " + sqlQuery);
+            logger.add("Model.DAO.DAO_InvoicesFullView sqlQuery: " + sqlQueryCount);
 
             connection = DriverManager.getConnection(connectionString);
             Statement statement = connection.createStatement();

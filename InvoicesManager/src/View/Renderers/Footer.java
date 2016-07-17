@@ -7,7 +7,7 @@ import freemarker.template.TemplateException;
 
 import java.io.IOException;
 
-import static Controller.Controller.FINANCE_VIEW;
+import static Controller.Controller.config;
 
 /**
  * Created by Karol Kistela on 27-Jun-16.
@@ -21,7 +21,7 @@ public class Footer extends FreeMarkerTemplate implements Renderer{
     public String render() throws IOException, TemplateException {
         Template template = getTemplate("FTL templates/Footer/Footer.ftl");
 
-        if (FINANCE_VIEW) {
+        if (config.FINANCE_VIEW) {
             replaceMap.put("FINANCE_VIEW","Reader");
         } else {
             replaceMap.put("FINANCE_VIEW","");

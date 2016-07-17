@@ -19,7 +19,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 
-import static Controller.Controller.FINANCE_VIEW;
+import static Controller.Controller.config;
+import static Controller.Controller.ImCFG;
 import static Model.Helpers.fileExists;
 import static Model.Helpers.truncuate;
 
@@ -64,7 +65,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
         Template template = getTemplate(this.ftlFile);
 
-        if (FINANCE_VIEW) {
+        if (config.FINANCE_VIEW) {
             replaceMap.put("FINANCE_VIEW"," Reader");
         } else {
             replaceMap.put("FINANCE_VIEW","");
@@ -127,12 +128,16 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
             case 1: retVal = "ID " + queryData.invoices.get(0).getID(); break;
             default:
                 if (this.menuButtonActive == 1) {
-                    retVal = "Main view " + String.format("%d",queryData.nrOfRecords) + " records";
+                    retVal = "Main view";
                 } else {
-                    retVal = "Filter view " + String.format("%d",queryData.nrOfRecords) + " records";
+                    retVal = "Filter view";
                 }
         }
         return retVal;
+    }
+
+    private String getViewRecordsCount() {
+        return String.format("%d",queryData.nrOfRecords) + " records";
     }
 
     private class IFVHeader extends FreeMarkerTemplate implements Renderer  {
@@ -153,8 +158,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
                 tableHeader = this.getTableHeaderWithoutSort();
             }
 
-            int rowPerPage = ImCFG.getRowsPerPage();
-            int lastPage = queryData.nrOfRecords/rowPerPage + 1;
+            int lastPage = queryData.nrOfRecords/config.RECORDS_PER_PAGE + 1;
 
             switch (menuButtonActive){
                 case 2: {
@@ -220,7 +224,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
                     replaceMap.put("pagePreviousOff1", "");
                     replaceMap.put("pagePreviousOff2", "");
                 }
-                if (rout.pageNr == queryData.nrOfRecords/ImCFG.getRowsPerPage()+1) { // hide next pagination button
+                if (rout.pageNr == queryData.nrOfRecords/config.RECORDS_PER_PAGE+1) { // hide next pagination button
                     replaceMap.put("pageNextOff1", "<!--");
                     replaceMap.put("pageNextOff2", "-->");
                 } else {
@@ -251,11 +255,12 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
             replaceMap.put("menu4", (menuButtonActive == 4) ? " IM-menu-active" : "");
             replaceMap.put("menu5", (menuButtonActive == 5) ? " IM-menu-active" : "");
             replaceMap.put("viewTitle", viewTitle);
+            replaceMap.put("viewTitle2", getViewRecordsCount());
             replaceMap.put("records", queryData.nrOfRecords);
             replaceMap.put("rout", rout.select + rout.orderByClause);
             replaceMap.put("previous", (rout.pageNr < 1) ? "1" : Integer.toString(rout.pageNr - 1).replace(",", ""));
             if (queryData.nrOfRecords != 0) {
-                replaceMap.put("pageNr", Integer.toString(rout.pageNr).replace(",", "") + "/" + Integer.toString(queryData.nrOfRecords/ImCFG.getRowsPerPage() + 1).replace(",", ""));
+                replaceMap.put("pageNr", Integer.toString(rout.pageNr).replace(",", "") + "/" + Integer.toString(queryData.nrOfRecords/config.RECORDS_PER_PAGE + 1).replace(",", ""));
             } else {    // case when total nr of pages is not required
                 replaceMap.put("pageNr", Integer.toString(rout.pageNr).replace(",", ""));
             }

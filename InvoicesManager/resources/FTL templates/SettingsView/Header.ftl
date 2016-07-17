@@ -57,7 +57,7 @@
             ${commentOnMenu1}<li><a href="/IFV/ID/gte/0/ID/DESC/1"><i class="fa fa-home${menu1}"></i></a></li>${commentOffMenu1}
             ${commentOnMenu2}<li><a href="/Settings"><i class="fa fa-cog${menu2}"></i></a></li>${commentOffMenu2}
             ${commentOnMenu3}<li onclick="w3_open()"><a href="#"><i class="fa fa-filter${menu3}"></i></a></li>${commentOffMenu3}
-            ${commentOnMenu4}<li><a href="/Reports"><i class="fa fa-bar-chart${menu4}"></i></a></li>${commentOffMenu4}
+            <#--${commentOnMenu4}<li><a href="/Reports"><i class="fa fa-bar-chart${menu4}"></i></a></li>${commentOffMenu4}-->
             ${commentOnMenu5}<li><a onclick="openModal('Save');"><i class="fa fa-floppy-o${menu5}"></i></a></li>${commentOffMenu5}
             <li><a onclick="openModal('Exit')"><i class="fa fa-power-off"></i></a></li>
         </ul>

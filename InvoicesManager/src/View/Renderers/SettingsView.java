@@ -10,7 +10,9 @@ import spark.Request;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static Controller.Controller.FINANCE_VIEW;
+import static Controller.Controller.config;
+import static Controller.Controller.ImCFG;
+import static Controller.Controller.logger;
 import static Model.Helpers.fileExists;
 import static Model.Helpers.isEmail;
 
@@ -29,14 +31,14 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
     public SettingsView(Request request) throws ClassNotFoundException {
         super();
         this.rout = request.pathInfo().substring(0,request.pathInfo().lastIndexOf("/")+1);
-        System.out.println("********View.Renderers.SettingsView ROUT: " + this.rout + " ********");
+        logger.add("********View.Renderers.SettingsView ROUT: " + this.rout + " ********");
     }
 
     @Override
     public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
         Template template = getTemplate(this.ftlFile);
 
-        if (FINANCE_VIEW) {
+        if (config.FINANCE_VIEW) {
             replaceMap.put("FINANCE_VIEW"," Reader");
         } else {
             replaceMap.put("FINANCE_VIEW","");
@@ -84,7 +86,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
 
 
             replaceMap.put("filterList", "");
-            replaceMap.put("NetID",ImCFG.getUserNetID());
+            replaceMap.put("NetID", ImCFG.getUserNetID());
             replaceMap.put("supplierList", "");
             replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active" : "");
             replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active" : "");
@@ -114,8 +116,8 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
         @Override
         public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
             Template template = getTemplate(settingsInputFormFTL);
-            String orderBy = ImCFG.getOrderByClause().replace("ORDER BY ","").replace(" DESC","").replace(" ASC","");
-            String order = ImCFG.getOrderByClause().substring(ImCFG.getOrderByClause().lastIndexOf(" ") + 1, ImCFG.getOrderByClause().length());
+            String orderBy = config.ORDER_BY_CLAUSE.replace("ORDER BY ","").replace(" DESC","").replace(" ASC","");
+            String order = config.ORDER_BY_CLAUSE.substring(config.ORDER_BY_CLAUSE.lastIndexOf(" ") + 1, config.ORDER_BY_CLAUSE.length());
 
             if (ImCFG.getImExternalFolderPath().equals("")) {
                 replaceMap.put("value_imExternalFolderPath", "");
@@ -141,14 +143,14 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
             } else {
                 replaceMap.put("folderExists","\"");
             }
-            if (ImCFG.getRowsPerPage() < 5) {
+            if (config.RECORDS_PER_PAGE < 5) {
                 replaceMap.put("value_rowsPerPage", 5);
                 replaceMap.put("rowsSetup", "\"");
-            } else if (ImCFG.getRowsPerPage() > 250){
+            } else if (config.RECORDS_PER_PAGE > 250){
                 replaceMap.put("value_rowsPerPage",250);
                 replaceMap.put("rowsSetup", ";color: dodgerblue");
             } else {
-                replaceMap.put("value_rowsPerPage", ImCFG.getRowsPerPage());
+                replaceMap.put("value_rowsPerPage", config.RECORDS_PER_PAGE);
                 replaceMap.put("rowsSetup", ";color: dodgerblue");
             }
             if (orderBy.equals("")) {
@@ -163,7 +165,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
             } else {
                 replaceMap.put("order_chcked", "checked");
             }
-            if (ImCFG.isCheckForInvDuplicates()) {
+            if (config.CHECK_FOR_INV_DUPLICATES) {
                 replaceMap.put("duplicates_chcked", "checked");
             } else {
                 replaceMap.put("duplicates_chcked", "");
@@ -277,7 +279,7 @@ public class SettingsView extends FreeMarkerTemplate implements Renderer {
                 replaceMap.put("outlookExePathIconColor", "");
             }
 
-            if (FINANCE_VIEW) { // it will coment out part of input form with user data, Finance dont use it
+            if (config.FINANCE_VIEW) { // it will coment out part of input form with user data, Finance dont use it
                 replaceMap.put("financeView1","<!--");
                 replaceMap.put("financeView2","-->");
             } else {

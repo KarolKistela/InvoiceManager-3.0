@@ -13,15 +13,23 @@ public class ComboList {
     private DAO_InvoicesComboLists DAO;
 
     public ComboList() throws FileNotFoundException, SQLException, ClassNotFoundException {
-        this.DAO = new DAO_InvoicesComboLists();
-        Controller.ImCFG.updateComboLists(DAO);
-        Controller.ImCFG.synchronizeComboLists(DAO);
+        try {
+            this.DAO = new DAO_InvoicesComboLists();
+            Controller.ImCFG.updateComboLists(DAO);
+            Controller.ImCFG.synchronizeComboLists(DAO);
+        } catch (Exception e) {
+            Controller.logger.addException(e);
+        }
     }
 
     public void reload() throws FileNotFoundException, SQLException, ClassNotFoundException {
-        this.DAO = new DAO_InvoicesComboLists();
-        Controller.ImCFG.updateComboLists(DAO);
-        Controller.ImCFG.synchronizeComboLists(DAO);
+        try {
+            this.DAO = new DAO_InvoicesComboLists();
+            Controller.ImCFG.updateComboLists(DAO);
+            Controller.ImCFG.synchronizeComboLists(DAO);
+        } catch (Exception e) {
+            Controller.logger.addException(e);
+        }
     }
 
     public String getSuppliersOptionValue() {

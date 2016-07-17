@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static Controller.Controller.OUTLOOK_OTM_PATH;
+import static Controller.Controller.config;
+import static Controller.Controller.logger;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
 
@@ -31,8 +32,8 @@ public class Helpers {
     public static void  copyOTMfile() throws IOException {
         Runtime runTime = Runtime.getRuntime();
         String cmd = new String();
-        cmd = "copy /b/v/y \"" + OUTLOOK_OTM_PATH + "\" \"%appdata%\\Microsoft\\Outlook\\\"";
-        System.out.println("========================== shellCmd: " + cmd);
+        cmd = "copy /b/v/y \"" + config.OUTLOOK_OTM_PATH + "\" \"%appdata%\\Microsoft\\Outlook\\\"";
+        logger.add("========================== shellCmd: " + cmd);
         String[] processCommand = {"cmd", "/c", cmd};
 
         Process shellProcess = runTime.exec(processCommand);
@@ -46,19 +47,19 @@ public class Helpers {
 //         read the output from the command;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
 
         // read any errors from the attempted command
-        System.out.println("Standard error of the command (if any):\n");
+        logger.add("Standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
     }
 
     public static void runShellCommand(String cmd) throws IOException, InterruptedException {
         Runtime runTime = Runtime.getRuntime();
-        System.out.println("========================== shellCmd: " + cmd);
+        logger.add("========================== shellCmd: " + cmd);
         String[] processCommand = {"cmd", "/c", cmd};
         Process shellProcess = runTime.exec(processCommand);
 
@@ -71,13 +72,13 @@ public class Helpers {
         // read the output from the command;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
 
         // read any errors from the attempted command
-        System.out.println("Standard error of the command (if any):\n");
+        logger.add("Standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
     }
 
@@ -88,7 +89,7 @@ public class Helpers {
 
         String cmd = outlookEXEpath + " /c ipm.note /m \"" + inv.getAuthContact() + "&subject=ID%3A%20" + inv.getID() + "\" /a \"" + Controller.ImCFG.getImExternalFolderPath() + inv.getInvScanPath() + "\"";
 
-        System.out.println("========================== shellCmd: " + cmd);
+        logger.add("========================== shellCmd: " + cmd);
         Process shellProcess = runTime.exec(cmd);
 
         BufferedReader stdInput = new BufferedReader(new
@@ -100,13 +101,13 @@ public class Helpers {
         // read the output from the command;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
 
         // read any errors from the attempted command
-        System.out.println("Standard error of the command (if any):\n");
+        logger.add("Standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
+            logger.add(s);
         }
     }
     public static int decimal(Double d) {
@@ -122,11 +123,14 @@ public class Helpers {
                 return exists(path);
             }
         } catch (InvalidPathException e) {
-            System.err.println("invalid path: " + filePath);
+            logger.add("invalid path: " + filePath);
+            logger.addException(e);
+            return false;
+        } catch (NullPointerException e) {
+            logger.add("DB path not defined in InvoicesManager.cfg");
+            logger.addException(e);
             return false;
         }
-
-
     }
 
 
@@ -166,7 +170,7 @@ public class Helpers {
         }
 
         String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
-        System.out.println("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
+        logger.add("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
 
         return ("SELECT * FROM Invoices " + whereClause);
     }
@@ -201,7 +205,7 @@ public class Helpers {
         String whereClause = "WHERE " + columnName + sign + "'" + value + "'" + " ";
         String orderByClause = "ORDER BY " + columnName2 + " " + direction;
 
-        System.out.println("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + orderByClause);
+        logger.add("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + orderByClause);
         return ("SELECT * FROM Invoices " + whereClause + orderByClause);
     }
 
@@ -249,7 +253,7 @@ public class Helpers {
         String whereClause2 = " AND " + colName3 + "=" + "'" + val3 + "'"+ " ";
         String orderByClause = "ORDER BY " + columnName2 + " " + direction;
 
-        System.out.println("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + whereClause2 + orderByClause);
+        logger.add("sqlQueryConstructor2: " + "SELECT * FROM Invoices " + whereClause + whereClause2 + orderByClause);
         return ("SELECT * FROM Invoices " + whereClause + whereClause2 + orderByClause);
     }
 
@@ -261,7 +265,7 @@ public class Helpers {
             query = filters.get(filterNR)[2] + " ORDER BY " + request.params(":columnName2") + " " + request.params("direction");
         }
 
-        System.out.println("sqlQueryConstructor3: " + query);
+        logger.add("sqlQueryConstructor3: " + query);
         return query;
     }
 
@@ -308,7 +312,7 @@ public class Helpers {
         String[] row = rs.get(0);
 
         String whereClause = "WHERE InvoiceNr=" + "'" + row[0] + "'" + " ";
-        System.out.println("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
+        logger.add("sqlQueryConstructor: " + "SELECT * FROM Invoices " + whereClause);
 
         return ("SELECT * FROM Invoices " + whereClause);
     }
@@ -318,7 +322,7 @@ public class Helpers {
         String sign = request.params("sign");
         String value = request.params("value");
 
-        System.out.println("getRout: " + "/Filter/Select/"+columnName+"/"+sign+"/"+value+"/");
+        logger.add("getRout: " + "/Filter/Select/"+columnName+"/"+sign+"/"+value+"/");
 
         return "/Filter/Select/"+columnName+"/"+sign+"/"+value+"/";
     }
@@ -340,16 +344,16 @@ public class Helpers {
 
     public static boolean InvoicesManagerDBconnection(String imDBPath) throws ClassNotFoundException {
         String query = "SELECT count(ID) FROM Invoices;";
-        System.out.println("Testing connection to DB");
-        System.out.println("DB path: " + imDBPath);
-        System.out.println("  Query: " + query);
+        logger.add("Testing connection to DB");
+        logger.add("DB path: " + imDBPath);
+        logger.add("  Query: " + query);
 
         Connection connection = null;
 
         Class.forName("org.sqlite.JDBC"); //ClassNotFoundException
 
         if (!fileExists(imDBPath)) {
-            imDBPath = "src/main/resources/InvoiceManagerCFG/saveToDelete.file";
+            imDBPath = config.TEMP_FOLDER + "\\test.db";
         }
             try {
                 // create a database connection
@@ -358,7 +362,7 @@ public class Helpers {
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
                 ResultSet rs = statement.executeQuery(query);
-                System.out.println("Nr of records in DB: " + rs.getInt(1));
+                logger.add("Nr of records in DB: " + rs.getInt(1));
                 if (rs.getInt(1) != 0){
                     Controller.isConnectedToDB = true;
                     return true;
@@ -368,7 +372,7 @@ public class Helpers {
             } catch (SQLException e) {
                 // if the error message is "out of memory",
                 // it probably means no database file is found
-                System.err.println(e.getMessage());
+                logger.addException(e);
                 return false;
             } finally {
                 try {
@@ -376,7 +380,7 @@ public class Helpers {
                     connection.close();
                 } catch (SQLException e) {
                     // connection close failed.
-                    System.err.println(e);
+                    logger.addException(e);
                     }
                 }
         }

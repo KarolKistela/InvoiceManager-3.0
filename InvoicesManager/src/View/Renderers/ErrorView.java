@@ -1,57 +1,38 @@
 package View.Renderers;
 
-import Controller.Controller;
-import Model.CSVFile;
 import Model.DAO.InvoiceManagerCFG;
 import View.FreeMarkerTemplate;
 import View.Renderer;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.List;
 
 import static Controller.Controller.config;
-
-
+import static Controller.Controller.logger;
+import static Model.Reversed.reversed;
 
 /**
- * Created by Karol Kistela on 01-Jun-16.
+ * Created by Karol Kistela on 16-Jul-16.
  */
-public class SaveView extends FreeMarkerTemplate implements Renderer {
-    private final String ftlFile = "FTL templates/SaveView/SaveView.ftl";
-    private final String headerFTL = "FTL templates/SaveView/Header.ftl";
-    private final String headerTableHeaderWithoutSortFTL = "FTL templates/SaveView/Header_tableHeaderWithoutSort.ftl";
-    private final String saveViewFTL = "FTL templates/SaveView/SaveViewBody.ftl";
+public class ErrorView extends FreeMarkerTemplate implements Renderer {
+    private final String ftlFile = "FTL templates/ErrorView/ErrorView.ftl";
+    private final String headerFTL = "FTL templates/ErrorView/Header.ftl";
+    private final String headerTableHeaderWithoutSortFTL = "FTL templates/ErrorView/Header_tableHeaderWithoutSort.ftl";
+    private final String errorViewFTL = "FTL templates/ErrorView/ErrorViewBody.ftl";
 
-    private final String viewTitle = "Save";
+    private final String viewTitle = "error";
     private boolean fileGenerated;
-    private String errorMsg = new String();
-    private String csvFilePath;
+//    private String errorMsg = new String();
+//    private String csvFilePath;
 
-    public SaveView() throws ClassNotFoundException, UnsupportedEncodingException {
+    public ErrorView() throws ClassNotFoundException, UnsupportedEncodingException {
         super();
         this.fileGenerated = false;
-        try {
-            CSVFile csvFile = new CSVFile(Controller.sqlQuery);
-            this.csvFilePath = csvFile.getPath();
-            this.fileGenerated = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            this.fileGenerated = false;
-            this.errorMsg = e.toString();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            this.fileGenerated = false;
-            this.errorMsg = e.toString() + "<p>connection to DB lost!</p>";
-        } catch (IOException e) {
-            e.printStackTrace();
-            this.fileGenerated = false;
-            this.errorMsg = e.toString() + "<p>another program might be using this file!</p>";
-        }
+        // TODO: creating log file and sending to me
     }
 
     @Override
@@ -59,21 +40,17 @@ public class SaveView extends FreeMarkerTemplate implements Renderer {
         Template template = getTemplate(this.ftlFile);
 
         if (config.FINANCE_VIEW) {
-            replaceMap.put("FINANCE_VIEW"," Reader");
+            replaceMap.put("FINANCE_VIEW", " Reader");
         } else {
-            replaceMap.put("FINANCE_VIEW","");
+            replaceMap.put("FINANCE_VIEW", "");
         }
 
         replaceMap.put("Style", new Style().render());
-        replaceMap.put("Header", new Header(5,
-                                            "/save",
-                                            1,
-                                            this.viewTitle).render());
-        if (fileGenerated) {
-            replaceMap.put("SettingsInputForm", new SaveViewBody().render(csvFilePath));
-        } else {
-            replaceMap.put("SettingsInputForm", new SaveViewBody().renderErrorMsg(errorMsg));
-        }
+        replaceMap.put("Header", new ErrorView.Header(5,
+                "/save",
+                1,
+                this.viewTitle).render());
+        replaceMap.put("error", new ErrorMessage().render());
         replaceMap.put("Footer", new Footer().render());
 
         return process(template);
@@ -108,16 +85,16 @@ public class SaveView extends FreeMarkerTemplate implements Renderer {
             String supplierList = "";
             String tableHeader = this.getTableHeaderWithoutSort();
 
-            replaceMap.put("commentOnMenu1","");
-            replaceMap.put("commentOnMenu2","");
-            replaceMap.put("commentOnMenu3","<!--");
-            replaceMap.put("commentOnMenu4","");
-            replaceMap.put("commentOnMenu5","");
-            replaceMap.put("commentOffMenu1","");
-            replaceMap.put("commentOffMenu2","");
-            replaceMap.put("commentOffMenu3","-->");
-            replaceMap.put("commentOffMenu4","");
-            replaceMap.put("commentOffMenu5","");
+            replaceMap.put("commentOnMenu1", "");
+            replaceMap.put("commentOnMenu2", "");
+            replaceMap.put("commentOnMenu3", "<!--");
+            replaceMap.put("commentOnMenu4", "");
+            replaceMap.put("commentOnMenu5", "");
+            replaceMap.put("commentOffMenu1", "");
+            replaceMap.put("commentOffMenu2", "");
+            replaceMap.put("commentOffMenu3", "-->");
+            replaceMap.put("commentOffMenu4", "");
+            replaceMap.put("commentOffMenu5", "");
             replaceMap.put("commentOnAdvSearch", "<!--");
             replaceMap.put("commentOffAdvSearch", "-->");
             replaceMap.put("commentOnSearch", "<!--");
@@ -132,7 +109,7 @@ public class SaveView extends FreeMarkerTemplate implements Renderer {
 
 
             replaceMap.put("filterList", filterList);
-            replaceMap.put("NetID",ImCFG.getUserNetID());
+            replaceMap.put("NetID", ImCFG.getUserNetID());
             replaceMap.put("supplierList", supplierList);
             replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active" : "");
             replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active" : "");
@@ -173,45 +150,33 @@ public class SaveView extends FreeMarkerTemplate implements Renderer {
         }
     }
 
-    private class SaveViewBody extends FreeMarkerTemplate implements Renderer {
+    private class ErrorMessage extends FreeMarkerTemplate implements Renderer {
+        Template template = getTemplate(errorViewFTL);
 
-        public SaveViewBody() throws ClassNotFoundException {
+        public ErrorMessage() throws ClassNotFoundException, IOException {
             super();
         }
 
         @Override
         public String render() throws IOException, TemplateException, ClassNotFoundException, SQLException {
-            Template template = getTemplate(saveViewFTL);
+            String retVal = "";
 
-            replaceMap.put("sqlQuery", "");
-            replaceMap.put("commentON", "");
-            replaceMap.put("commentOFF", "");
-            replaceMap.put("csvFilePath", "");
-            replaceMap.put("csvFilePathURL", "");
+            List<String> ls = logger.getExceptionList();
 
-            return process(template);
-        }
+            for (String s : reversed(ls)) {
+                if (s.contains("!")) {
+                    if (s.substring(10,15).contains("at")) {
+                        String t = s.substring(10,s.length());
+                        retVal += "<p style=\"color:red; padding-left: 100px\">" + t.replace("!", "") + "</p>";
+                    } else {
+                        retVal += "<p style=\"color:red\">" + s.replace("!", "") + "</p>";
+                    }
+                } else {
+                    retVal += "<p>" + s + "</p>";
+                }
+            }
 
-        public String render(String filePath) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-            Template template = getTemplate(saveViewFTL);
-
-            replaceMap.put("sqlQuery", "File was saved to:");
-            replaceMap.put("commentON", "");
-            replaceMap.put("commentOFF", "");
-            replaceMap.put("csvFilePath", filePath);
-            replaceMap.put("csvFilePathURL", URLEncoder.encode(filePath.substring(0,filePath.lastIndexOf("\\")),"UTF-8"));
-
-            return process(template);
-        }
-
-        public String renderErrorMsg(String errorMsg) throws IOException, TemplateException {
-            Template template = getTemplate(saveViewFTL);
-
-            replaceMap.put("sqlQuery", "ups... Something went wrong: " + errorMsg);
-            replaceMap.put("commentON", "<!--");
-            replaceMap.put("commentOFF", "-->");
-            replaceMap.put("csvFilePath", "");
-            replaceMap.put("csvFilePathURL", "");
+            replaceMap.put("errorLog", retVal);
 
             return process(template);
         }

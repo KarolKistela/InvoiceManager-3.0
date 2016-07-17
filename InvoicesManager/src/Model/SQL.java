@@ -4,7 +4,7 @@ import spark.Request;
 
 import java.net.URLDecoder;
 
-import static Controller.Controller.ImCFG;
+import static Controller.Controller.config;
 
 /**
  * Created by Karol Kistela on 26-Jun-16.
@@ -75,7 +75,7 @@ public class SQL {
         Integer pageNr = Integer.parseInt(request.params("pageNr"));
         if (pageNr < 1) pageNr = 1; // 1< would cause a SQL error
 
-        return "LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+        return "LIMIT " + ((pageNr - 1) * config.RECORDS_PER_PAGE) + ", " + config.RECORDS_PER_PAGE + ";";
     }
     private String signDecode(String URLsign) {
         String sign;

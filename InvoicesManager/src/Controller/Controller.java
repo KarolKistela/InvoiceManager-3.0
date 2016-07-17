@@ -2,13 +2,14 @@ package Controller;
 
 /**
  * Created by Karol Kistela on 10-07-2016.
+ *
+ * Main class of Invoices Manager.
  */
 
 import Model.ComboList;
 import Model.DAO.InvoiceManagerCFG;
 import Model.DAO.InvoiceManagerDB_DAO;
 import Model.Invoice;
-import Model.Suppliers;
 import View.HtmlFactory;
 import View.Renderer;
 import freemarker.template.TemplateException;
@@ -29,76 +30,52 @@ import static Model.Helpers.*;
 import static spark.Spark.*;
 
 public class Controller {
-    public static final Integer PORT = 8082;
-    public static String CFG_PATH = "C:\\InvoicesManager\\SQLITE\\InvoiceManagerCFG";
-    public static String CSV_EXPORT_FOLDER_PATH = "C:\\InvoicesManager\\SQLITE\\DBcsvExport";
-    public static String OUTLOOK_OTM_PATH = "C:\\InvoicesManager\\IM\\resources\\OutlookVBA\\VbaProject.OTM";
-    public static boolean FINANCE_VIEW = false;
-    public static boolean COPY_OTM = false;
+    public final static Logger logger = new Logger();
+    public static Config config = new Config();
+
     public static InvoiceManagerCFG ImCFG;
     public static ComboList comboList;
-    public static Suppliers suppliers;
     public static boolean isConnectedToDB;
-    public String errorMSG; // not sure if it will stay or not
     public static String sqlQuery = new String(); // story last SQL query executed by Invoices Manager go to DAO_InvoicesFullView constructor
+
     private final HtmlFactory htmlFactory;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
+    public static void main(String[] args) {
         if (args.length == 0) {
             new Controller(); // use default path to InvoicesManager.cfg
         }
         else {
-            new Controller(args[0]); // use not default path to cfg
+            new Controller(); // TODO: reference Config values to IM from JSON file
         }
     }
 
-    public Controller() throws IOException, ClassNotFoundException, SQLException {
-        ImCFG = new InvoiceManagerCFG(CFG_PATH);
+    public Controller() {
         htmlFactory = new HtmlFactory();
-        suppliers = new Suppliers();
-        comboList = new ComboList();
+        setPort(config.PORT);
+        externalStaticFileLocation(config.EXTERNAL_FOLDER_PATH);
 
-        if (fileExists(ImCFG.getImDBPath())) {
-            isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
-        }
-        System.out.println("Connected to DB? " + isConnectedToDB);
-
-        setPort(PORT);
-        externalStaticFileLocation("C:/InvoicesManager/IM/resources/");
-        initializeRoutes();
-
-        try { // Open chrome with Invoices Manager address
-            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + PORT + "/");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        try {
+            ImCFG = new InvoiceManagerCFG(config.CFG_PATH);
+            initializeRoutes();
+            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + config.PORT + "/");
+            comboList = new ComboList();
+        } catch (SQLException | InterruptedException | IOException | ClassNotFoundException sql) {
+            logger.addException(sql);
         }
 
-        if (COPY_OTM) copyOTMfile();
-    }
-
-    public Controller(String cfgPath) throws IOException, ClassNotFoundException {
-        this.CFG_PATH = cfgPath;
-        ImCFG = new InvoiceManagerCFG(CFG_PATH);
-        htmlFactory = new HtmlFactory();
-        suppliers = new Suppliers();
-        suppliers.toString();
-
-        if (fileExists(ImCFG.getImDBPath())) {
-            isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
+        try {
+            if (fileExists(ImCFG.getImDBPath())) {
+                isConnectedToDB = InvoicesManagerDBconnection(ImCFG.getImDBPath());
+            }
+        } catch (ClassNotFoundException e) {
+            logger.addException(e);
         }
 
-        System.err.println("Testing connection to DB: " + isConnectedToDB);
-
-        setPort(PORT);
-        externalStaticFileLocation("C:/InvoicesManager/IM/resources/");
-        initializeRoutes();
-        try { // Open chrome with Invoices Manager address
-            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + PORT + "/");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        try {
+            if (config.COPY_OTM) copyOTMfile();
+        } catch (IOException e) {
+            logger.addException(e);
         }
-
-        if (COPY_OTM) copyOTMfile();
     }
 
     abstract class FreemarkerBasedRoute extends Route {
@@ -113,8 +90,8 @@ public class Controller {
             try {
                 doHandle(request, response, writer);
             } catch (Exception e) {
-                errorMSG = e.getMessage();
-                response.redirect("/error");
+                logger.addException(e);
+                    response.redirect("/Settings");
             }
             return writer;
         }
@@ -127,15 +104,15 @@ public class Controller {
             if (request.queryParams("search_query") == null) { // quick search is empty do Advance search
                 if (request.queryParams("search_query_columns") == null) { // advance search is empty
                     // save Invoice from INVinputForm
-                    System.out.println("ID " + request.params("value1") + " update");
+                    logger.add("ID " + request.params("value1") + " update");
                     for (String s: request.queryParams()
                             ) {
-                        System.out.println(s + " = " + request.queryParams(s));
+                        logger.add(s + " = " + request.queryParams(s));
                     }
                     if (new Invoice().save(request)) {
                         response.redirect("/IFV/ID/eq/" + request.params("value1") + "/ID/DESC/1");
                     } else {
-                        response.redirect("/Error");
+                        response.redirect("/Settings");
                     }
                 } else {
                     response.redirect(this.getIFVadvanceSearchURL(request));
@@ -189,7 +166,7 @@ public class Controller {
             } else {
                 if (fileExists(ImCFG.getImDBPath())) {
                     if (InvoicesManagerDBconnection(ImCFG.getImDBPath())) {
-                        System.out.println("Connected to DB you can work");
+                        logger.add("Connected to DB you can work");
                         return false;
                     } else {
                         return true;
@@ -278,7 +255,7 @@ public class Controller {
                 if (ImCFG.save(request)) {
                     response.redirect("/Settings");
                 } else {
-                    response.redirect("/Error/UpdateCFG");
+                    response.redirect("/error");
                 }
             }
         });
@@ -302,8 +279,9 @@ public class Controller {
 // TODO: error msg handling
         get(new FreemarkerBasedRoute("/error") {
             @Override
-            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException {
-                writer.write(errorMSG.toString());
+            protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, SQLException, ClassNotFoundException {
+                Renderer errorView = HtmlFactory.getErrorView();
+                writer.write(errorView.render());
             }
         });
 

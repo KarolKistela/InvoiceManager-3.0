@@ -8,6 +8,9 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static Controller.Controller.ImCFG;
+import static Controller.Controller.config;
+
 /**
  * Created by Karol Kistela on 28-Apr-16.
  */
@@ -34,7 +37,7 @@ public class Style extends FreeMarkerTemplate implements Renderer {
         Template template = getTemplate(this.styleFTL);
         String columnStyle = this.getColumnClasses();
 
-        replaceMap.put("backGroundColor", ImCFG.getBackgroundColor());
+        replaceMap.put("backGroundColor", config.BACKGROUND_COLOR);
         replaceMap.put("columnStyle", columnStyle);
 
         return process(template);

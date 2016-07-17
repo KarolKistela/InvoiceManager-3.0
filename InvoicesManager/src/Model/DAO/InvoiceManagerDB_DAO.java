@@ -15,12 +15,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Controller.Controller.CFG_PATH;
+import static Controller.Controller.ImCFG;
+import static Controller.Controller.config;
+import static Controller.Controller.logger;
 import static Model.Helpers.fileExists;
 
 public class InvoiceManagerDB_DAO implements IMsqlite {
     private final String DB_Path;
-    private InvoiceManagerCFG ImCFG;
+//    private InvoiceManagerCFG ImCFG;
     private Connection connection;
     private Integer nrOfrecods;
 
@@ -29,22 +31,20 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
         String preperedQuery = "INSERT INTO Users (NetID, Email, UserColor) VALUES (1,2,3);";
         preperedQuery = preperedQuery.replace("1","mzjdx6").replace("2","karol.kistela@gmial.com").replace("3","red");
-        System.out.println("query: " + preperedQuery);
+        logger.add("query: " + preperedQuery);
 
     }
 
     public InvoiceManagerDB_DAO() throws ClassNotFoundException, FileNotFoundException {
-        ImCFG = new InvoiceManagerCFG(CFG_PATH);
         if (fileExists(ImCFG.getImDBPath())) {
             this.DB_Path = ImCFG.getImDBPath();
         } else {
-            this.DB_Path = "src/main/resources/InvoiceManagerCFG/saveToDelete.file";
+            this.DB_Path = config.TEMP_FOLDER + "\test.db";
             throw new FileNotFoundException();
         }
     }
 
     public InvoiceManagerDB_DAO(String DB_Path) throws ClassNotFoundException, FileNotFoundException {
-        ImCFG = new InvoiceManagerCFG(CFG_PATH);
         Class.forName("org.sqlite.JDBC");
         this.connection = null;
         if (fileExists(DB_Path)) {
@@ -61,7 +61,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
         String orderByClause;
         if (withOrderByClause) {
-            orderByClause = ImCFG.getOrderByClause();
+            orderByClause = config.ORDER_BY_CLAUSE;
         } else {
             orderByClause = "";
         }
@@ -70,22 +70,22 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             /* Make sure that LIMIT is correct sql statment: */
         if (withLimitClause) {
             if (pageNr < 0) pageNr = 0;
-            if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage()))
-                pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / ImCFG.getRowsPerPage() + 1;
-            limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+            if (pageNr > (this.sqlCOUNT(query.replace("*", "COUNT(*)")) / config.RECORDS_PER_PAGE))
+                pageNr = this.sqlCOUNT(query.replace("*", "COUNT(*)")) / config.RECORDS_PER_PAGE + 1;
+            limitClause = " LIMIT " + ((pageNr - 1) * config.RECORDS_PER_PAGE) + ", " + config.RECORDS_PER_PAGE + ";";
         } else {
             limitClause = ";";
         }
 
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
 
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("  Query: " + query + orderByClause + limitClause);
+            logger.add("  Query: " + query + orderByClause + limitClause);
 
             ResultSet rs = statement.executeQuery(query + orderByClause + limitClause);
 
@@ -114,7 +114,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
         String orderByClause;
         if (withOrderByClause) {
-            orderByClause = ImCFG.getOrderByClause();
+            orderByClause = config.ORDER_BY_CLAUSE;
         } else {
             orderByClause = "";
         }
@@ -123,23 +123,23 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             /* Make sure that LIMIT is correct sql statment: */
         if (withLimitClause) {
             if (pageNr < 0) pageNr = 0;
-            if (pageNr > records / ImCFG.getRowsPerPage()) {
-                pageNr = records / ImCFG.getRowsPerPage() + 1;
+            if (pageNr > records / config.RECORDS_PER_PAGE) {
+                pageNr = records / config.RECORDS_PER_PAGE + 1;
             }
-            limitClause = " LIMIT " + ((pageNr - 1) * ImCFG.getRowsPerPage()) + ", " + ImCFG.getRowsPerPage() + ";";
+            limitClause = " LIMIT " + ((pageNr - 1) * config.RECORDS_PER_PAGE) + ", " + config.RECORDS_PER_PAGE + ";";
         } else {
             limitClause = ";";
         }
 
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.sqlSELECT("+query+", "+pageNr+", "+withOrderByClause+", "+withLimitClause+")");
 
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("  Query: " + query + orderByClause + limitClause);
+            logger.add("  Query: " + query + orderByClause + limitClause);
 
             ResultSet rs = statement.executeQuery(query + orderByClause + limitClause);
 
@@ -177,20 +177,20 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         Invoice retVal = new Invoice();
         String query = "SELECT * FROM InvoicesFullView WHERE ID="+id;
 
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.sqlSELECTid("+id+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.sqlSELECTid("+id+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
                 retVal = new Invoice(rs);
             }
-            System.out.println("Returns: " + retVal.toString());
+            logger.add("Returns: " + retVal.toString());
             return retVal;
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -211,15 +211,15 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     public String[] sqlSELECTid2(Integer id) throws ClassNotFoundException, SQLException {
         String[] retVal = new String[28];
         String query = "SELECT * FROM InvoicesFullView WHERE ID="+id;
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.sqlSELECTid("+id+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.sqlSELECTid("+id+")");
 
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + this.DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
@@ -243,17 +243,17 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public int sqlCOUNT(String query) throws ClassNotFoundException, SQLException {
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.sqlCOUNT("+query+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.sqlCOUNT("+query+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
-            System.out.println("Returns: " + rs.getInt(1));
+            logger.add("Returns: " + rs.getInt(1));
             return rs.getInt(1);
         } catch (SQLException e) {
             // if the error message is "out of memory",
@@ -272,18 +272,18 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
     }
 
     public String filePath(String ID, String columnName) throws ClassNotFoundException {
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.filePath("+ID+", "+columnName+")");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.filePath("+ID+", "+columnName+")");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT " + columnName + " FROM Invoices WHERE ID = " + ID + ";";
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
-            System.out.println("Returns: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
+            logger.add("Returns: " + ImCFG.getImExternalFolderPath() + rs.getString(1));
             // returns path in quotation b/c without them files with spaces in path will not open
             return ("\"" + ImCFG.getImExternalFolderPath() + rs.getString(1) + "\"");
         } catch (SQLException e) {
@@ -304,15 +304,15 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
     public HashMap<String, Integer> findDuplicatedInvNr() throws ClassNotFoundException {
         HashMap invDuplicatesMap = new HashMap();
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.findDuplicatedInvNr()");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.findDuplicatedInvNr()");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT InvoiceNR, repeatNr FROM (SELECT count(ID) as repeatNr, InvoiceNR FROM Invoices GROUP BY InvoiceNR) as tymTab WHERE repeatNr>1 ORDER BY InvoiceNR DESC";
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
@@ -337,15 +337,15 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
     public HashMap<String, String> usersColorMap() throws ClassNotFoundException {
         HashMap usersColorMap = new HashMap();
-        System.out.println("Model.DAO.InvoiceManagerDB_DAO.usersColorMap()");
+        logger.add("Model.DAO.InvoiceManagerDB_DAO.usersColorMap()");
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             String query = "SELECT * FROM Users";
-            System.out.println("  Query: " + query);
+            logger.add("  Query: " + query);
 
             ResultSet rs = statement.executeQuery(query);
 
@@ -374,7 +374,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -386,8 +386,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
             String preperedQuery = "INSERT INTO Users (NetID, Email, UserColor) VALUES (1,2,3);";
             preperedQuery = preperedQuery.replace("1",u.getUserID()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
-            System.out.println("Model.DAO.InvoiceManagerDB_DAO.insertUser: " + u.getUserID());
-            System.out.println("query: " + preperedQuery);
+            logger.add("Model.DAO.InvoiceManagerDB_DAO.insertUser: " + u.getUserID());
+            logger.add("query: " + preperedQuery);
 
             prepStmt.execute();
         } catch (SQLException e) {
@@ -400,7 +400,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -412,8 +412,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
 
             String preperedQuery = "UPDATE Users SET Email=2, UserColor=3 WHERE NetID = 1;";
             preperedQuery = preperedQuery.replace("1",u.getUserID().toUpperCase()).replace("2",u.getUserMail()).replace("3",u.getUserColor());
-            System.out.println("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
-            System.out.println("query: " + preperedQuery);
+            logger.add("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
+            logger.add("query: " + preperedQuery);
 
             prepStmt.execute();
         } catch (SQLException e) {
@@ -425,7 +425,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -458,8 +458,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             prepStmt.setString(24, request.queryParams("FinanceComments"));
             prepStmt.setString(25, request.params("value1"));
 
-            System.out.println("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
-            System.out.println("query: " + prepStmt.toString());
+            logger.add("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
+            logger.add("query: " + prepStmt.toString());
 
             prepStmt.execute();
         } catch (SQLException e) {
@@ -471,7 +471,7 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
         try {
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:" + DB_Path);
-            System.out.println("DB path: " + this.DB_Path);
+            logger.add("DB path: " + this.DB_Path);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -480,8 +480,8 @@ public class InvoiceManagerDB_DAO implements IMsqlite {
             prepStmt.setString(1, request.queryParams("FinanceComments"));
             prepStmt.setString(2, request.params("value1"));
 
-            System.out.println("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
-            System.out.println("query: " + prepStmt.toString());
+            logger.add("Model.DAO.InvoiceManagerDB_DAO.insertUser: ");
+            logger.add("query: " + prepStmt.toString());
 
             prepStmt.execute();
         } catch (SQLException e) {

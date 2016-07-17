@@ -13,14 +13,14 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static Controller.Controller.CSV_EXPORT_FOLDER_PATH;
+import static Controller.Controller.config;
 import static Model.Helpers.fileExists;
 
 /**
  * Created by Karol Kistela on 01-Jun-16.
  */
 public class CSVFile {
-    private final String CSVPATH = CSV_EXPORT_FOLDER_PATH + "\\IM.csv";
+    private final String CSVPATH = config.CSV_EXPORT_FOLDER_PATH + "\\IM.csv";
     private final Path csvFilePath = Paths.get(CSVPATH);
     private BufferedWriter writer;
     private List<String[]> rs = new LinkedList<>();
