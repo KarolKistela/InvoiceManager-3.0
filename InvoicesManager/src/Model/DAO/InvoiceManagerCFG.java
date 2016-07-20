@@ -447,7 +447,7 @@ public class InvoiceManagerCFG {
                 '}';
     }
 
-    public void updateComboLists(DAO_InvoicesComboLists dao) throws ClassNotFoundException {
+    public void updateComboLists(InvoicesComboLists dao) throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection connection = null;
 
@@ -538,7 +538,7 @@ public class InvoiceManagerCFG {
     }
     }
 
-    public void synchronizeComboLists(DAO_InvoicesComboLists dao) throws ClassNotFoundException {
+    public void synchronizeComboLists(InvoicesComboLists dao) throws ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection connection = null;
 

@@ -1,6 +1,6 @@
 package Model;
 
-import Model.DAO.InvoiceManagerDB_DAO;
+import Model.DAO.InvoicesFullView;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -30,7 +30,7 @@ public class CSVFile {
 //    }
 
     public CSVFile(String sqlQuery) throws IOException, ClassNotFoundException, SQLException {
-        this.rs = new InvoiceManagerDB_DAO().sqlSELECT(sqlQuery,1,false,false);
+        this.rs = new InvoicesFullView().sqlSelect(sqlQuery);
 
         if (fileExists(csvFilePath.toString())) this.deleteOldFile();
 

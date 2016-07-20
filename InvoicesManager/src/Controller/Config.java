@@ -45,7 +45,6 @@ public class Config {
      * How many records will be displayed on one page
      */
     public Integer RECORDS_PER_PAGE;
-
     /**
      * Background color of HTML
      */
@@ -58,6 +57,11 @@ public class Config {
      * Deprecited. It was used as a option to check or not to check for invoice duplicates. After tests it was set up permanently to true
      */
     public Boolean CHECK_FOR_INV_DUPLICATES;
+
+    /**
+     * For finance, they will be working on cached DB stored in this location
+     */
+    public String DB_COPY_PATH;
 
     public Config() {
         PORT = 8082;
@@ -72,6 +76,7 @@ public class Config {
         BACKGROUND_COLOR = "#eee";
         ORDER_BY_CLAUSE = "ORDER BY ID DESC";
         CHECK_FOR_INV_DUPLICATES = true;
+        DB_COPY_PATH = "C:\\InvoicesManager\\Temp";
     }
 
     public Config(String JSONfilePath) {

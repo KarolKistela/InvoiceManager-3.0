@@ -1,17 +1,9 @@
 package Model;
 
-import Controller.Controller;
-import Model.DAO.InvoiceManagerDB_DAO;
-import spark.Request;
-
-import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
-import static Controller.Controller.config;
-import static Controller.Controller.logger;
+//import Model.DAO.Invoices;
 
 /**
  * Created by mzjdx6 on 21-Apr-16.
@@ -41,17 +33,9 @@ public class Invoice {
     private String User;
     private String RowColor;
     private String ProcessStatus;
-//    private int ProcessStage;
     private String FinanceComments;
     private Integer InvNrDuplicates;
     private String UserColor;
-
-    public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
-        Invoice inv = new Invoice(50000);
-        logger.add(inv.getAuthContact());
-        inv.toString();
-
-    }
 
     public Invoice(ResultSet rs) throws SQLException {
         this.ID = rs.getInt("ID");
@@ -78,7 +62,6 @@ public class Invoice {
         this.User = (rs.getString("User"));
         this.RowColor = (rs.getString("RowColor"));
         this.ProcessStatus = (rs.getString("ProcessStatus"));
-//        this.ProcessStage = (rs.getInt("ProcessStage"));
         this.FinanceComments = rs.getString("FinanceComments");
         this.InvNrDuplicates = rs.getInt("InvNrDuplicates");
         this.UserColor = rs.getString("UserColor");
@@ -88,86 +71,50 @@ public class Invoice {
 
     }
 
-    public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException, SQLException {
-        InvoiceManagerDB_DAO db = new InvoiceManagerDB_DAO();
-
-        if (config.FINANCE_VIEW) {
-            db.upsertInvoiceFinance(request);
-        } else {
-            db.upsertInvoice(request);
-        }
-        // relode the combolist on save action - it works to slow
-        Controller.ImCFG.loadData();
-        Controller.comboList.reload();
-        return true;
-    }
-
-    public Invoice(Integer pageNr) throws FileNotFoundException, ClassNotFoundException, SQLException {
-        String[] invRow = new InvoiceManagerDB_DAO().sqlSELECTid2(pageNr);
-
-        this.ID = Integer.parseInt(invRow[0]);
-        this.BC = invRow[1];
-        this.EntryDate = invRow[2];
-        this.ContactGenpact = invRow[3];
-        this.Supplier = invRow[4];
-        this.InvoiceNR = invRow[5];
-        this.InvScanPath =  invRow[6];
-        this.PO = invRow[7];
-        this.NetPrice = Double.parseDouble(invRow[8]);
-        this.Currency = invRow[9];
-        this.InvDate = invRow[10];
-        this.EmailSubject = invRow[11];
-        this.AuthContact = invRow[12];
-        this.AuthDate = invRow[13];
-        this.AuthReplyDate = invRow[14];
-        this.AuthEmail = invRow[15];
-        this.EndDate = invRow[16];
-        this.GR = invRow[17];
-        this.GenpactLastReply = invRow[18];
-        this.UserComments = invRow[19];
-        this.Status = invRow[20];
-        this.User = invRow[21];
-        this.RowColor = invRow[22];
-        this.ProcessStatus = invRow[23];
-//        this.ProcessStage = Integer.parseInt(invRow[24]);
-        this.FinanceComments = invRow[24];
-        this.InvNrDuplicates = Integer.parseInt(invRow[25]);
-        this.UserColor = invRow[26];
-    }
-
-    public List<String[]> getResultSet() {
-        List<String[]> retVal = new LinkedList();
-        String[] row = new String[27];
-        row[0] = Integer.toString(ID).replace(",","");
-        row[1] = BC;
-        row[2] = EntryDate;
-        row[3] = ContactGenpact;
-        row[4] = Supplier;
-        row[5] = InvoiceNR;
-        row[6] = InvScanPath;
-        row[7] = PO;
-        row[8] = Double.toString(NetPrice);
-        row[9] = Currency;
-        row[10] = InvDate;
-        row[11] = EmailSubject;
-        row[12] = AuthContact;
-        row[13] = AuthDate;
-        row[14] = AuthReplyDate;
-        row[15] = AuthEmail;
-        row[16] = EndDate;
-        row[17] = GR;
-        row[18] = GenpactLastReply;
-        row[19] = UserComments;
-        row[20] = Status;
-        row[21] = User;
-        row[22] = RowColor;
-        row[23] = ProcessStatus;
-        row[24] = FinanceComments;
-        row[25] = Integer.toString(InvNrDuplicates);
-        row[26] = UserColor;
-        retVal.add(row);
-        return retVal;
-    }
+//    public Boolean save(Request request) throws FileNotFoundException, ClassNotFoundException, SQLException {
+//        if (config.FINANCE_VIEW) {
+//            db.upsertInvoiceFinance(request);
+//        } else {
+//            db.upsertInvoice(request);
+//        }
+//        // relode the combolist on save action - it works to slow
+//        Controller.ImCFG.loadData();
+//        //Controller.comboList.reload();
+//        return true;
+//    }
+//
+//    public Invoice(Integer pageNr) throws FileNotFoundException, ClassNotFoundException, SQLException {
+//        String[] invRow = new Invoices().sqlSELECTid2(pageNr);
+//
+//        this.ID = Integer.parseInt(invRow[0]);
+//        this.BC = invRow[1];
+//        this.EntryDate = invRow[2];
+//        this.ContactGenpact = invRow[3];
+//        this.Supplier = invRow[4];
+//        this.InvoiceNR = invRow[5];
+//        this.InvScanPath =  invRow[6];
+//        this.PO = invRow[7];
+//        this.NetPrice = Double.parseDouble(invRow[8]);
+//        this.Currency = invRow[9];
+//        this.InvDate = invRow[10];
+//        this.EmailSubject = invRow[11];
+//        this.AuthContact = invRow[12];
+//        this.AuthDate = invRow[13];
+//        this.AuthReplyDate = invRow[14];
+//        this.AuthEmail = invRow[15];
+//        this.EndDate = invRow[16];
+//        this.GR = invRow[17];
+//        this.GenpactLastReply = invRow[18];
+//        this.UserComments = invRow[19];
+//        this.Status = invRow[20];
+//        this.User = invRow[21];
+//        this.RowColor = invRow[22];
+//        this.ProcessStatus = invRow[23];
+////        this.ProcessStage = Integer.parseInt(invRow[24]);
+//        this.FinanceComments = invRow[24];
+//        this.InvNrDuplicates = Integer.parseInt(invRow[25]);
+//        this.UserColor = invRow[26];
+//    }
 
     @Override
     public String toString() {
@@ -411,7 +358,11 @@ public class Invoice {
     }
 
     public String getUserColor() {
-        return UserColor;
+        if (UserColor == null) {
+            return "";
+        } else {
+            return UserColor;
+        }
     }
 
     public void setUserColor(String userColor) {

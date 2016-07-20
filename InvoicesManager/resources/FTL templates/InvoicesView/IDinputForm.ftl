@@ -147,7 +147,7 @@ ${ProcessStatus-activeClass}
 <!-- ============== 4.2 AuthEmail ================================================================================== -->
                     <div class="input-field col s3">
                         <input value="${AuthEmail}" id="AuthEmail" name="AuthEmail" type="text">
-                        <label class="${AuthEmail_activeClass}" for="AuthEmail">Path to Authorization Email</label>
+                        <label class="${AuthEmail_activeClass}" for="AuthEmail">Authorization</label>
                     </div>
 <!-- ============== 4.3 EndDate ==================================================================================== -->
                     <div class="input-field col s3">

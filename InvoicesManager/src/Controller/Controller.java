@@ -8,8 +8,7 @@ package Controller;
 
 import Model.ComboList;
 import Model.DAO.InvoiceManagerCFG;
-import Model.DAO.InvoiceManagerDB_DAO;
-import Model.Invoice;
+import Model.DAO.InvoicesFullView;
 import View.HtmlFactory;
 import View.Renderer;
 import freemarker.template.TemplateException;
@@ -36,7 +35,7 @@ public class Controller {
     public static InvoiceManagerCFG ImCFG;
     public static ComboList comboList;
     public static boolean isConnectedToDB;
-    public static String sqlQuery = new String(); // story last SQL query executed by Invoices Manager go to DAO_InvoicesFullView constructor
+    public static String sqlQuery = new String(); // story last SQL query executed by Invoices Manager go to InvoicesFullView constructor
 
     private final HtmlFactory htmlFactory;
 
@@ -57,7 +56,7 @@ public class Controller {
         try {
             ImCFG = new InvoiceManagerCFG(config.CFG_PATH);
             initializeRoutes();
-            runShellCommand("chrome " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + config.PORT + "/");
+            runShellCommand("start " + "http://" + InetAddress.getLocalHost().getHostName() + ":" + config.PORT + "/");
             comboList = new ComboList();
         } catch (SQLException | InterruptedException | IOException | ClassNotFoundException sql) {
             logger.addException(sql);
@@ -69,6 +68,14 @@ public class Controller {
             }
         } catch (ClassNotFoundException e) {
             logger.addException(e);
+        }
+
+        if (config.FINANCE_VIEW) {
+            try {
+                copyDB(ImCFG.getImDBPath(), config.DB_COPY_PATH);
+            } catch (IOException e) {
+                logger.addException(e);
+            }
         }
 
         try {
@@ -109,10 +116,18 @@ public class Controller {
                             ) {
                         logger.add(s + " = " + request.queryParams(s));
                     }
-                    if (new Invoice().save(request)) {
-                        response.redirect("/IFV/ID/eq/" + request.params("value1") + "/ID/DESC/1");
+                    if (config.FINANCE_VIEW) {
+                        if (new InvoicesFullView().updateFinance(request)) {
+                            response.redirect("/IFV/ID/eq/" + request.params("value1") + "/ID/DESC/1");
+                        } else {
+                            response.redirect("/error");
+                        }
                     } else {
-                        response.redirect("/Settings");
+                        if (new InvoicesFullView().update(request)) {
+                            response.redirect("/IFV/ID/eq/" + request.params("value1") + "/ID/DESC/1");
+                        } else {
+                            response.redirect("/error");
+                        }
                     }
                 } else {
                     response.redirect(this.getIFVadvanceSearchURL(request));
@@ -287,10 +302,10 @@ public class Controller {
 
         /* this rout will open tif file for ID
          */
-        get(new FreemarkerBasedRoute("/ID/:idNr/scan") {
+        get(new FreemarkerBasedRoute("/ID/:idNr/:scanPath/scan") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
-                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"InvScanPath");
+                String filePath = ImCFG.getImExternalFolderPath() + URLDecoder.decode(request.params("scanPath"),"UTF-8");
                 try {
                     runShellCommand(filePath);
                 } catch (InterruptedException e) {
@@ -299,26 +314,32 @@ public class Controller {
                 writer.write("Open invoice scan file");
             }
         });
-        /* DEPRECIATED this rout will open email msg file for ID
+
+        /* New, this rout will open email msg file for ID
          */
-        get(new FreemarkerBasedRoute("/ID/:idNr/authEmail") {
+        get(new FreemarkerBasedRoute("/ID/:idNr/:authContact/:scanPath/authEmail") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException, SQLException {
-                try {
-                    writer.write("Create Authorization msg");
-                    runShellCommand2(Integer.parseInt(request.params("idNr").replace(",","")));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                String outlookEXEpath = "\"" + Controller.ImCFG.getOutlookExePath() + "\"";
+                String ID = request.params("idNr");
+                String mailTo = URLDecoder.decode(request.params("authContact"),"UTF-8");
+                String attachmentPath = ImCFG.getImExternalFolderPath() + URLDecoder.decode(request.params("scanPath"),"UTF-8");
+                String cmd = outlookEXEpath + " /c ipm.note /m \"" + mailTo + "&subject=ID%3A%20" + ID + "\" /a \"" + attachmentPath + "\"";
 
+                try {
+                    runShellCommand2(cmd);
+                } catch (Exception e) {
+                    logger.addException(e);
+                }
+                writer.write("Create Authorization msg");
             }
         });
         /* this rout will open foldet with invoice scan file for ID
          */
-        get(new FreemarkerBasedRoute("/ID/:idNr/Folder") {
+        get(new FreemarkerBasedRoute("/ID/:idNr/:scanPath/Folder") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
-                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"InvScanPath");
+                String filePath = ImCFG.getImExternalFolderPath() + URLDecoder.decode(request.params("scanPath"),"UTF-8");
                 try {
                     runShellCommand("explorer " + filePath.substring(0,filePath.lastIndexOf("\\")+1) + "\"");
                 } catch (InterruptedException e) {
@@ -331,7 +352,6 @@ public class Controller {
         get(new FreemarkerBasedRoute("/OpenFolder/:folderPath") {
             @Override
             protected void doHandle(Request request, Response response, StringWriter writer) throws IOException, TemplateException, ClassNotFoundException {
-                String filePath = new InvoiceManagerDB_DAO().filePath(request.params("idNr"),"InvScanPath");
                 try {
                     runShellCommand("explorer " + URLDecoder.decode(request.params("folderPath"),"UTF-8"));
                 } catch (InterruptedException e) {

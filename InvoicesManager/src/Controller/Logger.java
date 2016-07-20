@@ -8,6 +8,7 @@ import java.util.*;
 
 /**
  * Created by Karol Kistela on 16-Jul-16.
+ * TODO: dump log to file and send it to email address
  */
 public class Logger {
     private List<String> log;

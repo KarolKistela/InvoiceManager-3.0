@@ -42,7 +42,7 @@ ${rowComment}
             <tr>
                 <td class="IM-ID"><a href="/IFV/ID/eq/${ID}/ID/DESC/1">${ID}</a></td>
                 <td class="IM-BC">
-                    <a href="/ID/${ID}/scan" onClick="scan${ID}=window.open('/ID/${ID}/scan','scan${ID}','width=640,height=480');
+                    <a href="/ID/${ID}/${scanPath}/scan" onClick="scan${ID}=window.open('/ID/${ID}/${scanPath}/scan','scan${ID}','width=640,height=480');
                                                     setTimeout(function () { scan${ID}.close();}, 500);
                                                     return false;">
                         <span style="color: ${fileExists}">${BCrow}</span>
@@ -60,14 +60,14 @@ ${rowComment}
                 <td class="IM-NetPrice" style="text-align: right; padding-right: 20px">${netPrice}</td>
                 <td class="IM-Currency">${currency}</td>
                 <td class="IM-AuthContact" >
-                    <a href="/ID/${ID}/authEmail" onClick="authEmail${ID}=window.open('/ID/${ID}/authEmail','authEmail${ID}','width=640,height=480');
+                    <a href="/ID/${ID}/${authContact}/${scanPath}/authEmail" onClick="authEmail${ID}=window.open('/ID/${ID}/${authContact}/${scanPath}/authEmail','authEmail${ID}','width=640,height=480');
                             setTimeout(function () { authEmail${ID}.close();}, 500);
                             return false;">
                         ${authorization}
                     </a>
                 </td>
                 <td class="IM-AuthEmail">
-                    <a href="/ID/${ID}/Folder" onClick="Folder${ID}=window.open('/ID/${ID}/Folder','Folder${ID}','width=640,height=480');
+                    <a href="/ID/${ID}/${scanPath}/Folder" onClick="Folder${ID}=window.open('/ID/${ID}/${scanPath}/Folder','Folder${ID}','width=640,height=480');
                             setTimeout(function () { Folder${ID}.close();}, 500);
                             return false;">
                         <i class="fa fa-folder-open${authEmailExists}" aria-hidden="true"></i>

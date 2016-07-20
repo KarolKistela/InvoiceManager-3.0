@@ -13,18 +13,25 @@ import static Model.Helpers.fileExists;
 /**
  * Created by Karol Kistela on 14-Jun-16.
  */
-abstract class InvoicesDB {
+abstract class DataBaseConnection {
     public String connectionString;
     public String DB_Path;
     public Connection connection;
+    public String Driver;
 
-    public InvoicesDB() throws ClassNotFoundException, FileNotFoundException {
+    public DataBaseConnection() throws ClassNotFoundException, FileNotFoundException {
         //TODO: addException option to connetct to other types of DBs
         Class.forName("org.sqlite.JDBC");
+        Driver = "jdbc:sqlite:";
+        String dbPath = Controller.ImCFG.getImDBPath();
 
-        if (fileExists(Controller.ImCFG.getImDBPath())) {
-            this.DB_Path = Controller.ImCFG.getImDBPath();
-            this.connectionString = "jdbc:sqlite:"+this.DB_Path;
+        if (fileExists(dbPath)) {
+            if (config.FINANCE_VIEW) {
+                this.DB_Path = config.DB_COPY_PATH + dbPath.substring(dbPath.lastIndexOf("\\"),dbPath.length());
+            } else {
+                this.DB_Path = Controller.ImCFG.getImDBPath();
+            }
+            this.connectionString = Driver + this.DB_Path;
         } else {
             this.DB_Path = config.CFG_PATH + "\\saveToDelete.file";
             throw new FileNotFoundException();

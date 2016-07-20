@@ -1,10 +1,12 @@
 package Model;
 
-import Model.DAO.InvoiceManagerDB_DAO;
+import Model.DAO.InvoicesFullView;
 
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static Controller.Controller.logger;
 
 /**
  * Created by Karol Kistela on 02-May-16.
@@ -15,7 +17,7 @@ public class User {
     private String userColor;
 
     public User(String netID, String Email, String Color) throws ClassNotFoundException {
-            this.userID = netID;
+            this.userID = netID.toUpperCase();
             this.userColor = Color;
             this.userMail = Email;
     }
@@ -35,39 +37,18 @@ public class User {
                 '}';
     }
 
-    public void upsertUserToIMDB() throws ClassNotFoundException {
-        InvoiceManagerDB_DAO db = null;
+    public void upsertUserToIMDB() throws FileNotFoundException, ClassNotFoundException {
+        InvoicesFullView db = new InvoicesFullView();
         try {
-            db = new InvoiceManagerDB_DAO();
-            if (isUserInDB()) {
+            if (db.isUserInDB(this.userID)) {
                 db.upsertUser(this);
             } else {
                 db.insertUser(this);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.addException(e);
         }
     }
-
-    public Boolean isUserInDB() throws ClassNotFoundException {
-        InvoiceManagerDB_DAO db = null;
-
-        try {
-            db = new InvoiceManagerDB_DAO();
-            int i = db.sqlCOUNT("SELECT count(NetID) FROM Users WHERE NetID='"+this.getUserID()+"'");
-            if (i == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-    };
 
     public String getUserID() {
         return userID;

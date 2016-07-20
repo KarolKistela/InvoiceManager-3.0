@@ -1,11 +1,9 @@
 package View.Renderers;
 
-import Controller.Controller;
-import Model.DAO.DAO_InvoicesFullView;
+import Model.DAO.InvoicesFullView;
 import Model.Invoice;
 import Model.Rout;
 import Model.SQL;
-import Model.User;
 import View.FreeMarkerTemplate;
 import View.Renderer;
 import freemarker.template.Template;
@@ -19,9 +17,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 
-import static Controller.Controller.config;
-import static Controller.Controller.ImCFG;
-import static Model.Helpers.fileExists;
+import static Controller.Controller.*;
 import static Model.Helpers.truncuate;
 
 /**
@@ -38,7 +34,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
 
     private Rout rout;
     private SQL sql;
-    private DAO_InvoicesFullView queryData;
+    private InvoicesFullView queryData;
     private String viewTitle;
     private int menuButtonActive;
 
@@ -47,18 +43,9 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
         super();
         this.rout = new Rout(request);
         this.sql = new SQL(request);
-        this.queryData = new DAO_InvoicesFullView(sql.query, sql.queryCountID);
+        this.queryData = new InvoicesFullView(sql.query, sql.queryCountID);
         this.menuButtonActive = this.getMenuButtonActive(request);
         this.viewTitle = this.getViewTitle(request);
-    }
-
-    public InvoicesView(Request request, int id) throws ClassNotFoundException, UnsupportedEncodingException, FileNotFoundException, SQLException {
-        super();
-        this.rout = new Rout(request);
-        this.sql = new SQL(request);
-        this.menuButtonActive = this.getMenuButtonActive(request);
-        this.viewTitle = "ID " + String.format("%d",id);
-        queryData = new DAO_InvoicesFullView(sql.query, sql.queryCountID);
     }
 
     @Override
@@ -72,10 +59,10 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
         }
 
         replaceMap.put("Footer", new Footer().render());
-        replaceMap.put("supplierList", Controller.comboList.getSuppliersOptionValue());
-        replaceMap.put("CurrencyList", Controller.comboList.getCurrencyOptionValue());
-        replaceMap.put("authContactList", Controller.comboList.getAuthContactOptionValue());
-        replaceMap.put("contactGenpactList", Controller.comboList.getContactGenpactOptionValue());
+        replaceMap.put("supplierList", comboList.getSuppliersOptionValue());
+        replaceMap.put("CurrencyList", comboList.getCurrencyOptionValue());
+        replaceMap.put("authContactList", comboList.getAuthContactOptionValue());
+        replaceMap.put("contactGenpactList", comboList.getContactGenpactOptionValue());
 
         switch (queryData.nrOfRecords) {
             case 0:
@@ -248,7 +235,7 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
 
 //            replaceMap.put("filterList", filterList);
             replaceMap.put("NetID", ImCFG.getUserNetID());
-            replaceMap.put("supplierList", Controller.comboList.getSuppliersOptionValue()); //supplierList);
+            replaceMap.put("supplierList", comboList.getSuppliersOptionValue()); //supplierList);
             replaceMap.put("menu1", (menuButtonActive == 1) ? " IM-menu-active" : "");
             replaceMap.put("menu2", (menuButtonActive == 2) ? " IM-menu-active" : "");
             replaceMap.put("menu3", (menuButtonActive == 3) ? " IM-menu-active" : "");
@@ -370,13 +357,16 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
                     replaceMap.put("invNrLink_a", "");
                 }
 
+                replaceMap.put("authContact", URLEncoder.encode(invoice.getAuthContact(),"UTF-8"));
+                replaceMap.put("scanPath", URLEncoder.encode(invoice.getInvScanPath(),"UTF-8"));
+
                 replaceMap.put("rowComment", "<!-- ============================ ID = "+String.format("%d",invoice.getID())+" ======================================================================= -->");
                 replaceMap.put("rowColor", (invoice.getRowColor().length() == 0) ? "white":invoice.getRowColor());
 
                 replaceMap.put("userColor", invoice.getUserColor());
 
                 replaceMap.put("ID", String.format("%d",invoice.getID()));
-                replaceMap.put("fileExists", (fileExists(scanPath)) ? "":"black");
+                replaceMap.put("fileExists", "");
                 replaceMap.put("BCrow", truncuate(invoice.getBC(),10));
                 replaceMap.put("entryDate", invoice.getEntryDate());
                 replaceMap.put("supplier", truncuate(invoice.getSupplier(),18));
@@ -498,19 +488,12 @@ public class InvoicesView extends FreeMarkerTemplate implements Renderer {
 
             replaceMap.put("User", this.invoice.getUser());
             if (this.invoice.getUser().equals("")) { replaceMap.put("User_activeClass","");} else {replaceMap.put("User_activeClass","active");}
-            String userOption = "";
-            for (User user: queryData.users
-                    ) {
-                userOption = userOption + "<option value=\"" + user.getUserID() + "\">\n";
-            }
-            replaceMap.put("UserList", userOption);
-
+            replaceMap.put("UserList", comboList.getUserOptionValue());
             replaceMap.put("RowColor", this.invoice.getRowColor());
             if (this.invoice.getRowColor().equals("")) { replaceMap.put("RowColor_activeClass","");} else {replaceMap.put("RowColor_activeClass","active");}
             String rowColorOption = "";
             for (String s: ImCFG.getRowColor()
                     ) {
-//            s = s.substring(0,s.indexOf(" ")); // remove lighten-4 from row color picker - it is not needed to be seen by user
                 rowColorOption = rowColorOption + "<option value=\"" + s + "\">\n";
             }
             replaceMap.put("RowColorList", rowColorOption);

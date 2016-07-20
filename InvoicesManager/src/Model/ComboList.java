@@ -1,7 +1,7 @@
 package Model;
 
 import Controller.Controller;
-import Model.DAO.DAO_InvoicesComboLists;
+import Model.DAO.InvoicesComboLists;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -10,11 +10,11 @@ import java.sql.SQLException;
  * Created by Karol Kistela on 11-Jul-16.
  */
 public class ComboList {
-    private DAO_InvoicesComboLists DAO;
+    private InvoicesComboLists DAO;
 
     public ComboList() throws FileNotFoundException, SQLException, ClassNotFoundException {
         try {
-            this.DAO = new DAO_InvoicesComboLists();
+            this.DAO = new InvoicesComboLists();
             Controller.ImCFG.updateComboLists(DAO);
             Controller.ImCFG.synchronizeComboLists(DAO);
         } catch (Exception e) {
@@ -24,7 +24,7 @@ public class ComboList {
 
     public void reload() throws FileNotFoundException, SQLException, ClassNotFoundException {
         try {
-            this.DAO = new DAO_InvoicesComboLists();
+            this.DAO = new InvoicesComboLists();
             Controller.ImCFG.updateComboLists(DAO);
             Controller.ImCFG.synchronizeComboLists(DAO);
         } catch (Exception e) {
@@ -62,6 +62,15 @@ public class ComboList {
     public String getContactGenpactOptionValue() {
         String retVal = "";
         for (String s: DAO.contactGenpact
+                ) {
+            retVal += "<option value=\"" + s + "\">";
+        }
+        return retVal;
+    }
+
+    public String getUserOptionValue() {
+        String retVal = "";
+        for (String s: DAO.users
                 ) {
             retVal += "<option value=\"" + s + "\">";
         }

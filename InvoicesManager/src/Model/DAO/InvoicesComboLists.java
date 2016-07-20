@@ -13,23 +13,23 @@ import static Controller.Controller.logger;
 /**
  * Created by Karol Kistela on 11-Jul-16.
  */
-public class DAO_InvoicesComboLists extends InvoicesDB {
+public class InvoicesComboLists extends DataBaseConnection {
     private final String suppliersSQL = "SELECT distinct(Supplier) FROM Invoices;";
     private final String authContactSQL = "SELECT distinct(AuthContact) FROM Invoices;";
     private final String currenciesSQL = "SELECT distinct(Currency) FROM Invoices;";
     private final String contactGenpactSQL = "SELECT distinct(ContactGenpact) FROM Invoices;";
+    private final String usersSQL = "SELECT distinct(User) FROM Invoices;";
     public List<String> suppliers = new LinkedList<>();
     public List<String> authContact = new LinkedList<>();
     public List<String> currencies = new LinkedList<>();
     public List<String> contactGenpact = new LinkedList<>();
+    public List<String> users = new LinkedList<>();
 
-
-
-    public DAO_InvoicesComboLists() throws ClassNotFoundException, FileNotFoundException, SQLException {
+    public InvoicesComboLists() throws ClassNotFoundException, FileNotFoundException, SQLException {
         super();
         try {
             // create a database connection
-            logger.add("Model.DAO.DAO_InvoicesComboLists connected to: " + this.DB_Path);
+            logger.add("Model.DAO.InvoicesComboLists connected to: " + this.DB_Path);
 
             connection = DriverManager.getConnection(connectionString);
             Statement statement = connection.createStatement();
@@ -67,6 +67,15 @@ public class DAO_InvoicesComboLists extends InvoicesDB {
             rs = statement.executeQuery(contactGenpactSQL);
             while (rs.next()){
                 if (!rs.getString(1).equals("")) contactGenpact.add(rs.getString(1));
+            }
+            rs.close();
+            statement.close();
+
+            // contactGenpact List
+            logger.add("Get users List: " + usersSQL);
+            rs = statement.executeQuery(usersSQL);
+            while (rs.next()){
+                if (!rs.getString(1).equals("")) users.add(rs.getString(1));
             }
             rs.close();
             statement.close();
